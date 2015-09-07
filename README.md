@@ -1,5 +1,3 @@
 # tpotm
 
-Top Poster of the month, extension for phpBB 3.1.x
-
-Requires at least phpBB version 3.1.0-b3.
+Top Poster of the month is an EXTension that requires at least phpBB version 3.1.0-b3.
