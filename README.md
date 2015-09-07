@@ -4,6 +4,8 @@ Top Poster of the month is an EXTension that requires at least phpBB version 3.1
 
 This is a port of the MOD I made first for phpBB2 and for phpBB3 (Olympus) then.
 
+[![Build Status](https://travis-ci.org/3D-I/tpotm.svg)](https://travis-ci.org/3D-I/tpotm)
+
 ## Installation
 
 ### 1. clone
