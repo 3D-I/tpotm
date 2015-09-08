@@ -2,27 +2,28 @@
 	"name": "threedi/tpotm",
 	"type": "phpbb-extension",
 	"description": "Have a Top Poster of the Month to show on your phpBB. Founder and Admins not included.",
-	"homepage": "",
+	"homepage": "http://3d-i.github.io/tpotm/",
 	"version": "1.0.0",
 	"time": "2015-09-06",
 	"license": "GPL-2.0",
 	"authors": [
 		{
 			"name": "3Di",
-			"homepage": "",
+			"email": "three3di@hotmail.it",
+			"homepage": "https://github.com/3D-I",
 			"role": "Lead Developer"
 		},
 		{
 			"name": "Dicky (Richard Foote)",
-			"email": "",
-			"homepage": "",
-			"role": "Contributor"
+			"email": "N/A",
+			"homepage": "https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=163542",
+			"role": "Past Contributor for the phpBB 2.0.x MOD"
 		},
 		{
 			"name": "RMcGirr83",
-			"email": "",
-			"homepage": "",
-			"role": "Contributor"
+			"email": "rmcgirr83@gmail.com",
+			"homepage": "https://github.com/rmcgirr83",
+			"role": "Past Contributor for the phpBB 3.0.x MOD"
 		}
 	],
 	"require": {
@@ -31,7 +32,7 @@
 	"extra": {
 		"display-name": "Top Poster Of The Month",
 			"soft-require": {
-				"phpbb/phpbb": "3.1.*"
+				"phpbb/phpbb": ">=3.1.0-b3,<3.2.*@dev"
 		}
 	}
 }
