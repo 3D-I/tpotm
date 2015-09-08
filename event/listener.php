@@ -95,12 +95,15 @@ class listener implements EventSubscriberInterface
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
 
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, COUNT(p.post_id) AS total_posts
+		// Here group_id 5 because admins belong to this group into a Vanilla board
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, COUNT(p.post_id) AS total_posts
 			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
 						AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 							AND (u.user_type <> ' . USER_FOUNDER . ')
+								AND (u.group_id <> 5)
+
 			GROUP BY u.user_id
 			ORDER BY total_posts DESC';
 
@@ -115,7 +118,8 @@ class listener implements EventSubscriberInterface
 		$topm_tp = $row['total_posts'];
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
-		// there is not a Top Poster, usually happens with fresh installations, where only FOUNDERS have posted. Here TOPM_UN reflects this state.
+		// there is not a Top Poster, usually happens with fresh installations, where only the FOUNDER made the first post/topic. Or no normal users already did it.
+		//Here TOPM_UN reflects this state.
 		$this->template->assign_vars(array(
 			'TOPM_UN'			=> ($topm_tp < 1) ? $topm_un = $this->user->lang['TOP_USERNAME_NONE'] : $topm_un,
 			'L_TPOTM'			=> $this->user->lang['TOP_CAT'],
