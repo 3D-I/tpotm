@@ -1,7 +1,7 @@
 {
 	"name": "threedi/tpotm",
 	"type": "phpbb-extension",
-	"description": "Have a Top Poster of the Month to show on your phpBB. Founder and Admins not included.",
+	"description": "Have a Top Poster of the Month to show on your phpBB. Founder, Admins and Global Moderators are not included.",
 	"homepage": "http://3d-i.github.io/tpotm/",
 	"version": "1.0.0",
 	"time": "2015-09-06",

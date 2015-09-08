@@ -95,7 +95,9 @@ class listener implements EventSubscriberInterface
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
 
-		// Here group_id 5 because admins belong to this group into a Vanilla board
+		// group_id 5 = administrators
+		// group_id 4 = global moderators
+		// this groups belong to a Vanilla 3.1.x board
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, COUNT(p.post_id) AS total_posts
 			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
@@ -103,7 +105,7 @@ class listener implements EventSubscriberInterface
 						AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 							AND (u.user_type <> ' . USER_FOUNDER . ')
 								AND (u.group_id <> 5)
-
+									AND (u.group_id <> 4)
 			GROUP BY u.user_id
 			ORDER BY total_posts DESC';
 
