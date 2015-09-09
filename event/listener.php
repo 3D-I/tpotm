@@ -90,7 +90,7 @@ class listener implements EventSubscriberInterface
 		$date_today = gmdate("Y-m-d", $now);
 		list($year_cur, $month_cur, $day1) = split('-', $date_today);
 
-		 // Start time for current month
+		// Start time for current month
 		$month_start_cur	= gmmktime (0,0,0, $month_cur, 1, $year_cur);
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
@@ -111,7 +111,7 @@ class listener implements EventSubscriberInterface
 
 		$result = $this->db->sql_query_limit($sql, 1);
 		$row = $this->db->sql_fetchrow($result);
-		
+
 		$this->db->sql_freeresult($result);
 
 		// let's go then..
