@@ -18,11 +18,11 @@ Top Poster with 2 or more posts
 ## Installation
 
 ### 1. clone
-Clone (or download and move) the repository into the folder ext/3D-I/tpotm:
+Clone (or download and move) the repository into the folder ext/threedi/tpotm:
 
 ```
 cd phpBB3
-git clone https://github.com/3D-I/tpotm.git ext/3D-I/tpotm/
+git clone https://github.com/3D-I/tpotm.git ext/threedi/tpotm/
 ```
 
 ### 2. activate
