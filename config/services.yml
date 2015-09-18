@@ -3,8 +3,8 @@ services:
         class: threedi\tpotm\event\listener
         arguments:
             - @auth
-            - @config
-            - @template
+              @config
+              @template
             - @user
             - @dbal.conn
 

@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package phpBB Extension - tpotm (Top Poster Of The Month)
+* @package phpBB Extension - tpotm 1.0.1-RC2 (Top Poster Of The Month)
 * @copyright (c) 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -28,14 +28,8 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\template\template */
 	protected $template;
 
-	/* @var \phpbb\request\request */
-	protected $request;
-
 	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\path_helper */
-	protected $helper;
 
 	/** @var \phpbb\db\driver\driver */
 	protected $db;
@@ -43,12 +37,10 @@ class listener implements EventSubscriberInterface
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			auth			Authentication object
+		* @param \phpbb\auth\auth			$auth			Authentication object
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\template\template	$template		Template object
-		* @param \phpbb\request\request		$request		Request object
 		* @param \phpbb\user				$user			User Object
-		* @param \phpbb\path_helper			$path_helper	Controller helper object
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @access public
 		*/
@@ -95,33 +87,40 @@ class listener implements EventSubscriberInterface
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
 
-		// group_id 5 = administrators
-		// group_id 4 = global moderators
-		// this groups belong to a Vanilla 3.1.x board
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, COUNT(p.post_id) AS total_posts
+		/*
+		* group_id 5 = administrators
+		* group_id 4 = global moderators
+		* this groups belong to a Vanilla 3.1.x board
+		*/
+		$group_ids = array(5, 4);
+
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
 			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
-						AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
-							AND (u.user_type <> ' . USER_FOUNDER . ')
-								AND (u.group_id <> 5)
-									AND (u.group_id <> 4)
+						AND (u.user_type <> ' . USER_FOUNDER . ')
+							AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
+								AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 			GROUP BY u.user_id
 			ORDER BY total_posts DESC';
 
 		$result = $this->db->sql_query_limit($sql, 1);
 		$row = $this->db->sql_fetchrow($result);
-
 		$this->db->sql_freeresult($result);
 
-		// let's go then..
-
-		// posts made into the selected elapsed time
+		/*
+		* Let's go then..
+		* Posts made into the selected elapsed time
+		*/
 		$topm_tp = $row['total_posts'];
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
-		// there is not a Top Poster, usually happens with fresh installations, where only the FOUNDER made the first post/topic. Or no normal users already did it.
-		//Here TOPM_UN reflects this state.
+		/*
+		* There is not a Top Poster yet, usually happens with fresh installations.
+		* Where only the FOUNDER made the first post/topic.
+		* No normal users already did it or at least not into the current month.
+		* Here TOPM_UN reflects this state.
+		*/
 		$this->template->assign_vars(array(
 			'TOPM_UN'			=> ($topm_tp < 1) ? $topm_un = $this->user->lang['TOP_USERNAME_NONE'] : $topm_un,
 			'L_TPOTM'			=> $this->user->lang['TOP_CAT'],
@@ -129,6 +128,5 @@ class listener implements EventSubscriberInterface
 			'L_TOPM_UPO_L'		=> sprintf($this->user->lang['TOP_USER_MONTH_POSTS'], $topm_tp),
 			'L_TOPM_POSTS_L'	=> ($topm_tp > 1 || $topm_tp == 0 ) ? $this->user->lang['TOP_POSTS'] : $this->user->lang['TOP_POST'],
 		));
-
 	}
 }
