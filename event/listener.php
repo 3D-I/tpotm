@@ -45,11 +45,7 @@ class listener implements EventSubscriberInterface
 		* @access public
 		*/
 	public function __construct(
-			\phpbb\auth\auth $auth,
-			\phpbb\config\config $config,
-			\phpbb\template\template $template,
-			\phpbb\user $user,
-			\phpbb\db\driver\driver_interface $db)
+			\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
 		$this->auth = $auth;
 		$this->config = $config;
@@ -69,10 +65,12 @@ class listener implements EventSubscriberInterface
 	public function load_language_on_setup($event)
 	{
 		$lang_set_ext = $event['lang_set_ext'];
+
 		$lang_set_ext[] = array(
 			'ext_name' => 'threedi/tpotm',
 			'lang_set' => 'common',
 		);
+
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
@@ -88,10 +86,10 @@ class listener implements EventSubscriberInterface
 		$month_end			= $now;
 
 		/*
-		* group_id 5 = administrators
-		* group_id 4 = global moderators
-		* this groups belong to a Vanilla 3.1.x board
-		*/
+			* group_id 5 = administrators
+			* group_id 4 = global moderators
+			* this groups belong to a Vanilla 3.1.x board
+			*/
 		$group_ids = array(5, 4);
 
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
@@ -109,18 +107,18 @@ class listener implements EventSubscriberInterface
 		$this->db->sql_freeresult($result);
 
 		/*
-		* Let's go then..
-		* Posts made into the selected elapsed time
-		*/
+			* Let's go then..
+			* Posts made into the selected elapsed time
+			*/
 		$topm_tp = $row['total_posts'];
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
 		/*
-		* There is not a Top Poster yet, usually happens with fresh installations.
-		* Where only the FOUNDER made the first post/topic.
-		* No normal users already did it or at least not into the current month.
-		* Here TOPM_UN reflects this state.
-		*/
+			* There is not a Top Poster yet, usually happens with fresh installations.
+			* Where only the FOUNDER made the first post/topic.
+			* No normal users already did it or at least not into the current month.
+			* Here TOPM_UN reflects this state.
+			*/
 		$this->template->assign_vars(array(
 			'TOPM_UN'			=> ($topm_tp < 1) ? $topm_un = $this->user->lang['TOP_USERNAME_NONE'] : $topm_un,
 			'L_TPOTM'			=> $this->user->lang['TOP_CAT'],
