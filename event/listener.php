@@ -22,6 +22,9 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
+	/** @var \phpbb\cache\service */
+	protected $cache;
+
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -38,6 +41,7 @@ class listener implements EventSubscriberInterface
 		* Constructor
 		*
 		* @param \phpbb\auth\auth			$auth			Authentication object
+		* @param \phpbb\cache\service		$cache			
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
@@ -45,9 +49,10 @@ class listener implements EventSubscriberInterface
 		* @access public
 		*/
 	public function __construct(
-			\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
+			\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
 		$this->auth = $auth;
+		$this->cache = $cache;
 		$this->config = $config;
 		$this->template = $template;
 		$this->user = $user;
@@ -102,7 +107,8 @@ class listener implements EventSubscriberInterface
 			GROUP BY u.user_id
 			ORDER BY total_posts DESC';
 
-		$result = $this->db->sql_query_limit($sql, 1);
+		// cached for 15 minutes
+		$result = $this->db->sql_query_limit($sql, 1, 0, 900);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
@@ -110,7 +116,7 @@ class listener implements EventSubscriberInterface
 			* Let's go then..
 			* Posts made into the selected elapsed time
 			*/
-		$topm_tp = $row['total_posts'];
+		$topm_tp = (int) $row['total_posts'];
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
 		/*
