@@ -94,28 +94,30 @@ class listener implements EventSubscriberInterface
 			* group_id 5 = administrators
 			* group_id 4 = global moderators
 			* this groups belong to a Vanilla 3.1.x board
-			*/
+		*/
 		$group_ids = array(5, 4);
 
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
+		if (($row = $this->cache->get('_tpotm')) === false)
+		{
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
 			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-				WHERE u.user_id > ' . ANONYMOUS . '
-					AND u.user_id = p.poster_id
-						AND (u.user_type <> ' . USER_FOUNDER . ')
-							AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
-								AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
-			GROUP BY u.user_id
-			ORDER BY total_posts DESC';
+					WHERE u.user_id > ' . ANONYMOUS . '
+						AND u.user_id = p.poster_id
+							AND (u.user_type <> ' . USER_FOUNDER . ')
+								AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
+									AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC';
 
-		// cached for 15 minutes
-		$result = $this->db->sql_query_limit($sql, 1, 0, 900);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
+			$result = $this->db->sql_query_limit($sql, 1);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
 
-		/*
-			* Let's go then..
-			* Posts made into the selected elapsed time
-			*/
+			/* cache this data for 15 minutes, this improves performance */
+			$this->cache->put('_tpotm', $row, 900);
+		}
+
+		/* Let's go then. Posts made into the selected elapsed time */
 		$topm_tp = (int) $row['total_posts'];
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
@@ -124,7 +126,7 @@ class listener implements EventSubscriberInterface
 			* Where only the FOUNDER made the first post/topic.
 			* No normal users already did it or at least not into the current month.
 			* Here TOPM_UN reflects this state.
-			*/
+		*/
 		$this->template->assign_vars(array(
 			'TOPM_UN'			=> ($topm_tp < 1) ? $topm_un = $this->user->lang['TOP_USERNAME_NONE'] : $topm_un,
 			'L_TPOTM'			=> $this->user->lang['TOP_CAT'],
