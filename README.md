@@ -26,11 +26,11 @@ git clone https://github.com/3D-I/tpotm.git ext/threedi/tpotm/
 ```
 
 ### 2. activate
-Go to admin panel -> tab Customise -> Manage extensions -> enable tpotm
+Go to admin panel -> tab Customise -> Manage extensions -> Top Poster Of The Month: enable
 
 ## Update instructions:
-1. Go to you phpBB-Board > Admin Control Panel > Customise > Manage extensions > tpotm: disable
-2. Delete all files of the extension from ext/3D-I/tpotm
+1. Go to you phpBB-Board > Admin Control Panel > Customise > Manage extensions > Top Poster Of The Month: disable
+2. Delete all files of the extension from ext/threedi/tpotm
 3. Upload all the new files to the same locations
-4. Go to you phpBB-Board > Admin Control Panel > Customise > Manage extensions > tpotm: enable
+4. Go to you phpBB-Board > Admin Control Panel > Customise > Manage extensions > Top Poster Of The Month: enable
 5. Purge the board cache
