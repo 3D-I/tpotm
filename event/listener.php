@@ -41,7 +41,7 @@ class listener implements EventSubscriberInterface
 		* Constructor
 		*
 		* @param \phpbb\auth\auth			$auth			Authentication object
-		* @param \phpbb\cache\service		$cache			
+		* @param \phpbb\cache\service		$cache
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
@@ -97,15 +97,22 @@ class listener implements EventSubscriberInterface
 		*/
 		$group_ids = array(5, 4);
 
+		/*
+			* config time for cache still to be implemented thus hardcoded
+			* 900 = 15 minutes
+		*/
+		$config_time_cache = 900;
+
+		/* Check cached data */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
-			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-					WHERE u.user_id > ' . ANONYMOUS . '
-						AND u.user_id = p.poster_id
-							AND (u.user_type <> ' . USER_FOUNDER . ')
-								AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
-									AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+				WHERE u.user_id > ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+						AND (u.user_type <> ' . USER_FOUNDER . ')
+							AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
+								AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 				GROUP BY u.user_id
 				ORDER BY total_posts DESC';
 
@@ -113,8 +120,8 @@ class listener implements EventSubscriberInterface
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
-			/* cache this data for 15 minutes, this improves performance */
-			$this->cache->put('_tpotm', $row, 900);
+			/* cache this data, improves performance */
+			$this->cache->put('_tpotm', $row, (int) $config_time_cache);
 		}
 
 		/* Let's go then. Posts made into the selected elapsed time */
@@ -122,8 +129,8 @@ class listener implements EventSubscriberInterface
 		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
 		/*
-			* There is not a Top Poster yet, usually happens with fresh installations.
-			* Where only the FOUNDER made the first post/topic.
+			* There is not a Top Poster yet, usually happens with fresh installations, where only
+			* the FOUNDER made the first post/topic.
 			* No normal users already did it or at least not into the current month.
 			* Here TOPM_UN reflects this state.
 		*/
