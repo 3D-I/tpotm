@@ -20,13 +20,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 	/** @var \phpbb\auth\auth */
-	protected $auth;
+	// protected $auth; //(not yet used in this version, for the next)
 
 	/** @var \phpbb\cache\service */
 	protected $cache;
 
 	/** @var \phpbb\config\config */
-	protected $config;
+	// protected $config; // (not yet used in this version, for the next)
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -40,20 +40,20 @@ class listener implements EventSubscriberInterface
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			$auth			Authentication object
+		* @param \phpbb\auth\auth			$auth			Authentication object (not yet used in this version, for the next)
 		* @param \phpbb\cache\service		$cache
-		* @param \phpbb\config\config		$config			Config Object
+		* @param \phpbb\config\config		$config			Config Object (not yet used in this version, for the next)
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @access public
 		*/
 	public function __construct(
-			\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
+			\phpbb\cache\service $cache, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
-		$this->auth = $auth;
+		// $this->auth = $auth; // (not yet used in this version, for the next)
 		$this->cache = $cache;
-		$this->config = $config;
+		// $this->config = $config; // (not yet used in this version, for the next)
 		$this->template = $template;
 		$this->user = $user;
 		$this->db = $db;
