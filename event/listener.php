@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package phpBB Extension - tpotm 1.0.1-RC2 (Top Poster Of The Month)
+* @package phpBB Extension - tpotm 1.0.2-RC3 (Top Poster Of The Month)
 * @copyright (c) 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -20,13 +20,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 	/** @var \phpbb\auth\auth */
-	// protected $auth; //(not yet used in this version, for the next)
+	protected $auth; // not yet in use
 
 	/** @var \phpbb\cache\service */
 	protected $cache;
 
 	/** @var \phpbb\config\config */
-	// protected $config; // (not yet used in this version, for the next)
+	protected $config; // not yet in use
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -40,9 +40,9 @@ class listener implements EventSubscriberInterface
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			$auth			Authentication object (not yet used in this version, for the next)
+		* @param \phpbb\auth\auth			$auth			Authentication object  // not yet in use
 		* @param \phpbb\cache\service		$cache
-		* @param \phpbb\config\config		$config			Config Object (not yet used in this version, for the next)
+		* @param \phpbb\config\config		$config			Config Object  // not yet in use
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
 		* @param \phpbb\db\driver\driver	$db				Database object
@@ -51,9 +51,9 @@ class listener implements EventSubscriberInterface
 	public function __construct(
 			\phpbb\cache\service $cache, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
-		// $this->auth = $auth; // (not yet used in this version, for the next)
+		// $this->auth = $auth; // not yet in use
 		$this->cache = $cache;
-		// $this->config = $config; // (not yet used in this version, for the next)
+		//$this->config = $config; // not yet in use
 		$this->template = $template;
 		$this->user = $user;
 		$this->db = $db;
@@ -93,12 +93,12 @@ class listener implements EventSubscriberInterface
 		/*
 			* group_id 5 = administrators
 			* group_id 4 = global moderators
-			* this groups belong to a Vanilla 3.1.x board
+			* per default into a Vanilla 3.1.x board
 		*/
 		$group_ids = array(5, 4);
 
 		/*
-			* config time for cache still to be implemented thus hardcoded
+			* config time for cache, still to be fully implemented thus hardcoded
 			* 900 = 15 minutes
 		*/
 		$config_time_cache = 900;
@@ -124,22 +124,18 @@ class listener implements EventSubscriberInterface
 			$this->cache->put('_tpotm', $row, (int) $config_time_cache);
 		}
 
-		/* Let's go then. Posts made into the selected elapsed time */
-		$topm_tp = (int) $row['total_posts'];
-		$topm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
+		/* Number of posts made into the selected elapsed time and username string related */
+		$tpotm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
-		/*
-			* There is not a Top Poster yet, usually happens with fresh installations, where only
-			* the FOUNDER made the first post/topic.
-			* No normal users already did it or at least not into the current month.
-			* Here TOPM_UN reflects this state.
-		*/
+		$tpotm_post = ($this->user->lang('TPOTM_POST'), (int) $row['total_posts']);
+
+		// you know..
 		$this->template->assign_vars(array(
-			'TOPM_UN'			=> ($topm_tp < 1) ? $topm_un = $this->user->lang['TOP_USERNAME_NONE'] : $topm_un,
-			'L_TPOTM'			=> $this->user->lang['TOP_CAT'],
-			'L_TOPM_UNA_L'		=> $this->user->lang['TOP_USERNAME'],
-			'L_TOPM_UPO_L'		=> sprintf($this->user->lang['TOP_USER_MONTH_POSTS'], $topm_tp),
-			'L_TOPM_POSTS_L'	=> ($topm_tp > 1 || $topm_tp == 0 ) ? $this->user->lang['TOP_POSTS'] : $this->user->lang['TOP_POST'],
+			'TPOTM_NAME'		=> $tpotm_un,
+			'L_TPOTM_CAT'		=> $this->user->lang['TPOTM_CAT'],
+			'L_TPOTM_NOW'		=> $this->user->lang['TPOTM_NOW'],
+			'L_TPOTM_TOT'		=> $this->user->lang['TPOTM_TOTAL'],
+			'L_TPOTM_POST'		=> $tpotm_post,
 		));
 	}
 }

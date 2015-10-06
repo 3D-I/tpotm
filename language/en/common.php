@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* tpotm [English]
+* tpotm 1.0.2 RC3 [English]
 *
 * @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -34,10 +34,15 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'TOP_CAT'				=> 'Top Poster',
-	'TOP_USERNAME'			=> 'The Top Poster of the Month at the present time is ',
-	'TOP_USER_MONTH_POSTS'	=> ' with a total of <b>%d</b>',
-	'TOP_POSTS'				=> ' posts',
-	'TOP_POST'				=> ' post',
-	'TOP_USERNAME_NONE'		=> '<b>N/A</b>',
+
+	'TPOTM_POST'	=> array(
+		1	=> '%d post',
+		2	=> '%d posts',
+	),
+
+	'TPOTM_CAT'		=> 'Top Poster of the Month',
+	'TPOTM_NOW'		=> 'At the present time is ',
+	'TPOTM_TOTAL'	=> ' with a total of ',
+	'TPOTM_NOBODY'	=> '<b>N/A</b>',
+
 ));
