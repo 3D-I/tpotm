@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Have a Top Poster of the Month to show on your phpBB. Founder, Admins and Global Moderators are not included.",
 	"homepage": "http://3d-i.github.io/tpotm/",
-	"version": "1.0.1",
-	"time": "2015-09-18",
+	"version": "1.0.2",
+	"time": "2015-10-06",
 	"license": "GPL-2.0",
 	"authors": [
 		{
