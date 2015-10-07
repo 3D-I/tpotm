@@ -37,11 +37,11 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'TPOTM_CAT'				=> 'Top Poster of the Month',
 	'TPOTM_NOW'				=> 'At the present time is ',
-	'TPOTM_NOBODY'			=> '<b>N/A</b>',
+	'TPOTM_NOBODY'			=> '<strong>N/A</strong>',
 	'TPOTM_CACHE_EXPLAIN'	=> ' (<i>updates every 15 minutes</i>)',
 
 	'TPOTM_POST'	=> array(
-		1	=> ' with a total of <b>%d</b> post',
-		2	=> ' with a total of <b>%d</b> posts',
+		1	=> ' with a total of <strong>%d</strong> post',
+		2	=> ' with a total of <strong>%d</strong> posts',
 	),
 ));

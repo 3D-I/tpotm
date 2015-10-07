@@ -38,11 +38,11 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'TPOTM_CAT'				=> 'أكثر عضو مُشارك',
 	'TPOTM_NOW'				=> 'أكثر الأعضاء مُشاركة لهذا الشهر هو ',
-	'TPOTM_NOBODY'			=> '<b>لا يوجد</b>',
+	'TPOTM_NOBODY'			=> '<strong>لا يوجد</strong>',
 	'TPOTM_CACHE_EXPLAIN'	=> ' (<i>تحديث كل 15 دقيقة</i>)',
 
 	'TPOTM_POST'	=> array(
-		1	=> ' بإجمالي مشاركات <b>%d</b> مشاركة',
-		2	=> ' بإجمالي مشاركات <b>%d</b> مشاركات',
+		1	=> ' بإجمالي مشاركات <strong>%d</strong> مشاركة',
+		2	=> ' بإجمالي مشاركات <strong>%d</strong> مشاركات',
 	),
 ));
