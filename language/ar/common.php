@@ -1,8 +1,9 @@
 <?php
 /**
 *
-* tpotm [Arabic]
+* tpotm 1.0.2 [Arabic]
 *
+* @package phpBB Extension - tpotm 1.0.2-(Top Poster Of The Month)
 * @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -35,10 +36,13 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'TOP_CAT'				=> 'أكثر عضو مُشارك',
-	'TOP_USERNAME'			=> 'أكثر الأعضاء مُشاركة لهذا الشهر هو ',
-	'TOP_USER_MONTH_POSTS'	=> ' بإجمالي مشاركات <b>%d</b>',
-	'TOP_POSTS'				=> ' مشاركات',
-	'TOP_POST'				=> ' مشاركة',
-	'TOP_USERNAME_NONE'		=> '<b>لا يوجد</b>',
+	'TPOTM_CAT'				=> 'أكثر عضو مُشارك',
+	'TPOTM_NOW'				=> 'أكثر الأعضاء مُشاركة لهذا الشهر هو ',
+	'TPOTM_NOBODY'			=> '<b>لا يوجد</b>',
+	'TPOTM_CACHE_EXPLAIN'	=> ' (<i>تحديث كل 15 دقيقة</i>)',
+
+	'TPOTM_POST'	=> array(
+		1	=> ' بإجمالي مشاركات <b>%d</b> مشاركة',
+		2	=> ' بإجمالي مشاركات <b>%d</b> مشاركات',
+	),
 ));
