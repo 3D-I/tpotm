@@ -1,7 +1,7 @@
 <?php
 /**
 *
-* @package phpBB Extension - tpotm 1.0.2-RC3 (Top Poster Of The Month)
+* @package phpBB Extension - tpotm 1.0.2-(Top Poster Of The Month)
 * @copyright (c) 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
@@ -20,13 +20,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 	/** @var \phpbb\auth\auth */
-	protected $auth; // not yet in use
+	//protected $auth; // not yet in use
 
 	/** @var \phpbb\cache\service */
 	protected $cache;
 
 	/** @var \phpbb\config\config */
-	protected $config; // not yet in use
+	//protected $config; // not yet in use
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -85,7 +85,7 @@ class listener implements EventSubscriberInterface
 		$date_today = gmdate("Y-m-d", $now);
 		list($year_cur, $month_cur, $day1) = split('-', $date_today);
 
-		// Start time for current month
+		/* Start time for current month */
 		$month_start_cur	= gmmktime (0,0,0, $month_cur, 1, $year_cur);
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
@@ -120,21 +120,26 @@ class listener implements EventSubscriberInterface
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
-			/* cache this data, improves performance */
+			/* caching this data improves performance */
 			$this->cache->put('_tpotm', $row, (int) $config_time_cache);
 		}
 
-		/* Number of posts made into the selected elapsed time and username string related */
-		$tpotm_un = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
+		/* Let's show the Top Poster then */
+		$tpotm_tot_posts = (int) $row['total_posts'];
 
-		$tpotm_post = ($this->user->lang('TPOTM_POST'), (int) $row['total_posts']);
+		$tpotm_un_string = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
+		/* Fresh installs or new Month starts give zero posts */
+		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 
-		// you know..
+		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
+
+		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
+
+		/* you know.. template stuffs */
 		$this->template->assign_vars(array(
-			'TPOTM_NAME'		=> $tpotm_un,
+			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_CAT'		=> $this->user->lang['TPOTM_CAT'],
 			'L_TPOTM_NOW'		=> $this->user->lang['TPOTM_NOW'],
-			'L_TPOTM_TOT'		=> $this->user->lang['TPOTM_TOTAL'],
 			'L_TPOTM_POST'		=> $tpotm_post,
 		));
 	}

@@ -1,8 +1,9 @@
 <?php
 /**
 *
-* tpotm [Italiano]
+* tpotm 1.0.2 [Italiano]
 *
+* @package phpBB Extension - tpotm 1.0.2-(Top Poster Of The Month)
 * @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -34,10 +35,13 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'TOP_CAT'				=> 'Top Poster',
-	'TOP_USERNAME'			=> 'Al momento attuale il Top Poster del mese è ',
-	'TOP_USER_MONTH_POSTS'	=> ' con un totale di <b>%d</b>',
-	'TOP_POSTS'				=> ' messaggi',
-	'TOP_POST'				=> ' messaggio',
-	'TOP_USERNAME_NONE'		=> '<b>N/P</b>',
+	'TPOTM_CAT'				=> 'Top Poster del Mese',
+	'TPOTM_NOW'				=> 'Attualmente è ',
+	'TPOTM_NOBODY'			=> '<b>N/A</b>',
+	'TPOTM_CACHE_EXPLAIN'	=> ' (<i>aggiornato ogni 15 minuti</i>)',
+
+	'TPOTM_POST'	=> array(
+		1	=> ' con un totale di <b>%d</b> post',
+		2	=> ' con un totale di <b>%d</b> posts',
+	),
 ));
