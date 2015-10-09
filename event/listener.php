@@ -40,9 +40,9 @@ class listener implements EventSubscriberInterface
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			$auth			Authentication object  // not yet in use
+		* @param \phpbb\auth\auth			$auth			Authentication object // not yet in use
 		* @param \phpbb\cache\service		$cache
-		* @param \phpbb\config\config		$config			Config Object  // not yet in use
+		* @param \phpbb\config\config		$config			Config Object // not yet in use
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
 		* @param \phpbb\db\driver\driver	$db				Database object
@@ -51,7 +51,7 @@ class listener implements EventSubscriberInterface
 	public function __construct(
 			\phpbb\cache\service $cache, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
-		// $this->auth = $auth; // not yet in use
+		//$this->auth = $auth; // not yet in use
 		$this->cache = $cache;
 		//$this->config = $config; // not yet in use
 		$this->template = $template;
