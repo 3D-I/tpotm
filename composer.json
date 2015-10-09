@@ -6,7 +6,8 @@
 	"version": "1.0.2",
 	"time": "2015-10-07",
 	"license": "GPL-2.0",
-	"authors": [
+	"authors":
+	[
 		{
 			"name": "3Di",
 			"email": "three3di@hotmail.it",
@@ -26,16 +27,27 @@
 			"role": "Past Contributor for the phpBB 3.0.x MOD"
 		}
 	],
-	"require": {
+	"require":
+	{
 		"php": ">=5.3.3"
 	},
-	"require-dev": {
+	"require-dev":
+	{
 		"phpbb/epv": "dev-master"
 	},
-	"extra": {
-		"display-name": "Top Poster Of The Month",
-			"soft-require": {
-				"phpbb/phpbb": ">=3.1.0-b3,<3.2.*@dev"
+	"extra":
+	{
+		"display-name":
+			"Top Poster Of The Month",
+		"soft-require":
+		{
+			"phpbb/phpbb": ">=3.1.0-b3,<3.2.*@dev"
+		},
+		"version-check":
+		{
+			"host": "www.phpbb.com",
+			"directory": "/customise/db/extension/top_poster_of_the_month",
+			"filename": "version_check"
 		}
 	}
 }
