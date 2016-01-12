@@ -3,7 +3,7 @@
 *
 * tpotm 1.0.2 [English]
 *
-* @package phpBB Extension - tpotm 1.0.2-(Top Poster Of The Month)
+* @package phpBB Extension - tpotm 1.0.3-(Top Poster Of The Month)
 * @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
@@ -37,8 +37,12 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'TPOTM_CAT'				=> 'Top Poster of the Month',
 	'TPOTM_NOW'				=> 'At the present time is ',
-	'TPOTM_NOBODY'			=> '<strong>N/A</strong>',
-	'TPOTM_CACHE_EXPLAIN'	=> ' (<i>updates every 15 minutes</i>)',
+	'TPOTM_NOBODY'			=> 'not yet available,',
+
+	'TPOTM_CACHE'	=> array(
+		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
+		2	=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
+	),
 
 	'TPOTM_POST'	=> array(
 		1	=> ' with a total of <strong>%d</strong> post',

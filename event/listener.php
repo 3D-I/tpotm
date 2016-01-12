@@ -1,8 +1,8 @@
 <?php
 /**
 *
-* @package phpBB Extension - tpotm 1.0.2-(Top Poster Of The Month)
-* @copyright (c) 2015 3Di (Marco T.)
+* @package phpBB Extension - tpotm 1.0.3-(Top Poster Of The Month)
+* @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -20,13 +20,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 	/** @var \phpbb\auth\auth */
-	//protected $auth; // not yet in use
+	protected $auth;
 
 	/** @var \phpbb\cache\service */
 	protected $cache;
 
 	/** @var \phpbb\config\config */
-	//protected $config; // not yet in use
+	protected $config;
 
 	/** @var \phpbb\template\template */
 	protected $template;
@@ -48,12 +48,11 @@ class listener implements EventSubscriberInterface
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @access public
 		*/
-	public function __construct(
-			\phpbb\cache\service $cache, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
 	{
-		//$this->auth = $auth; // not yet in use
+		$this->auth = $auth;
 		$this->cache = $cache;
-		//$this->config = $config; // not yet in use
+		$this->config = $config;
 		$this->template = $template;
 		$this->user = $user;
 		$this->db = $db;
@@ -83,38 +82,42 @@ class listener implements EventSubscriberInterface
 	{
 		$now = time();
 		$date_today = gmdate("Y-m-d", $now);
-		list($year_cur, $month_cur, $day1) = split('-', $date_today);
+		list($year_cur, $month_cur, $day1) = explode('-', $date_today);
 
 		/* Start time for current month */
 		$month_start_cur	= gmmktime (0,0,0, $month_cur, 1, $year_cur);
 		$month_start		= $month_start_cur;
 		$month_end			= $now;
 
-		/*
-			* group_id 5 = administrators
-			* group_id 4 = global moderators
-			* per default into a Vanilla 3.1.x board
-		*/
-		$group_ids = array(5, 4);
+		/* config time for cache, hinerits from View online time span */
+		$config_time_cache = (int) ($this->config['load_online_time'] * 60);
+
+		/* grabs the number of minutes to show for templating purgoses */
+		$config_time_cache_min = (int) ($this->config['load_online_time']);
 
 		/*
-			* config time for cache, still to be fully implemented thus hardcoded
-			* 900 = 15 minutes
+			* Borrowed from Top Five ext
+			* grabs all admins and mods, it is a catch all
 		*/
-		$config_time_cache = 900;
+		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
+		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+		$mod_ary = $this->auth->acl_get_list(false,'m_', false);
+		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+		/* groups the above results */
+		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
 
 		/* Check cached data */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, u.group_id, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
 						AND (u.user_type <> ' . USER_FOUNDER . ')
-							AND ' . $this->db->sql_in_set('u.group_id', $group_ids, true) . '
+							AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true) . '
 								AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 				GROUP BY u.user_id
-				ORDER BY total_posts DESC';
+				ORDER BY total_posts DESC, p.post_time DESC';
 
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
@@ -127,20 +130,23 @@ class listener implements EventSubscriberInterface
 		/* Let's show the Top Poster then */
 		$tpotm_tot_posts = (int) $row['total_posts'];
 
-		$tpotm_un_string = get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
-		/* Fresh installs or new Month starts give zero posts */
+		/* only auth'd users can view the profile */
+		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+
+		/* Fresh install or when a new Month starts gives zero posts */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
+
+		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $config_time_cache_min);
 
 		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
 		/* you know.. template stuffs */
 		$this->template->assign_vars(array(
 			'TPOTM_NAME'		=> $tpotm_name,
-			'L_TPOTM_CAT'		=> $this->user->lang['TPOTM_CAT'],
-			'L_TPOTM_NOW'		=> $this->user->lang['TPOTM_NOW'],
 			'L_TPOTM_POST'		=> $tpotm_post,
+			'L_TPOTM_CACHE'		=> $tpotm_cache,
 		));
 	}
 }
