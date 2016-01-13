@@ -1,10 +1,10 @@
 <?php
 /**
 *
-* tpotm 1.0.2 [English]
+* tpotm 1.0.3 [English]
 *
 * @package phpBB Extension - tpotm 1.0.3-(Top Poster Of The Month)
-* @copyright (c) 2005 - 2008 - 2015 3Di (Marco T.)
+* @copyright (c) 2005 - 2008 - 2016 3Di (Marco T.)
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
