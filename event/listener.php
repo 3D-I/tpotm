@@ -69,12 +69,10 @@ class listener implements EventSubscriberInterface
 	public function load_language_on_setup($event)
 	{
 		$lang_set_ext = $event['lang_set_ext'];
-
 		$lang_set_ext[] = array(
 			'ext_name' => 'threedi/tpotm',
 			'lang_set' => 'common',
 		);
-
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
@@ -92,7 +90,7 @@ class listener implements EventSubscriberInterface
 		/* config time for cache, hinerits from View online time span */
 		$config_time_cache = (int) ($this->config['load_online_time'] * 60);
 
-		/* grabs the number of minutes to show for templating purgoses */
+		/* grabs the number of minutes to show for templating purposes */
 		$config_time_cache_min = (int) ($this->config['load_online_time']);
 
 		/*
