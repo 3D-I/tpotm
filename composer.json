@@ -1,7 +1,7 @@
 {
 	"name": "threedi/tpotm",
 	"type": "phpbb-extension",
-	"description": "Have a Top Poster of the Month to show on your phpBB. Founder, Admins and Moderators are excluded by default. The last poster with the max number of posts made into the current month's lapse of time will win. Cached data management is in the ACP, works together with the "who si online time span" (native). The TPOTM's profile link works under native permissions (can view profile). ",
+	"description": "Have a Top Poster of the Month to show on your phpBB. Founder, Admins and Moderators are excluded by default. The last poster with the max number of posts made into the current month's lapse of time will win. Cached data management is in the ACP, works together with the - who is online time span - (native). The TPOTM's profile link works under native permissions (can view profile). ",
 	"homepage": "http://3d-i.github.io/tpotm/",
 	"version": "1.0.3",
 	"license": "GPL-2.0",
