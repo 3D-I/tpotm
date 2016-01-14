@@ -107,6 +107,10 @@ class listener implements EventSubscriberInterface
 		/* Check cached data */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
+			/*
+				* There can be only ONE, the TPOTM.
+				* If same tot posts and same exact post time then the post ID rules
+			*/
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
@@ -115,7 +119,7 @@ class listener implements EventSubscriberInterface
 							AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true) . '
 								AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 				GROUP BY u.user_id
-				ORDER BY total_posts DESC, p.post_time DESC';
+				ORDER BY total_posts DESC, p.post_time DESC, p.post_id DESC';
 
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
