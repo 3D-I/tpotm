@@ -101,6 +101,7 @@ class listener implements EventSubscriberInterface
 		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
 		$mod_ary = $this->auth->acl_get_list(false,'m_', false);
 		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+
 		/* groups the above results */
 		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
 
