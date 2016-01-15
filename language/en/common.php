@@ -40,12 +40,12 @@ $lang = array_merge($lang, array(
 	'TPOTM_NOBODY'			=> 'not yet available,',
 
 	'TPOTM_CACHE'	=> array(
-		1	=> ' (<i>updates every<strong>%d</strong> minute</i>)',
-		2	=> ' (<i>updates every<strong>%d</strong> minutes</i>)',
+		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
+		2	=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
 	),
 
 	'TPOTM_POST'	=> array(
-		1	=> ' with a total of<strong>%d</strong> post',
-		2	=> ' with a total of<strong>%d</strong> posts',
+		1	=> ' with a total of <strong>%d</strong> post',
+		2	=> ' with a total of <strong>%d</strong> posts',
 	),
 ));
