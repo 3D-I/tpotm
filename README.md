@@ -1,10 +1,10 @@
 # tpotm
+[![Build Status](https://travis-ci.org/3D-I/tpotm.svg)](https://travis-ci.org/3D-I/tpotm)
 
-Top Poster of the month is an extension that requires at least phpBB version 3.1.3.
-
+Top Poster of the month is an extension that requires at least phpBB version 3.1.8, works also on 3.2.x.
 This is a port of the MOD I made first for phpBB2 and for phpBB3 (Olympus) then.
 
-[![Build Status](https://travis-ci.org/3D-I/tpotm.svg)](https://travis-ci.org/3D-I/tpotm)
+Have a Top Poster of the Month to show on your phpBB except for Founder, Banned, Admins and Moderators. The last poster with the max number of posts made into the current month's gap of time will win. Cached data management is in the ACP, works according with the - who is online time span - (native). The TPOTM's profile link works according with the - can view profile - permissions (native).
 
 No Top Poster
 ![Screenshot](tpotm_zero.png)
@@ -33,4 +33,3 @@ Go to admin panel -> tab Customise -> Manage extensions -> Top Poster Of The Mon
 2. Delete all files of the extension from ext/threedi/tpotm
 3. Upload all the new files to the same locations
 4. Go to you phpBB-Board > Admin Control Panel > Customise > Manage extensions > Top Poster Of The Month: enable
-5. Purge the board cache
