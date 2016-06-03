@@ -1,0 +1,13 @@
+services:
+    threedi.tpotm.listener:
+        class: threedi\tpotm\event\listener
+        arguments:
+            - '@auth'
+            - '@cache'
+            - '@config'
+            - '@template'
+            - '@user'
+            - '@dbal.conn'
+
+        tags:
+            - { name: event.listener }

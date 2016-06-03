@@ -1,0 +1,43 @@
+{
+	"name": "threedi/tpotm",
+	"type": "phpbb-extension",
+	"description": " Have a Top Poster of the Month to show on your phpBB except for Founder, Banned, Admins and Moderators. The last poster with the max number of posts made into the current month's lapse of time will win. Cached data management is in the ACP, works according with the - who is online time span - (native). The TPOTM's profile link works according with the - can view profile - permissions (native).",
+	"homepage": "http://3di.space/32/",
+	"version": "1.0.4",
+	"license": "GPL-2.0",
+	"authors": [
+		{
+			"name": "3Di",
+			"email": "three3di@hotmail.it",
+			"homepage": "http://3di.space/32/",
+			"role": "Lead Developer"
+		},
+		{
+			"name": "Dicky (Richard Foote)",
+			"email": "dicky@phpbb.com",
+			"homepage": "https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=163542",
+			"role": "Past Contributor for the phpBB 2.0.x MOD"
+		},
+		{
+			"name": "RMcGirr83",
+			"email": "rmcgirr83@gmail.com",
+			"homepage": "https://github.com/rmcgirr83",
+			"role": "Past Contributor for the phpBB 3.0.x MOD"
+		}
+	],
+	"require": {
+		"php": ">=5.3.3",
+		"phpbb/phpbb": ">=3.1.8,<3.3.0@dev"
+	},
+	"extra": {
+		"display-name": "Top Poster Of The Month",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.1.8,<3.3.0@dev"
+		},
+		"version-check": {
+			"host": "www.phpbb.com",
+			"directory": "/customise/db/extension/top_poster_of_the_month",
+			"filename": "version_check"
+		}
+	}
+}
