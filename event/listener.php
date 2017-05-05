@@ -150,10 +150,10 @@ class listener implements EventSubscriberInterface
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id > ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
-						AND (u.user_type <> ' . USER_FOUNDER . ')
-							AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true, true) . '
-								AND ' . $this->db->sql_in_set('u.user_id', $ban_ids, true, true) . '
-									AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+					AND (u.user_type <> ' . USER_FOUNDER . ')
+					AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true, true) . '
+					AND ' . $this->db->sql_in_set('u.user_id', $ban_ids, true, true) . '
+					AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 				GROUP BY u.user_id
 				ORDER BY total_posts DESC, p.post_time DESC, p.post_id DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
