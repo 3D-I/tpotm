@@ -146,16 +146,17 @@ class listener implements EventSubscriberInterface
 				* If same tot posts and same exact post time then the post ID rules
 				* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
 			*/
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_type, p.poster_id, p.post_time, COUNT(p.post_id) AS total_posts
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-				WHERE u.user_id > ' . ANONYMOUS . '
+				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
 					AND (u.user_type <> ' . USER_FOUNDER . ')
 					AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true, true) . '
 					AND ' . $this->db->sql_in_set('u.user_id', $ban_ids, true, true) . '
+					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 				GROUP BY u.user_id
-				ORDER BY total_posts DESC, p.post_time DESC, p.post_id DESC';
+				ORDER BY total_posts DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
