@@ -101,12 +101,10 @@ class listener implements EventSubscriberInterface
 				'lang'	=> 'ACL_U_ALLOW_TPOTM_VIEW',
 				'cat'	=> 'misc',
 			),
-			/*
 			'a_tpotm_admin' => array(
 				'lang'	=> 'ACL_A_TPOTM_ADMIN',
 				'cat'	=> 'misc',
 			),
-			*/
 		);
 		$event['permissions'] = $permissions;
 	}
