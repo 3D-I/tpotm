@@ -1,11 +1,12 @@
 <?php
 /**
-*
-* @package phpBB Extension - tpotm 1.0.4-(Top Poster Of The Month)
-* @copyright (c) 2005 - 2008 - 2016 3Di (Marco T.)
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * Top Poster Of The Month. An extension for the phpBB Forum Software package.
+ *
+ * @copyright (c) 2005,2017, 3Di
+ * @license GNU General Public License, version 2 (GPL-2.0)
+ *
+ */
 
 namespace threedi\tpotm;
 
@@ -16,18 +17,28 @@ namespace threedi\tpotm;
 class ext extends \phpbb\extension\base
 {
 	/**
-	* Check whether or not the extension can be enabled.
-	* The current phpBB version should meet or exceed
-	* the minimum version required by this extension:
-	*
-	* Requires phpBB 3.1.3 due to usage of http_exception.
-	*
-	* @return bool
-	* @access public
-	*/
+	 * Check whether the extension can be enabled.
+	 * Provides meaningful(s) error message(s) and the back-link on failure.
+	 * CLI and 3.1/3.2 compatible
+	 *
+	 * @return bool
+	 */
 	public function is_enableable()
 	{
-		$config = $this->container->get('config');
-		return phpbb_version_compare($config['version'], '3.1.8', '>=');
+		$is_enableable = true;
+
+		$user = $this->container->get('user');
+		$user->add_lang_ext('threedi/tpotm', 'ext_require');
+		$lang = $user->lang;
+
+		if ( !(phpbb_version_compare(PHPBB_VERSION, '3.2.1', '>=') || (phpbb_version_compare(PHPBB_VERSION, '3.1.11', '>=') && phpbb_version_compare(PHPBB_VERSION, '3.2.0@dev', '<'))) )
+		{
+			$lang['EXTENSION_NOT_ENABLEABLE'] .= '<br>' . $user->lang('ERROR_MSG_3111_321_MISTMATCH');
+			$is_enableable = false;
+		}
+
+		$user->lang = $lang;
+
+		return $is_enableable;
 	}
 }
