@@ -28,14 +28,20 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\config\config */
 	protected $config;
 
+	/** @var \phpbb\db\driver\driver */
+	protected $db;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
 	/* @var \phpbb\user */
 	protected $user;
 
-	/** @var \phpbb\db\driver\driver */
-	protected $db;
+	/** @var string phpBB root path */
+	protected $root_path;
+
+	/** @var string phpEx */
+	protected $php_ext;
 
 	/**
 		* Constructor
@@ -43,19 +49,23 @@ class listener implements EventSubscriberInterface
 		* @param \phpbb\auth\auth			$auth			Authentication object
 		* @param \phpbb\cache\service		$cache
 		* @param \phpbb\config\config		$config			Config Object
+		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
-		* @param \phpbb\db\driver\driver	$db				Database object
+		* @var string phpBB root path
+		* @var string phpEx
 		* @access public
 		*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\template\template $template, \phpbb\user $user, \phpbb\db\driver\driver_interface $db)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt)
 	{
-		$this->auth = $auth;
-		$this->cache = $cache;
-		$this->config = $config;
-		$this->template = $template;
-		$this->user = $user;
-		$this->db = $db;
+		$this->auth			= $auth;
+		$this->cache		= $cache;
+		$this->config		= $config;
+		$this->db			= $db;
+		$this->template		= $template;
+		$this->user			= $user;
+		$this->root_path	= $root_path;
+		$this->php_ext		= $phpExt;
 	}
 
 	static public function getSubscribedEvents()
@@ -89,58 +99,36 @@ class listener implements EventSubscriberInterface
 
 		/* Config time for cache, hinerits from View online time span */
 		$config_time_cache = (int) ($this->config['load_online_time'] * 60);
-
 		/* Grabs the number of minutes to show for templating purposes */
 		$config_time_cache_min = (int) ($this->config['load_online_time']);
 
-		/*
-			* Borrowed from Top Five ext
-			* grabs all admins and mods, it is a catch all
-		*/
-		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
-		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
-		$mod_ary = $this->auth->acl_get_list(false,'m_', false);
-		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
-
-		/* groups the above results */
-		$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
-
-		/* Check cached data */
-		if (($row = $this->cache->get('_tpotm_ban_ids')) === false)
-		{
-			/*
-				* No banned users allowed for the TPOTM.
-				* Creating an array on purpose
-			*/
-			$sql = 'SELECT ban_userid
-				FROM ' . BANLIST_TABLE . '';
-			$result = $this->db->sql_query($sql);
-
-			while ($rows = $this->db->sql_fetchrow($result))
-			{
-				$ban_ids[] = (int) $rows['ban_userid'];
-			}
-			$this->db->sql_freeresult($result);
-
-			/*
-				* Let's give a simple workaround for empty arrays..
-				* There are no banned users? Ok.
-			*/
-			if (!isset($ban_ids))
-			{
-				/*
-					* ANONYMOUS usually isn't banned and in any case
-					* it is already excluded from the TPOTM
-				*/
-				$ban_ids = array(1);
-			}
-			/* Caching this data improves performance */
-			$this->cache->put('_tpotm_ban_ids', $row, (int) $config_time_cache);
-		}
-
-		/* Check cached data */
+		/**
+		 * Check cached data
+		 * Run the whole stuff only when needed
+		 */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
+			/*
+				* Borrowed from Top Five ext
+				* grabs all admins and mods, it is a catch all
+			*/
+			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
+			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+			$mod_ary = $this->auth->acl_get_list(false,'m_', false);
+			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+			/* Groups the above results */
+			$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+
+			/*
+				* Borrowed from Ban Hammer ext
+				* Check if this user already is banned.
+			*/
+			if (!function_exists('phpbb_get_banned_user_ids'))
+			{
+				include($this->root_path . 'includes/functions_user.' . $this->php_ext);
+			}
+			$ban_ids = phpbb_get_banned_user_ids(array($this->user->data['user_id']));
+
 			/*
 				* There can be only ONE, the TPOTM.
 				* If same tot posts and same exact post time then the post ID rules
@@ -175,9 +163,7 @@ class listener implements EventSubscriberInterface
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
-
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $config_time_cache_min);
-
 		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
 		/* You know.. template stuff */
