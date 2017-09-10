@@ -33,8 +33,8 @@ class m1_install_perms extends \phpbb\db\migration\migration
 			/* Permissions now */
 			array('permission.add', array('u_allow_tpotm_view')),
 			array('permission.permission_set', array('REGISTERED', 'u_allow_tpotm_view', 'group')),
-			//array('permission.add', array('a_tpotm_admin')),
-			//array('permission.permission_set', array('ADMINISTRATORS', 'a_tpotm_admin', 'group')),
+			array('permission.add', array('a_tpotm_admin')),
+			array('permission.permission_set', array('ADMINISTRATORS', 'a_tpotm_admin', 'group')),
 		);
 	}
 }

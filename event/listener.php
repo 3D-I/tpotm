@@ -72,9 +72,10 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'		=> 'load_language_on_setup',
-			'core.permissions'		=>	'permissions',
-			'core.page_footer'		=> 'display_tpotm',
+			'core.user_setup'			=> 'load_language_on_setup',
+			'core.permissions'			=>	'permissions',
+			'core.page_header_after'	=>	'tpotm_template_switch',
+			'core.page_footer'			=> 'display_tpotm',
 		);
 	}
 
@@ -101,14 +102,27 @@ class listener implements EventSubscriberInterface
 				'lang'	=> 'ACL_U_ALLOW_TPOTM_VIEW',
 				'cat'	=> 'misc',
 			),
-			/*
 			'a_tpotm_admin' => array(
 				'lang'	=> 'ACL_A_TPOTM_ADMIN',
 				'cat'	=> 'misc',
 			),
-			*/
 		);
 		$event['permissions'] = $permissions;
+	}
+
+	/**
+	 * Template switches over all
+	 *
+	 * @event core.page_header_after
+	 */
+	public function tpotm_template_switch($event)
+	{
+		$this->template->assign_vars(array(
+			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view')) ? true : false,
+			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
+			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
+			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
+		));
 	}
 
 	public function display_tpotm($event)
@@ -128,9 +142,10 @@ class listener implements EventSubscriberInterface
 			$month_end			= $now;
 
 			/* Config time for cache, hinerits from View online time span */
-			$config_time_cache = (int) ($this->config['load_online_time'] * 60);
+			$config_time_cache = (int) ($this->config['threedi_tpotm_ttl'] * 60);
+
 			/* Grabs the number of minutes to show for templating purposes */
-			$config_time_cache_min = (int) ($this->config['load_online_time']);
+			$config_time_cache_min = (int) ($this->config['threedi_tpotm_ttl']);
 
 			/**
 			 * Check cached data

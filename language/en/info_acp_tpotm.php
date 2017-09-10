@@ -19,6 +19,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, array(
-	'ACL_U_ALLOW_TPOTM_VIEW'	=> 'Allow to use the TPOTM extension',
-	'ACL_A_TPOTM_ADMIN'			=> 'Allow administering the TPOTM extension',
+	'ACP_TPOTM_TITLE'				=> 'Top Poster Of The Month',
+	'ACP_TPOTM_SETTINGS'			=> 'Settings',
+	'ACP_TPOTM_SETTING_SAVED'		=> 'Top Poster Of The Month Settings saved.',
 ));

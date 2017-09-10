@@ -1,0 +1,46 @@
+/* CSS Document */
+
+.tpotm-acp-inner {
+}
+
+.tpotm-acp-middle {
+	background-color: #F3F3F3; /* light grey */ 
+}
+
+.tpotm-acp-outer {
+	background-image: url("../images/tpotm_acp_gfx.png");
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: scroll;
+}
+
+.tpotm-acp-submit {
+}
+
+/* That's the native phpBB prosilver class "rules" slightly modified */
+.tpotm-acp-rules {
+	margin-bottom: 10px;
+	font-size: 0.9em;
+	padding: 5px 10px;
+	border-radius: 7px;
+	background-color: #d6e9cf; /* light green */
+	color: #125814; /* dark green */
+}
+
+/* Better alignment than the core phpbb */
+fieldset dd {
+	padding-top: 3px;
+	margin-top: 2px;
+}
+
+/* Rounded corners against the core phpbb */
+fieldset {
+	padding: 5px 10px;
+	border-radius: 7px;
+}
+
+/* Rounded corners against the core phpbb */
+input.button1, input.button2 {
+	border-radius: 4px;
+}

@@ -1,5 +1,3 @@
-{% if S_U_TPOTM %}
-	<h3>{{ lang('TPOTM_CAT') }}</h3>
-	<p>{{ lang('TPOTM_NOW') }}<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TPOTM_CACHE') }}</p>
+{% if S_TPOTM and S_TPOTM_INDEX_BOTTOM %}
+	{% include 'tpotm.html' %}
 {% endif %}
-
