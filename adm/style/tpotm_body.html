@@ -1,0 +1,110 @@
+{% if not INCLUDED_TPOTM_ACP_CSS %}
+	{% INCLUDECSS '@threedi_tpotm/tpotm_acp.css' %}
+	{% set INCLUDED_TPOTM_ACP_CSS = true %}
+{% endif %}
+
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('ACP_TPOTM_TITLE') }}</h1>
+
+{% if S_ERRORS %}
+{# Non invasive error reporting #}
+<fieldset>
+	<legend>{{ lang('ACP_TPOTM_ERRORS') }}</legend>
+	<p class="error">
+		{{ ERRORS_MSG }}
+	</p>
+</fieldset>
+{% endif %}
+
+<form id="threedi_tpotm" method="post" action="{U_ACTION}">
+	<fieldset class="tpotm-acp-outer">
+		<fieldset class="tpotm-acp-middle">
+			<fieldset class="tpotm-acp-inner">
+				<legend>{{ lang('ACP_TPOTM_TEMPLATE_LOCATIONS') }}</legend>
+				<div class="tpotm-acp-rules">{{ lang('ACP_TPOTM_TEMPLATE_LOCATIONS_EXPLAIN') }}</div>
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_index">{{ lang('TPOTM_INDEX') }}{{ lang('COLON') }}</label><br />
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_index" value="1"{% if TPOTM_INDEX %} checked="checked"{% endif %}/> {{ lang('TPOTM_BOTTOM') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_index" value="0"{% if not TPOTM_INDEX %} checked="checked"{% endif %} /> {{ lang('TPOTM_TOP') }}
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_forums">{{ lang('TPOTM_FORUMS') }}{{ lang('COLON') }}</label><br />
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_forums" value="1"{% if TPOTM_FORUMS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_forums" value="0"{% if not TPOTM_FORUMS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+			</fieldset>
+
+			<fieldset class="tpotm-acp-inner">
+				<legend>{{ lang('ACP_TPOTM_VARIOUSES') }}</legend>
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_ttl">{{ lang('TPOTM_TTL') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_TTL_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="number" min="1" name="threedi_tpotm_ttl" id="threedi_tpotm_ttl" size="6" value="{{ TPOTM_TTL }}" />
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_miniavatar">{{ lang('TPOTM_AVATAR') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_AVATAR_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="1"{% if TPOTM_MINIAVATAR %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="0"{% if not TPOTM_MINIAVATAR %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_miniprofile">{{ lang('TPOTM_MINIPROFILE') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_MINIPROFILE_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="1"{% if TPOTM_MINIPROFILE %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="0"{% if not TPOTM_MINIPROFILE %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_hall">{{ lang('TPOTM_HALL') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_HALL_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_hall" value="1"{% if TPOTM_HALL %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_hall" value="0"{% if not TPOTM_HALL %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_adm_mods">{{ lang('TPOTM_ADM_MODS') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_ADM_MODS_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="1"{% if TPOTM_ADM_MODS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="0"{% if not TPOTM_ADM_MODS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+			</fieldset>
+		</fieldset>
+	</fieldset>
+
+	<fieldset class="tpotm-acp-submit">
+		<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="submit" name="preview" value="{L_PREVIEW}" />
+		</fieldset>
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+</form>
+
+{% INCLUDE 'overall_footer.html' %}
