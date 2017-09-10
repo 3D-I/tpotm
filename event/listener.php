@@ -216,8 +216,6 @@ class listener implements EventSubscriberInterface
 				'TPOTM_NAME'		=> $tpotm_name,
 				'L_TPOTM_POST'		=> $tpotm_post,
 				'L_TPOTM_CACHE'		=> $tpotm_cache,
-
-				'S_U_TPOTM'			=> ($this->auth->acl_get('u_allow_tpotm_view')) ? true : false,
 			));
 		}
 	}
