@@ -156,7 +156,9 @@ class listener implements EventSubscriberInterface
 				/**
 				 * Don't run that code if the admin so wishes
 				 */
-				if (!$this->config['threedi_tpotm_adm_mods'])
+				$enable_admin_mod_array = ($this->config['threedi_tpotm_adm_mods']) ? false : true;
+
+				if ($enable_admin_mod_array)
 				{
 					/*
 						* Borrowed from Top Five ext
