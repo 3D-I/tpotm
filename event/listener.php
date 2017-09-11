@@ -179,7 +179,7 @@ class listener implements EventSubscriberInterface
 				}
 
 				/**
- 				 * Idea borrowed from Ban Hammer ext
+				 * Idea borrowed from Ban Hammer ext
 				 */
 				if (!function_exists('phpbb_get_banned_user_ids'))
 				{
