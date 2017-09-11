@@ -122,6 +122,7 @@ class listener implements EventSubscriberInterface
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
+			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 		));
 	}
 
@@ -190,7 +191,7 @@ class listener implements EventSubscriberInterface
 					* If same tot posts and same exact post time then the post ID rules
 					* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
 				*/
-				$sql = 'SELECT u.username, u.user_id, u.user_colour, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 					FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 					WHERE u.user_id <> ' . ANONYMOUS . '
 						AND u.user_id = p.poster_id
@@ -212,7 +213,7 @@ class listener implements EventSubscriberInterface
 			/* Let's show the TPOTM then.. */
 			$tpotm_tot_posts = (int) $row['total_posts'];
 
-			/* only auth'd users can view the profile */
+			/* Only auth'd users can view the profile */
 			$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 			/* Fresh install or when a new Month starts gives zero posts */
@@ -222,12 +223,24 @@ class listener implements EventSubscriberInterface
 			$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $config_time_cache_min);
 			$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
-			/* You know.. template stuff */
-			$this->template->assign_vars(array(
+			$template_vars = array(
 				'TPOTM_NAME'		=> $tpotm_name,
 				'L_TPOTM_POST'		=> $tpotm_post,
 				'L_TPOTM_CACHE'		=> $tpotm_cache,
-			));
+			);
+			/**
+			 * Don't run that code if the admin so wishes
+			 */
+			$enable_miniavatar = ($this->config['threedi_tpotm_miniavatar']) ? true : false;
+			if ($enable_miniavatar)
+			{
+				$template_vars += array(
+					'TPOTM_AVATAR'		=> get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']),
+					'TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
+				);
+			}
+			/* You know.. template stuff */
+			$this->template->assign_vars($template_vars);
 		}
 	}
 }

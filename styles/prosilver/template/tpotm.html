@@ -1,4 +1,4 @@
 {% if S_TPOTM %}
 	<h3>{{ lang('TPOTM_CAT') }}</h3>
-	<p>{{ lang('TPOTM_NOW') }}<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TPOTM_CACHE') }}</p>
+	<p>{{ lang('TPOTM_NOW') }}{% if S_TPOTM_AVATAR %}<a href="{{ TPOTM_AVATAR_URL }}" class="header-avatar">{{ TPOTM_AVATAR }}</a>{% endif %}<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TPOTM_CACHE') }}</p>
 {% endif %}

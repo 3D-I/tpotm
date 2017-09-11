@@ -1,0 +1,4 @@
+{% if S_TPOTM and not INCLUDED_TPOTM_CSS %}
+	{% INCLUDECSS '@threedi_tpotm/tpotm.css' %}
+	{% set INCLUDED_TPOTM_CSS = true %}
+{% endif %}
