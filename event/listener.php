@@ -179,8 +179,8 @@ class listener implements EventSubscriberInterface
 				}
 
 				/**
- 				* Idea borrowed from Ban Hammer ext
-				*/
+ 				 * Idea borrowed from Ban Hammer ext
+				 */
 				if (!function_exists('phpbb_get_banned_user_ids'))
 				{
 					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
@@ -239,6 +239,7 @@ class listener implements EventSubscriberInterface
 			 */
 			if ( $this->enable_miniavatar )
 			{
+				// @ToDO: use phpbb_get_avatar here..
 				$template_vars += array(
 					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : 'N/A',
 					'TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
