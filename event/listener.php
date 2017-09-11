@@ -67,15 +67,18 @@ class listener implements EventSubscriberInterface
 		$this->user			= $user;
 		$this->root_path	= $root_path;
 		$this->php_ext		= $phpExt;
+
+		$this->enable_admin_mod_array	= (bool) $this->config['threedi_tpotm_adm_mods'];
+		$this->enable_miniavatar		= (bool) $this->config['threedi_tpotm_miniavatar'];
 	}
 
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'			=> 'load_language_on_setup',
+			'core.user_setup'			=>	'load_language_on_setup',
 			'core.permissions'			=>	'permissions',
 			'core.page_header_after'	=>	'tpotm_template_switch',
-			'core.page_footer'			=> 'display_tpotm',
+			'core.page_footer'			=>	'display_tpotm',
 		);
 	}
 
@@ -122,7 +125,7 @@ class listener implements EventSubscriberInterface
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
-			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
+			'S_TPOTM_AVATAR'		=> (bool) $this->config['threedi_tpotm_miniavatar'],
 		));
 	}
 
@@ -155,15 +158,17 @@ class listener implements EventSubscriberInterface
 			if (($row = $this->cache->get('_tpotm')) === false)
 			{
 				/**
-				 * Don't run that code if the admin so wishes
+				 * Don't run the code if the admin so wishes
 				 */
-				$enable_admin_mod_array = ($this->config['threedi_tpotm_adm_mods']) ? false : true;
-
-				if ($enable_admin_mod_array)
+				if ($this->enable_admin_mod_array)
 				{
-					/*
-						* Borrowed from Top Five ext
-						* grabs all admins and mods, it is a catch all
+					$admin_mod_array = array();
+				}
+				else
+				{
+					/**
+					 * Borrowed from Top Five ext
+					 * Grabs all admins and mods, it is a catch all.
 					*/
 					$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
 					$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
@@ -172,19 +177,20 @@ class listener implements EventSubscriberInterface
 					/* Groups the above results */
 					$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
 				}
-				else
-				{
-					$admin_mod_array = array();
-				}
-				/*
-					* Borrowed from Ban Hammer ext
-					* Check if this user already is banned.
+
+				/**
+ 				* Idea borrowed from Ban Hammer ext
 				*/
 				if (!function_exists('phpbb_get_banned_user_ids'))
 				{
 					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
 				}
-				$ban_ids = phpbb_get_banned_user_ids(array($this->user->data['user_id']));
+				/**
+				 * Gets the complete list of banned ids.
+				 *
+				 * @return array	Array of banned users' ids if any, empty array otherwise
+				 */
+				$ban_ids = phpbb_get_banned_user_ids(array());
 
 				/*
 					* There can be only ONE, the TPOTM.
@@ -195,9 +201,9 @@ class listener implements EventSubscriberInterface
 					FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 					WHERE u.user_id <> ' . ANONYMOUS . '
 						AND u.user_id = p.poster_id
-						AND (u.user_type <> ' . USER_FOUNDER . ')
 						AND ' . $this->db->sql_in_set('u.user_id', $admin_mod_array, true, true) . '
 						AND ' . $this->db->sql_in_set('u.user_id', $ban_ids, true, true) . '
+						AND (u.user_type <> ' . USER_FOUNDER . ')
 						AND p.post_visibility = ' . ITEM_APPROVED . '
 						AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
 					GROUP BY u.user_id
@@ -231,11 +237,10 @@ class listener implements EventSubscriberInterface
 			/**
 			 * Don't run that code if the admin so wishes
 			 */
-			$enable_miniavatar = ($this->config['threedi_tpotm_miniavatar']) ? true : false;
-			if ($enable_miniavatar)
+			if ( $this->enable_miniavatar )
 			{
 				$template_vars += array(
-					'TPOTM_AVATAR'		=> get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']),
+					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : 'N/A',
 					'TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				);
 			}
