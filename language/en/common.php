@@ -34,22 +34,22 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'TPOTM_CAT'				=> 'Top Poster of the Month',
-	'TPOTM_NOW'				=> 'At the present time is ',
-	'TPOTM_NOBODY'			=> 'not yet available,',
+	'TPOTM_CAT'			=> 'Top Poster of the Month',
+	'TPOTM_NOW'			=> 'At the present time is ',
+	'TPOTM_NOBODY'		=> 'not yet available,',
+	'TPOTM_BADGE'		=> 'TPOTM badge',
 
 	'TPOTM_CACHE'	=> array(
-		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
-		2	=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
+		0				=>	' (<i>updates at every page load</i>)',
+		1				=> ' (<i>updates every <strong>%d</strong> minute</i>)',
+		2				=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
 	),
 
 	'TPOTM_POST'	=> array(
-		1	=> ' with a total of <strong>%d</strong> post',
-		2	=> ' with a total of <strong>%d</strong> posts',
+		1				=> ' with a total of <strong>%d</strong> post',
+		2				=> ' with a total of <strong>%d</strong> posts',
 	),
 
-	'TPOTM_BADGE'			=> 'TPOTM badge',
-
 	// Translators please do not change the following line, no need to translate it!
-	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
+	'TPOTM_CREDIT_LINE'	=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
 ));

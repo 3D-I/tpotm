@@ -64,4 +64,19 @@ class tpotm
 	{
 		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '"';
 	}
+
+	public function admin_mody_ary()
+	{
+		/**
+		 * Inspiration taken from Top Five ext - Thanks to Steve.
+		 * Grabs all admins and mods, it is a catch all.
+		*/
+		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
+		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+		$mod_ary = $this->auth->acl_get_list(false,'m_', false);
+		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+
+		/* Groups the above results */
+		return array_unique(array_merge($admin_ary, $mod_ary));
+	}
 }

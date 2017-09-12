@@ -30,7 +30,7 @@ $lang = array_merge($lang, array(
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Variouses',
 	'TPOTM_TTL'								=>	'Time to live',
-	'TPOTM_TTL_EXPLAIN'						=>	'Cache time in minutes',
+	'TPOTM_TTL_EXPLAIN'						=>	'Cache time in minutes. 0 = Disabled.',
 	'TPOTM_AVATAR'							=>	'Mini Avatar',
 	'TPOTM_AVATAR_EXPLAIN'					=>	'Prepends the TPOTM avatar to the result',
 	'TPOTM_MINIPROFILE'						=>	'Mini profile next to posts',

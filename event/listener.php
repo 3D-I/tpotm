@@ -150,7 +150,7 @@ class listener implements EventSubscriberInterface
 			$month_start		= $month_start_cur;
 			$month_end			= $now;
 
-			/* Config time for cache, hinerits from View online time span */
+			/* Config time for cache adjustable in ACP */
 			$config_time_cache = (int) ($this->config['threedi_tpotm_ttl'] * 60);
 
 			/* Grabs the number of minutes to show for templating purposes */
@@ -158,7 +158,7 @@ class listener implements EventSubscriberInterface
 
 			/**
 			 * Check cached data
-			 * Run the whole stuff only when needed
+			 * Run the whole stuff only when needed or cache is disabled in ACP
 			 */
 			if (($row = $this->cache->get('_tpotm')) === false)
 			{
@@ -171,16 +171,7 @@ class listener implements EventSubscriberInterface
 				}
 				else
 				{
-					/**
-					 * Borrowed from Top Five ext
-					 * Grabs all admins and mods, it is a catch all.
-					*/
-					$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
-					$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
-					$mod_ary = $this->auth->acl_get_list(false,'m_', false);
-					$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
-					/* Groups the above results */
-					$admin_mod_array = array_unique(array_merge($admin_ary, $mod_ary));
+					$admin_mod_array = $this->tpotm->admin_mody_ary();
 				}
 
 				/**
@@ -217,7 +208,10 @@ class listener implements EventSubscriberInterface
 				$row = $this->db->sql_fetchrow($result);
 				$this->db->sql_freeresult($result);
 
-				/* Caching this data improves performance */
+				/**
+				 * Always caching this data improves performance when needed
+				 * Also to avoid solar flares.
+				 */
 				$this->cache->put('_tpotm', $row, (int) $config_time_cache);
 			}
 
@@ -239,10 +233,11 @@ class listener implements EventSubscriberInterface
 				'L_TPOTM_POST'		=> $tpotm_post,
 				'L_TPOTM_CACHE'		=> $tpotm_cache,
 			);
+
 			/**
 			 * Don't run that code if the admin so wishes
 			 */
-			if ( $this->enable_miniavatar )
+			if ($this->enable_miniavatar)
 			{
 				// @ToDO: use phpbb_get_avatar here..
 				$template_vars += array(
