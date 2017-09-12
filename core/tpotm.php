@@ -62,6 +62,6 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img class="header-avatar" src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '"';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '"';
 	}
 }
