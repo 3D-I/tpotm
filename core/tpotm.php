@@ -65,6 +65,11 @@ class tpotm
 		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '"';
 	}
 
+	/**
+	 * Returns an array of users with admin/mod auths
+	 *
+	 * @return array	empty array if false
+	 */
 	public function admin_mody_ary()
 	{
 		/**
