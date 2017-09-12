@@ -9,7 +9,18 @@ services:
             - '@template'
             - '@user'
             - '%core.root_path%'
-            - '%core.php_ext%' 
+            - '%core.php_ext%'
+            - '@threedi.tpotm.tpotm'
 
         tags:
             - { name: event.listener }
+
+    threedi.tpotm.tpotm:
+        class: threedi\tpotm\core\tpotm
+        arguments:
+            - '@auth'
+            - '@config'
+            - '@log'
+            - '@user'
+            - '@ext.manager'
+            - '@path_helper'

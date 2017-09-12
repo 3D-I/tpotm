@@ -44,6 +44,9 @@ class listener implements EventSubscriberInterface
 	/** @var string phpEx */
 	protected $php_ext;
 
+	/* @var \threedi\dae\core\dae */
+	protected $tpotm;
+
 	/**
 		* Constructor
 		*
@@ -55,9 +58,10 @@ class listener implements EventSubscriberInterface
 		* @param \phpbb\user				$user			User Object
 		* @var string phpBB root path
 		* @var string phpEx
+		* @param threedi\tpotm\core\tpotm		$tpotm			Methods to be used by Class
 		* @access public
 		*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
 		$this->auth			= $auth;
 		$this->cache		= $cache;
@@ -67,6 +71,7 @@ class listener implements EventSubscriberInterface
 		$this->user			= $user;
 		$this->root_path	= $root_path;
 		$this->php_ext		= $phpExt;
+		$this->tpotm		= $tpotm;
 
 		$this->enable_admin_mod_array	= (bool) $this->config['threedi_tpotm_adm_mods'];
 		$this->enable_miniavatar		= (bool) $this->config['threedi_tpotm_miniavatar'];
@@ -241,7 +246,8 @@ class listener implements EventSubscriberInterface
 			{
 				// @ToDO: use phpbb_get_avatar here..
 				$template_vars += array(
-					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : 'N/A',
+					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge(),
+
 					'TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				);
 			}

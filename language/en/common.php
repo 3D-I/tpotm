@@ -48,6 +48,8 @@ $lang = array_merge($lang, array(
 		2	=> ' with a total of <strong>%d</strong> posts',
 	),
 
+	'TPOTM_BADGE'			=> 'TPOTM badge',
+
 	// Translators please do not change the following line, no need to translate it!
-	'TPOTM_CREDIT_LINE'	=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
+	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
 ));
