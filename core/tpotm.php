@@ -30,6 +30,12 @@ class tpotm
 	/** @var \phpbb\path_helper */
 	protected $path_helper;
 
+	/** @var string phpBB root path */
+	protected $root_path;
+
+	/** @var string phpEx */
+	protected $php_ext;
+
 	/**
 		* Constructor
 		*
@@ -39,10 +45,12 @@ class tpotm
 		* @param \phpbb\user				$user			User object
 		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
 		* @param \phpbb\path_helper			$path_helper	Path helper object
+		* @var string phpBB root path
+		* @var string phpEx
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt)
 	{
 		$this->auth				=	$auth;
 		$this->config			=	$config;
@@ -50,9 +58,10 @@ class tpotm
 		$this->user				=	$user;
 		$this->ext_manager		=	$ext_manager;
 		$this->path_helper		=	$path_helper;
-
 		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
 		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
+		$this->root_path		=	$root_path;
+		$this->php_ext			=	$phpExt;
 	}
 
 	/**
@@ -68,7 +77,7 @@ class tpotm
 	/**
 	 * Returns an array of users with admin/mod auths
 	 *
-	 * @return array	empty array if false
+	 * @return array	empty array otherwise
 	 */
 	public function admin_mody_ary()
 	{
@@ -83,5 +92,20 @@ class tpotm
 
 		/* Groups the above results */
 		return array_unique(array_merge($admin_ary, $mod_ary));
+	}
+
+	/**
+	 * Gets the complete list of banned users' ids.
+	 *
+	 * @return array	Array of banned users' ids if any, empty array otherwise
+	 */
+	public function banned_users_ids()
+	{
+				if (!function_exists('phpbb_get_banned_user_ids'))
+				{
+					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
+				}
+
+				return phpbb_get_banned_user_ids(array());
 	}
 }

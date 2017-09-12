@@ -175,18 +175,9 @@ class listener implements EventSubscriberInterface
 				}
 
 				/**
-				 * Idea borrowed from Ban Hammer ext
+				 * Gets the complete list of banned users' ids.
 				 */
-				if (!function_exists('phpbb_get_banned_user_ids'))
-				{
-					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
-				}
-				/**
-				 * Gets the complete list of banned ids.
-				 *
-				 * @return array	Array of banned users' ids if any, empty array otherwise
-				 */
-				$ban_ids = phpbb_get_banned_user_ids(array());
+				$ban_ids = $this->tpotm->banned_users_ids();
 
 				/*
 					* There can be only ONE, the TPOTM.

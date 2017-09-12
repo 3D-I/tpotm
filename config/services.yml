@@ -24,3 +24,5 @@ services:
             - '@user'
             - '@ext.manager'
             - '@path_helper'
+            - '%core.root_path%'
+            - '%core.php_ext%'
