@@ -44,7 +44,7 @@ class listener implements EventSubscriberInterface
 	/** @var string phpEx */
 	protected $php_ext;
 
-	/* @var \threedi\dae\core\dae */
+	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
 	/**
