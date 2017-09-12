@@ -71,7 +71,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '"';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" alt="' . $this->user->lang('TPOTM_BADGE') . '">';
 	}
 
 	/**
@@ -101,11 +101,11 @@ class tpotm
 	 */
 	public function banned_users_ids()
 	{
-				if (!function_exists('phpbb_get_banned_user_ids'))
-				{
-					include($this->root_path . 'includes/functions_user.' . $this->php_ext);
-				}
+		if (!function_exists('phpbb_get_banned_user_ids'))
+		{
+			include($this->root_path . 'includes/functions_user.' . $this->php_ext);
+		}
 
-				return phpbb_get_banned_user_ids(array());
+		return phpbb_get_banned_user_ids(array());
 	}
 }
