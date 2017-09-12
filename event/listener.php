@@ -157,6 +157,15 @@ class listener implements EventSubscriberInterface
 			$config_time_cache_min = (int) ($this->config['threedi_tpotm_ttl']);
 
 			/**
+			 * If we are disabling the cache, the existing information
+			 * in the cache file is not valid. Let's clear it.
+			 */
+			if (($config_time_cache_min) === 0)
+			{
+				$this->cache->destroy('_tpotm');
+			}
+
+			/**
 			 * Check cached data
 			 * Run the whole stuff only when needed or cache is disabled in ACP
 			 */
@@ -200,10 +209,12 @@ class listener implements EventSubscriberInterface
 				$this->db->sql_freeresult($result);
 
 				/**
-				 * Always caching this data improves performance when needed
-				 * Also to avoid solar flares.
+				 * If cache is enabled use it
 				 */
-				$this->cache->put('_tpotm', $row, (int) $config_time_cache);
+				if (($config_time_cache_min) >= 1)
+				{
+					$this->cache->put('_tpotm', $row, (int) $config_time_cache);
+				}
 			}
 
 			/* Let's show the TPOTM then.. */
