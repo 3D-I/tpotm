@@ -193,7 +193,7 @@ class listener implements EventSubscriberInterface
 					* If same tot posts and same exact post time then the post ID rules
 					* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
 				*/
-				$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 					FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 					WHERE u.user_id <> ' . ANONYMOUS . '
 						AND u.user_id = p.poster_id
@@ -219,6 +219,17 @@ class listener implements EventSubscriberInterface
 
 			/* Let's show the TPOTM then.. */
 			$tpotm_tot_posts = (int) $row['total_posts'];
+
+			/* If no posts for the current elapsed time there is not a TPOTM */
+			if ((int) $tpotm_tot_posts < 1)
+			{
+				$this->tpotm->perform_user_db_clean();
+			}
+			/* There is a TPOTM, let's update the DB then */
+			if ((int) $tpotm_tot_posts >= 1)
+			{
+				$this->tpotm->perform_user_db_update((int) $row['user_id']);
+			}
 
 			/* Only auth'd users can view the profile */
 			$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);

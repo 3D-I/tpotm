@@ -18,6 +18,9 @@ class tpotm
 	/** @var \phpbb\config\config */
 	protected $config;
 
+	/** @var \phpbb\db\driver\driver */
+	protected $db;
+
 	/** @var \phpbb\log */
 	protected $log;
 
@@ -41,6 +44,7 @@ class tpotm
 		*
 		* @param \phpbb\auth\auth			$auth			Authentication object
 		* @param \phpbb\config\config		$config			Config Object
+		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\log\log				$log			phpBB log
 		* @param \phpbb\user				$user			User object
 		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
@@ -50,10 +54,11 @@ class tpotm
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt)
 	{
 		$this->auth				=	$auth;
 		$this->config			=	$config;
+		$this->db				=	$db;
 		$this->log				=	$log;
 		$this->user				=	$user;
 		$this->ext_manager		=	$ext_manager;
@@ -107,5 +112,49 @@ class tpotm
 		}
 
 		return phpbb_get_banned_user_ids(array());
+	}
+
+	/**
+	 * Update the user_tpotm to be false for everyone
+	 *
+	 * @return void
+	 */
+	public function perform_user_db_clean()
+	{
+		/* Update the user_tpotm to be false for everyone */
+		$tpotm_sql1 = array(
+			'user_tpotm'		=> 0
+		);
+		$sql1 = 'UPDATE ' . USERS_TABLE . '
+			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
+			WHERE user_id <> ' . ANONYMOUS;
+		$this->db->sql_query($sql1);
+	}
+
+	/**
+	 * Update the user_tpotm to be true for the present winner
+	 *
+	 * @param int $tpotm_id the current TPOTM user_id
+	 * @return void
+	 */
+	public function perform_user_db_update($tpotm_id)
+	{
+		/* Update the user_tpotm to be false for everyone */
+		$tpotm_sql1 = array(
+			'user_tpotm'		=> 0
+		);
+		$sql1 = 'UPDATE ' . USERS_TABLE . '
+			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
+			WHERE user_id <> ' . ANONYMOUS;
+		$this->db->sql_query($sql1);
+
+		/* Now update the user_tpotm to be true for the present winner */
+		$tpotm_sql2 = array(
+			'user_tpotm'		=> 1
+		);
+		$sql2 = 'UPDATE ' . USERS_TABLE . '
+			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
+			WHERE user_id = ' . (int) $tpotm_id;
+		$this->db->sql_query($sql2);
 	}
 }
