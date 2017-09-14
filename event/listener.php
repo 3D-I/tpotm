@@ -310,6 +310,5 @@ class listener implements EventSubscriberInterface
 		{
 			$event['post_row'] = array_merge($event['post_row'], array('TPOTM_BADGE' => $event['user_poster_data']['user_tpotm']));
 		}
-	//var_dump($event['user_poster_data']['user_tpotm']);
 	}
 }
