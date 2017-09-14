@@ -47,10 +47,10 @@ class tpotm
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\log\log				$log			phpBB log
 		* @param \phpbb\user				$user			User object
-		* @var string phpBB root path		$root_path
-		* @var string phpEx					$phpExt
 		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
 		* @param \phpbb\path_helper			$path_helper	Path helper object
+		* @var string phpBB root path		$root_path
+		* @var string phpEx					$phpExt
 		* @access public
 	*/
 
@@ -87,7 +87,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" class="tpotm-header-avatar" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
@@ -99,7 +99,6 @@ class tpotm
 	{
 		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
-
 
 	/**
 	 * Returns an array of users with admin/mod auths (thx Steve for the idea)

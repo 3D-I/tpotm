@@ -260,8 +260,6 @@ class listener implements EventSubscriberInterface
 				// @ToDO: use phpbb_get_avatar here..
 				$template_vars += array(
 					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge(),
-
-					'U_TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				);
 			}
 			/* You know.. template stuff */
@@ -300,7 +298,6 @@ class listener implements EventSubscriberInterface
 	 *
 	 * @event core.viewtopic_modify_post_row
 	 */
-	// @ToDo fix display of the results!
 	public function viewtopic_tpotm($event)
 	{
 		/**
