@@ -38,6 +38,7 @@ $lang = array_merge($lang, array(
 	'TPOTM_NOW'			=> 'At the present time is ',
 	'TPOTM_NOBODY'		=> 'not yet available,',
 	'TPOTM_BADGE'		=> 'TPOTM badge',
+	'TPOTM_BADGE_MINIPROFILE'		=> 'Top poster of the Month',
 
 	'TPOTM_CACHE'	=> array(
 		0				=>	' (<i>updates at every page load</i>)',

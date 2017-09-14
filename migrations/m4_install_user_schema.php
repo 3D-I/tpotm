@@ -32,7 +32,7 @@ class m4_install_user_schema extends \phpbb\db\migration\migration
 		return array(
 			'add_columns'	=> array(
 				$this->table_prefix . 'users'	=>	array(
-					'user_tpotm'	=> array('TINT:1', '0'),
+					'user_tpotm'	=> array('VCHAR:255', ''),
 				),
 			),
 		);

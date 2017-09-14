@@ -80,10 +80,12 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'			=>	'load_language_on_setup',
-			'core.permissions'			=>	'permissions',
-			'core.page_header_after'	=>	'tpotm_template_switch',
-			'core.page_footer'			=>	'display_tpotm',
+			'core.user_setup'					=>	'load_language_on_setup',
+			'core.permissions'					=>	'permissions',
+			'core.page_header_after'			=>	'tpotm_template_switch',
+			'core.page_footer'					=>	'display_tpotm',
+			'core.viewtopic_cache_user_data'	=>	'viewtopic_cache_user_data',
+			'core.viewtopic_modify_post_row'	=>	'viewtopic_tpotm',
 		);
 	}
 
@@ -126,11 +128,12 @@ class listener implements EventSubscriberInterface
 	public function tpotm_template_switch($event)
 	{
 		$this->template->assign_vars(array(
-			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view')) ? true : false,
+			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
-			'S_TPOTM_AVATAR'		=> (bool) $this->config['threedi_tpotm_miniavatar'],
+			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
+			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 		));
 	}
 
@@ -139,7 +142,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check perms first
 		 */
-		if ($this->auth->acl_get('u_allow_tpotm_view'))
+		if ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin'))
 		{
 			$now = time();
 			$date_today = gmdate("Y-m-d", $now);
@@ -228,7 +231,7 @@ class listener implements EventSubscriberInterface
 			/* There is a TPOTM, let's update the DB then */
 			if ((int) $tpotm_tot_posts >= 1)
 			{
-				$this->tpotm->perform_user_db_update((int) $row['user_id']);
+				$this->tpotm->perform_user_reset((int) $row['user_id'], (string) $this->tpotm->style_miniprofile_badge());
 			}
 
 			/* Only auth'd users can view the profile */
@@ -256,11 +259,57 @@ class listener implements EventSubscriberInterface
 				$template_vars += array(
 					'TPOTM_AVATAR'		=> (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge(),
 
-					'TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
+					'U_TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				);
 			}
 			/* You know.. template stuff */
 			$this->template->assign_vars($template_vars);
 		}
+	}
+
+	/**
+	 * Modify the users' data displayed within their posts
+	 *
+	 * @event core.viewtopic_cache_user_data
+	 */
+	public function viewtopic_cache_user_data($event)
+	{
+		/**
+		 * Check permission prior to run the code
+		 */
+		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->config['threedi_tpotm_miniprofile']) )
+		{
+			$array = $event['user_cache_data'];
+			$array['user_tpotm'] = $event['row']['user_tpotm'];
+			/**
+			 * The migration sat a default user_tpotm for everyone that's empty string
+			 * Only one user got the formatted HTML string to the image
+			 */
+			$user_tpotm = array();
+			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge() : '';
+			$array = array_merge($array, $user_tpotm);
+
+			$event['user_cache_data'] = $array;
+		}
+	}
+
+	/**
+	 * Modify the posts template block
+	 *
+	 * @event core.viewtopic_modify_post_row
+	 */
+	// @ToDo fix display of the results!
+	public function viewtopic_tpotm($event)
+	{
+		/**
+		 * Check permission prior to run the code
+		 */
+		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->config['threedi_tpotm_miniprofile']) )
+		{
+			$event['post_row'] = array_merge($event['post_row'], array(
+				'TPOTM_BADGE'	=>	$event['user_poster_data']['user_tpotm'])
+			);
+		}
+	//var_dump($event['user_poster_data']['user_tpotm']);
 	}
 }

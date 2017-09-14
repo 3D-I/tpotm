@@ -5,3 +5,10 @@ a.tpotm-header-avatar img {
 	vertical-align: bottom;
 	width: auto;
 }
+
+.tpotm-miniprofile-badge {
+	padding-left: 4px;
+	max-height: 14px;
+	vertical-align: bottom;
+	width: auto;
+}

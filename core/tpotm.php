@@ -47,10 +47,10 @@ class tpotm
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\log\log				$log			phpBB log
 		* @param \phpbb\user				$user			User object
+		* @var string phpBB root path		$root_path
+		* @var string phpEx					$phpExt
 		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
 		* @param \phpbb\path_helper			$path_helper	Path helper object
-		* @var string phpBB root path
-		* @var string phpEx
 		* @access public
 	*/
 
@@ -63,10 +63,21 @@ class tpotm
 		$this->user				=	$user;
 		$this->ext_manager		=	$ext_manager;
 		$this->path_helper		=	$path_helper;
-		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
-		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
+
+		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
+		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
+	}
+
+	/**
+	 * Returns whether the phpBB is equal or greater than v3.2.1
+	 *
+	 * @return bool
+	 */
+	public function is_rhea()
+	{
+		return phpbb_version_compare(PHPBB_VERSION, '3.2.1', '>=');
 	}
 
 	/**
@@ -80,14 +91,25 @@ class tpotm
 	}
 
 	/**
-	 * Returns an array of users with admin/mod auths
+	 * Returns the style related URL and HTML to the miniprofile image file
+	 *
+	 * @return string
+	 */
+	public function style_miniprofile_badge()
+	{
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+	}
+
+
+	/**
+	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
 	 *
 	 * @return array	empty array otherwise
 	 */
 	public function admin_mody_ary()
 	{
 		/**
-		 * Inspiration taken from Top Five ext - Thanks to Steve.
+		 * Inspiration taken from Top Five ext
 		 * Grabs all admins and mods, it is a catch all.
 		*/
 		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
@@ -121,9 +143,8 @@ class tpotm
 	 */
 	public function perform_user_db_clean()
 	{
-		/* Update the user_tpotm to be false for everyone */
 		$tpotm_sql1 = array(
-			'user_tpotm'		=> 0
+			'user_tpotm'		=> ''
 		);
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
@@ -134,27 +155,29 @@ class tpotm
 	/**
 	 * Update the user_tpotm to be true for the present winner
 	 *
-	 * @param int $tpotm_id the current TPOTM user_id
+	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
 	 * @return void
 	 */
-	public function perform_user_db_update($tpotm_id)
+	public function perform_user_db_update($tpotm_user_id, $tpotm_miniprofile_badge)
 	{
-		/* Update the user_tpotm to be false for everyone */
-		$tpotm_sql1 = array(
-			'user_tpotm'		=> 0
-		);
-		$sql1 = 'UPDATE ' . USERS_TABLE . '
-			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
-			WHERE user_id <> ' . ANONYMOUS;
-		$this->db->sql_query($sql1);
-
-		/* Now update the user_tpotm to be true for the present winner */
 		$tpotm_sql2 = array(
-			'user_tpotm'		=> 1
+			'user_tpotm'		=> (string) $tpotm_miniprofile_badge
 		);
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
-			WHERE user_id = ' . (int) $tpotm_id;
+			WHERE user_id = ' . (int) $tpotm_user_id;
 		$this->db->sql_query($sql2);
+	}
+
+	/**
+	 * Resets the user_tpotm information in the database
+	 *
+	 * @param int $tpotm_id the current TPOTM user_id
+	 * @return void
+	 */
+	public function perform_user_reset($tpotm_user_id, $tpotm_miniprofile_badge)
+	{
+		$this->perform_user_db_clean();
+		$this->perform_user_db_update($tpotm_user_id, $tpotm_miniprofile_badge);
 	}
 }
