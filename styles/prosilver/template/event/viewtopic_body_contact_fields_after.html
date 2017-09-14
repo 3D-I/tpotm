@@ -1,10 +1,10 @@
 {% if S_TPOTM_MINIPROFILE and not postrow.S_POST_HIDDEN and S_TPOTM and postrow.TPOTM_BADGE %}
 	<dd>
 		<strong>{{ lang('TPOTM_BADGE_MINIPROFILE') }}</strong>
-			{% if S_IS_RHEA %}
-				<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span>
-			{% else %}
-				{{ postrow.TPOTM_BADGE }}
-			{% endif %}
+		{% if S_IS_RHEA %}
+			<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span>
+		{% else %}
+			{{ postrow.TPOTM_BADGE }}
+		{% endif %}
 	</dd>
 {% endif %}
