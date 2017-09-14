@@ -253,9 +253,9 @@ class listener implements EventSubscriberInterface
 			);
 
 			/**
-			 * Don't run that code if the admin so wishes
+			 * Don't run that code if the admin so wishes or there is not a TPOTM yet
 			 */
-			if ($this->enable_miniavatar)
+			if ($this->enable_miniavatar && ((int) $tpotm_tot_posts >= 1))
 			{
 				// @ToDO: use phpbb_get_avatar here..
 				$template_vars += array(
