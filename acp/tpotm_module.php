@@ -21,7 +21,7 @@ class tpotm_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $user;
+		global $config, $request, $template, $user, $phpbb_log;
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
 		$this->tpl_name = 'tpotm_body';
@@ -55,6 +55,8 @@ class tpotm_module
 
 				$config->set('threedi_tpotm_adm_mods', $request->variable('threedi_tpotm_adm_mods', (int) $config['threedi_tpotm_adm_mods']));
 
+				/* Log the action. */
+				$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'TPOTM_LOG_CONFIG_SAVED', false, array());
 				trigger_error($user->lang('ACP_TPOTM_SETTING_SAVED') . adm_back_link($this->u_action));
 			}
 		}
