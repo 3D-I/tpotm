@@ -155,6 +155,7 @@ class tpotm
 	/**
 	 * Update the user_tpotm to be true for the present winner
 	 *
+	 * @param int $tpotm_user_id the current TPOTM user_id
 	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
 	 * @return void
 	 */
@@ -172,7 +173,8 @@ class tpotm
 	/**
 	 * Resets the user_tpotm information in the database
 	 *
-	 * @param int $tpotm_id the current TPOTM user_id
+	 * @param int $tpotm_user_id the current TPOTM user_id
+	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
 	 * @return void
 	 */
 	public function perform_user_reset($tpotm_user_id, $tpotm_miniprofile_badge)

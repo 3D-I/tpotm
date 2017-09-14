@@ -75,6 +75,7 @@ class listener implements EventSubscriberInterface
 
 		$this->enable_admin_mod_array	= (bool) $this->config['threedi_tpotm_adm_mods'];
 		$this->enable_miniavatar		= (bool) $this->config['threedi_tpotm_miniavatar'];
+		$this->enable_miniprofile		= (bool) ($this->config['threedi_tpotm_miniprofile']);
 	}
 
 	static public function getSubscribedEvents()
@@ -129,6 +130,7 @@ class listener implements EventSubscriberInterface
 	{
 		$this->template->assign_vars(array(
 			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
+			'S_IS_RHEA'				=> $this->tpotm->is_rhea(),
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
@@ -277,7 +279,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permission prior to run the code
 		 */
-		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->config['threedi_tpotm_miniprofile']) )
+		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
 		{
 			$array = $event['user_cache_data'];
 			$array['user_tpotm'] = $event['row']['user_tpotm'];
@@ -304,11 +306,9 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permission prior to run the code
 		 */
-		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->config['threedi_tpotm_miniprofile']) )
+		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
 		{
-			$event['post_row'] = array_merge($event['post_row'], array(
-				'TPOTM_BADGE'	=>	$event['user_poster_data']['user_tpotm'])
-			);
+			$event['post_row'] = array_merge($event['post_row'], array('TPOTM_BADGE' => $event['user_poster_data']['user_tpotm']));
 		}
 	//var_dump($event['user_poster_data']['user_tpotm']);
 	}
