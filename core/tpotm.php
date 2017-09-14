@@ -93,11 +93,12 @@ class tpotm
 	/**
 	 * Returns the Fontawesome HTML markup for the miniavatar image file
 	 *
+	 * @param string $tpotm_av_url	the profile URL
 	 * @return string
 	 */
-	public function style_mini_badge_fa()
+	public function style_mini_badge_fa($tpotm_av_url)
 	{
-		return '<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
+		return '<a href="' . $tpotm_av_url . '" class="tpotm-header-avatar"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
 	}
 
 	/**

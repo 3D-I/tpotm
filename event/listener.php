@@ -260,12 +260,13 @@ class listener implements EventSubscriberInterface
 				// @ToDO: use phpbb_get_avatar here..
 				$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge();
 
-				$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge_fa();
+				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+
+				$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge_fa($tpotm_av_url);
 
 				$template_vars += array(
 					'TPOTM_AVATAR'			=> ($this->tpotm->is_rhea()) ? $tpotm_av_32 : $tpotm_av_31,
-
-					'U_TPOTM_AVATAR_URL'	=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '',
+					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
 				);
 			}
 			/* You know.. template stuff */
