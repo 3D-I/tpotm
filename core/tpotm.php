@@ -91,6 +91,16 @@ class tpotm
 	}
 
 	/**
+	 * Returns the Fontawesome HTML markup for the miniavatar image file
+	 *
+	 * @return string
+	 */
+	public function style_mini_badge_fa()
+	{
+		return '<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
+	}
+
+	/**
 	 * Returns the style related URL and HTML to the miniprofile badge image file
 	 *
 	 * @return string
