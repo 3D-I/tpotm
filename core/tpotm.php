@@ -81,17 +81,17 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the image file
+	 * Returns the style related URL and HTML to the miniavatar image file
 	 *
 	 * @return string
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" class="tpotm-header-avatar" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniprofile image file
+	 * Returns the style related URL and HTML to the miniprofile badge image file
 	 *
 	 * @return string
 	 */
@@ -136,7 +136,7 @@ class tpotm
 	}
 
 	/**
-	 * Update the user_tpotm to be false for everyone
+	 * Update the user_tpotm to be empty for everyone
 	 *
 	 * @return void
 	 */
@@ -152,7 +152,7 @@ class tpotm
 	}
 
 	/**
-	 * Update the user_tpotm to be true for the present winner
+	 * Update the user_tpotm with the badge HTML markup for the present winner
 	 *
 	 * @param int $tpotm_user_id the current TPOTM user_id
 	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
