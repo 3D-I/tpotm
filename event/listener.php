@@ -131,6 +131,8 @@ class listener implements EventSubscriberInterface
 		$this->template->assign_vars(array(
 			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
 			'S_IS_RHEA'				=> $this->tpotm->is_rhea(),
+			'S_IS_BADGE_IMG'		=> $this->tpotm->style_badge_is_true() ? true : false,
+
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
@@ -233,7 +235,7 @@ class listener implements EventSubscriberInterface
 			/* There is a TPOTM, let's update the DB then */
 			if ((int) $tpotm_tot_posts >= 1)
 			{
-				$this->tpotm->perform_user_reset((int) $row['user_id'], (string) $this->tpotm->style_miniprofile_badge());
+				$this->tpotm->perform_user_reset((int) $row['user_id']);
 			}
 
 			/* Only auth'd users can view the profile */
@@ -257,17 +259,33 @@ class listener implements EventSubscriberInterface
 			 */
 			if ($this->enable_miniavatar && ((int) $tpotm_tot_posts >= 1))
 			{
-				// @ToDO: use phpbb_get_avatar here..
-				$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge();
+				if ( ($this->tpotm->style_badge_is_true()) && !$this->tpotm->is_rhea() )
+				{
+					// @ToDO: use phpbb_get_avatar here..
+					$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge();
 
-				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+					$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
-				$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge_fa($tpotm_av_url);
+					$template_vars += array(
+						'TPOTM_AVATAR'			=> $tpotm_av_31,
+						'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+					);
+				}
+				else if ($this->tpotm->is_rhea())
+				{
+					$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
-				$template_vars += array(
-					'TPOTM_AVATAR'			=> ($this->tpotm->is_rhea()) ? $tpotm_av_32 : $tpotm_av_31,
-					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
-				);
+					$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->tpotm->style_mini_badge_fa($tpotm_av_url);
+
+					$template_vars += array(
+						'TPOTM_AVATAR'			=> $tpotm_av_32,
+						'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+					);
+				}
+				else
+				{
+					$template_vars += array();
+				}
 			}
 			/* You know.. template stuff */
 			$this->template->assign_vars($template_vars);
@@ -282,20 +300,22 @@ class listener implements EventSubscriberInterface
 	public function viewtopic_cache_user_data($event)
 	{
 		/**
-		 * Check permission prior to run the code
+		 * Check permissions prior to run the code
 		 */
 		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
 		{
 			$array = $event['user_cache_data'];
 			$array['user_tpotm'] = $event['row']['user_tpotm'];
 			/**
-			 * The migration sat a default user_tpotm for everyone that's empty string
-			 * Only one user got the formatted HTML string to the image
+			 * The migration created a field in the users table: user_tpotm
+			 * Sat as default to be empty string for everyone
+			 * Only the TPOTM gets the badge's filename in it.
 			 */
 			$user_tpotm = array();
-			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge() : '';
-			$array = array_merge($array, $user_tpotm);
 
+			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
+
+			$array = array_merge($array, $user_tpotm);
 			$event['user_cache_data'] = $array;
 		}
 	}
@@ -308,11 +328,13 @@ class listener implements EventSubscriberInterface
 	public function viewtopic_tpotm($event)
 	{
 		/**
-		 * Check permission prior to run the code
+		 * Check permissions prior to run the code
 		 */
 		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
 		{
-			$event['post_row'] = array_merge($event['post_row'], array('TPOTM_BADGE' => $event['user_poster_data']['user_tpotm']));
+			$user_tpotm = (!empty($event['user_poster_data']['user_tpotm'])) ? $this->tpotm->style_miniprofile_badge($event['user_poster_data']['user_tpotm']) : '';
+
+			$event['post_row'] = array_merge($event['post_row'], array('TPOTM_BADGE' => $user_tpotm));
 		}
 	}
 }

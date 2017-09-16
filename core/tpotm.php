@@ -81,9 +81,69 @@ class tpotm
 	}
 
 	/**
+	 * Returns the absolute URL to the badge image file
+	 *
+	 * @return void
+	 */
+	public function style_badge()
+	{
+		return ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
+	}
+
+	/**
+	 * Returns whether the basic badge img exists
+	 *
+	 * @return	bool
+	 */
+	public function style_badge_is_true()
+	{
+		return file_exists(self::style_badge());
+	}
+
+	/**
+	 * Update config to false
+	 *
+	 * @return void
+	 */
+	public function update_img_config_to_false()
+	{
+		$this->config->set('threedi_default_badge_exists', 0);
+	}
+
+	/**
+	 * Update config to true
+	 *
+	 * @return void
+	 */
+	public function update_img_config_to_true()
+	{
+		$this->config->set('threedi_default_badge_exists', 1);
+	}
+
+	/**
+	 * Badge IMG check-point
+	 *
+	 * @return void
+	 */
+	public function check_point_badge_img()
+	{
+		/* If Img badge filename mistmach error, state is false and return */
+		if (!self::style_badge_is_true())
+		{
+			self::update_img_config_to_false();
+			return;
+		}
+		else
+		{
+			/* Check passed, let's set it back to true. */
+			self::update_img_config_to_true();
+		}
+	}
+
+	/**
 	 * Returns the style related URL and HTML to the miniavatar image file
 	 *
-	 * @return string
+	 * @return string	Formatted HTML markup
 	 */
 	public function style_mini_badge()
 	{
@@ -93,8 +153,8 @@ class tpotm
 	/**
 	 * Returns the Fontawesome HTML markup for the miniavatar image file
 	 *
-	 * @param string $tpotm_av_url	the profile URL
-	 * @return string
+	 * @param string	$tpotm_av_url	the profile URL
+	 * @return string					Formatted HTML markup
 	 */
 	public function style_mini_badge_fa($tpotm_av_url)
 	{
@@ -104,11 +164,12 @@ class tpotm
 	/**
 	 * Returns the style related URL and HTML to the miniprofile badge image file
 	 *
-	 * @return string
+	 * @param string	$user_tpotm		the miniprofile image filename with extension
+	 * @return string					Formatted HTML markup
 	 */
-	public function style_miniprofile_badge()
+	public function style_miniprofile_badge($user_tpotm)
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm . '') . '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
@@ -165,14 +226,13 @@ class tpotm
 	/**
 	 * Update the user_tpotm with the badge HTML markup for the present winner
 	 *
-	 * @param int $tpotm_user_id the current TPOTM user_id
-	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
+	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void
 	 */
-	public function perform_user_db_update($tpotm_user_id, $tpotm_miniprofile_badge)
+	public function perform_user_db_update($tpotm_user_id)
 	{
 		$tpotm_sql2 = array(
-			'user_tpotm'		=> (string) $tpotm_miniprofile_badge
+			'user_tpotm'		=> 'tpotm_badge.png'
 		);
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
@@ -183,13 +243,12 @@ class tpotm
 	/**
 	 * Resets the user_tpotm information in the database
 	 *
-	 * @param int $tpotm_user_id the current TPOTM user_id
-	 * @param string $tpotm_miniprofile_badge	the style related URL and HTML to the miniprofile image file
+	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void
 	 */
-	public function perform_user_reset($tpotm_user_id, $tpotm_miniprofile_badge)
+	public function perform_user_reset($tpotm_user_id)
 	{
 		$this->perform_user_db_clean();
-		$this->perform_user_db_update($tpotm_user_id, $tpotm_miniprofile_badge);
+		$this->perform_user_db_update($tpotm_user_id);
 	}
 }

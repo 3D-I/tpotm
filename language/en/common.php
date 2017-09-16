@@ -34,11 +34,12 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'TPOTM_CAT'			=> 'Top Poster of the Month',
-	'TPOTM_NOW'			=> 'At the present time is ',
-	'TPOTM_NOBODY'		=> 'not yet available,',
-	'TPOTM_BADGE'		=> 'TPOTM badge',
+	'TPOTM_CAT'						=> 'Top Poster of the Month',
+	'TPOTM_NOW'						=> 'At the present time is ',
+	'TPOTM_NOBODY'					=> 'not yet available,',
+	'TPOTM_BADGE'					=> 'TPOTM badge',
 	'TPOTM_BADGE_MINIPROFILE'		=> 'Top poster of the Month',
+	'TPOTM_BADGE_ERROR'				=> 'image?',
 
 	'TPOTM_CACHE'	=> array(
 		0				=>	' (<i>updates at every page load</i>)',

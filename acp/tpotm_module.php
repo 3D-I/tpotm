@@ -21,12 +21,29 @@ class tpotm_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $user, $phpbb_log;
+		global $config, $request, $template, $user, $phpbb_log, $phpbb_container;
+
+		$tpotm = $phpbb_container->get('threedi.tpotm.tpotm');
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
 		$this->tpl_name = 'tpotm_body';
 		$this->page_title = $user->lang('ACP_TPOTM_TITLE');
 		add_form_key('threedi/tpotm');
+
+		/**
+		 * If Img Badge filename wrong then stop the party and go dormant.
+		 * Valid only if phpBB 3.1
+		 */
+		if (!$tpotm->is_rhea())
+		{
+			if (!$tpotm->style_badge_is_true())
+			{
+				/* Log the error. */
+				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
+
+				trigger_error($user->lang('TPOTM_BADGE_IMG_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+			}
+		}
 
 		/* Do this now and forget */
 		$errors = array();
@@ -36,6 +53,25 @@ class tpotm_module
 			if (!check_form_key('threedi/tpotm'))
 			{
 				trigger_error('FORM_INVALID', E_USER_WARNING);
+			}
+
+			/* Valid only if phpBB 3.1 */
+			if (!$tpotm->is_rhea())
+			{
+				/**
+				 * If Img Badge filename error..
+				 * state is false and return, else go on..
+				 * Valid only if phpBB 3.1
+				 */
+				$tpotm->check_point_badge_img();
+
+				/* You changed filenames? No party! */
+				if (!$config['threedi_default_badge_exists'])
+				{
+					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID');
+					/* Log the error. */
+					$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
+				}
 			}
 
 			/* No errors? Great, let's go. */
@@ -56,7 +92,8 @@ class tpotm_module
 				$config->set('threedi_tpotm_adm_mods', $request->variable('threedi_tpotm_adm_mods', (int) $config['threedi_tpotm_adm_mods']));
 
 				/* Log the action. */
-				$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'TPOTM_LOG_CONFIG_SAVED', false, array());
+				$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'TPOTM_LOG_CONFIG_SAVED');
+
 				trigger_error($user->lang('ACP_TPOTM_SETTING_SAVED') . adm_back_link($this->u_action));
 			}
 		}

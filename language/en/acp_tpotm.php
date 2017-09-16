@@ -41,4 +41,5 @@ $lang = array_merge($lang, array(
 	'TPOTM_ADM_MODS_EXPLAIN'				=>	'Include also those users in the TPOTM',
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors explaination',
+	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
 ));
