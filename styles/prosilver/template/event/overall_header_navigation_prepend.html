@@ -1,0 +1,13 @@
+{% if S_TPOTM_HALL and S_TPOTM %}
+	{% if S_IS_RHEA %}
+		<li data-last-responsive="true">
+			<a href="{{ U_TPOTM_HALL }}" title="{{ lang('TPOTM_PAGE') }}" role="menuitem">
+			<i class="icon fa-trophy fa-fw" aria-hidden="true"></i><span>{{ lang('TPOTM_PAGE') }}</span>
+			</a>
+		</li>
+	{% else %}
+		<li class="small-icon icon-tpotmhall no-bulletin">
+			<a href="{{ U_TPOTM_HALL }}" title="{{ lang('TPOTM_PAGE') }}">{{ lang('TPOTM_PAGE') }}</a>
+		</li>
+	{% endif %}
+{% endif %}

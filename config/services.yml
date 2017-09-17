@@ -1,4 +1,13 @@
 services:
+    threedi.tpotm.controller:
+        class: threedi\tpotm\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+            - '@threedi.tpotm.tpotm'
+
     threedi.tpotm.listener:
         class: threedi\tpotm\event\listener
         arguments:
@@ -6,6 +15,7 @@ services:
             - '@cache'
             - '@config'
             - '@dbal.conn'
+            - '@controller.helper'
             - '@template'
             - '@user'
             - '%core.root_path%'

@@ -1,0 +1,3 @@
+threedi_tpotm_controller:
+    path: /tpotm/{name}
+    defaults: { _controller: threedi.tpotm.controller:handle }

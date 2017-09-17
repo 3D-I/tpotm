@@ -12,3 +12,8 @@ a.tpotm-header-avatar img {
 	vertical-align: bottom;
 	width: auto;
 }
+
+.icon-tpotmhall {
+	background-image: url("./images/icon-tpotm-hall.png");
+	background-repeat: no-repeat;
+}

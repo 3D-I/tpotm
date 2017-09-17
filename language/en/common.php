@@ -54,4 +54,13 @@ $lang = array_merge($lang, array(
 
 	// Translators please do not change the following line, no need to translate it!
 	'TPOTM_CREDIT_LINE'	=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
+
+	// Hall of fame
+	'VIEWING_TPOTM_HALL'	=> 'Viewing TPOTM Hall of fame',
+	'TPOTM_PAGE'			=> 'Hall of fame',
+	'DEMO_HELLO'			=> 'Welcome to the TPOTM Hall of fame - W.I.P.',
+	'TPOTM_ROUTE_NAME'		=> 'hall_of_fame',
+	// Hall of fame - controller exceptions
+	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
+	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
 ));

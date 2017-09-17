@@ -78,15 +78,75 @@ class tpotm
 
 		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
 		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
+	}
 
-		$this->enable_admin_mod_array	= ($this->config['threedi_tpotm_adm_mods']) ? true : false;
-		$this->enable_miniavatar		= ($this->config['threedi_tpotm_miniavatar']) ? true : false;
-		$this->enable_miniprofile		= ($this->config['threedi_tpotm_miniprofile']) ? true : false;
+	/**
+	 * Returns the time for cache adjustable in ACP
+	 *
+	 * @return int
+	 */
+	public function config_time_cache()
+	{
+		return (int) ($this->config['threedi_tpotm_ttl'] * 60);
+	}
+	/**
+	 * Returns the number of minutes to show for templating purposes
+	 *
+	 * @return int
+	 */
+	public function config_time_cache_min()
+	{
+		return (int) ($this->config['threedi_tpotm_ttl']);
+	}
 
-		/* Config time for cache adjustable in ACP */
-		$this->config_time_cache		= (int) ($this->config['threedi_tpotm_ttl'] * 60);
-		/* Grabs the number of minutes to show for templating purposes */
-		$this->config_time_cache_min	= (int) ($this->config['threedi_tpotm_ttl']);
+	/**
+	 * Returns whether the user is authed
+	 *
+	 * @return bool
+	 */
+	public function is_authed()
+	{
+		return (bool) ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) );
+	}
+
+	/**
+	 * Returns whether the Hall of fame has been enabled or not
+	 *
+	 * @return bool
+	 */
+	public function is_hall()
+	{
+		return (bool) $this->config['threedi_tpotm_hall'];
+	}
+
+	/**
+	 * Returns whether the admin/mod array has been enabled or not
+	 *
+	 * @return bool
+	 */
+	public function enable_admin_mod_array()
+	{
+		return (bool) $this->config['threedi_tpotm_adm_mods'];
+	}
+
+	/**
+	 * Returns whether the miniavatar has been enabled or not
+	 *
+	 * @return bool
+	 */
+	public function enable_miniavatar()
+	{
+		return (bool) $this->config['threedi_tpotm_miniavatar'];
+	}
+
+	/**
+	 * Returns whether the miniprofile has been enabled or not
+	 *
+	 * @return bool
+	 */
+	public function enable_miniprofile()
+	{
+		return (bool) $this->config['threedi_tpotm_miniprofile'];
 	}
 
 	/**
@@ -102,7 +162,7 @@ class tpotm
 	/**
 	 * Returns the absolute URL to the badge image file
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function style_badge()
 	{
@@ -219,7 +279,7 @@ class tpotm
 	 */
 	public function auth_admin_mody_ary()
 	{
-		if (!$this->enable_admin_mod_array)
+		if (!self::enable_admin_mod_array())
 		{
 			return self::admin_mody_ary();
 		}
@@ -306,6 +366,7 @@ class tpotm
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
+			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 		));
 	}
 
@@ -368,7 +429,7 @@ class tpotm
 		 * If we are disabling the cache, the existing information
 		 * in the cache file is not valid. Let's clear it.
 		 */
-		if (($this->config_time_cache_min) === 0)
+		if ((self::config_time_cache_min()) === 0)
 		{
 			$this->cache->destroy('_tpotm');
 		}
@@ -383,9 +444,9 @@ class tpotm
 		}
 
 		/* If cache is enabled use it */
-		if (($this->config_time_cache) >= 1)
+		if ((self::config_time_cache()) >= 1)
 		{
-			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache);
+			$this->cache->put('_tpotm', $row, (int) self::config_time_cache());
 		}
 
 		return $row;
@@ -424,7 +485,7 @@ class tpotm
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
-		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min);
+		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) self::config_time_cache_min());
 		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
 		$template_vars = array(
@@ -436,7 +497,7 @@ class tpotm
 		/**
 		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
 		 */
-		if ($this->enable_miniavatar && ((int) $tpotm_tot_posts >= 1))
+		if (self::enable_miniavatar() && ((int) $tpotm_tot_posts >= 1))
 		{
 			if ( (self::style_badge_is_true()) && !self::is_rhea() )
 			{

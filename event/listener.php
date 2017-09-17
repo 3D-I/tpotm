@@ -32,6 +32,9 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\db\driver\driver */
 	protected $db;
 
+	/* @var \phpbb\controller\helper */
+	protected $helper;
+
 	/** @var \phpbb\template\template */
 	protected $template;
 
@@ -54,37 +57,39 @@ class listener implements EventSubscriberInterface
 		* @param \phpbb\cache\service		$cache
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\db\driver\driver	$db				Database object
+		* @param \phpbb\controller\helper	$helper			Controller helper object
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
 		* @var string phpBB root path
 		* @var string phpEx
-		* @param threedi\tpotm\core\tpotm		$tpotm			Methods to be used by Class
+		* @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
 		* @access public
 		*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
 		$this->auth			= $auth;
 		$this->cache		= $cache;
 		$this->config		= $config;
 		$this->db			= $db;
+		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
 		$this->root_path	= $root_path;
 		$this->php_ext		= $phpExt;
 		$this->tpotm		= $tpotm;
-
-		$this->enable_miniprofile		= (bool) ($this->config['threedi_tpotm_miniprofile']);
 	}
 
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.user_setup'					=>	'load_language_on_setup',
-			'core.permissions'					=>	'permissions',
-			'core.page_header_after'			=>	'tpotm_template_switch',
-			'core.page_footer'					=>	'display_tpotm',
-			'core.viewtopic_cache_user_data'	=>	'viewtopic_cache_user_data',
-			'core.viewtopic_modify_post_row'	=>	'viewtopic_tpotm',
+			'core.user_setup'						=>	'load_language_on_setup',
+			'core.permissions'						=>	'permissions',
+			'core.page_header'						=> 'add_page_header_link',
+			'core.viewonline_overwrite_location'	=> 'viewonline_page',
+			'core.page_header_after'				=>	'tpotm_template_switch',
+			'core.page_footer'						=>	'display_tpotm',
+			'core.viewtopic_cache_user_data'		=>	'viewtopic_cache_user_data',
+			'core.viewtopic_modify_post_row'		=>	'viewtopic_tpotm',
 		);
 	}
 
@@ -120,6 +125,42 @@ class listener implements EventSubscriberInterface
 	}
 
 	/**
+	 * Add a link to the controller in the forum navbar
+	 */
+	public function add_page_header_link()
+	{
+		/**
+		 * Check permissions prior to run the code
+		 */
+		if ( ($this->tpotm->is_authed()) && ($this->tpotm->is_hall()) )
+		{
+			$this->template->assign_vars(array(
+				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller', array('name' => $this->user->lang('TPOTM_ROUTE_NAME'))),
+			));
+		}
+	}
+
+	/**
+	 * Show users viewing hall of fame on the Who Is Online page
+	 *
+	 * @param \phpbb\event\data	$event	Event object
+	 */
+	public function viewonline_page($event)
+	{
+		/**
+		 * Check permissions prior to run the code
+		 */
+		if ( ($this->tpotm->is_authed()) && ($this->tpotm->is_hall()) )
+		{
+			if ($event['on_page'][1] === 'app' && strrpos($event['row']['session_page'], 'app.' . $this->php_ext . '/tpotm') === 0)
+			{
+				$event['location'] = $this->user->lang('VIEWING_TPOTM_HALL');
+				$event['location_url'] = $this->helper->route('threedi_tpotm_controller', array('name' => $this->user->lang('TPOTM_ROUTE_NAME')));
+			}
+		}
+	}
+
+	/**
 	 * Template switches over all
 	 *
 	 * @event core.page_header_after
@@ -134,7 +175,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check perms first
 		 */
-		if ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin'))
+		if ($this->tpotm->is_authed())
 		{
 			/*
 			 * There can be only ONE, the TPOTM.
@@ -153,7 +194,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
+		if ( ($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()) )
 		{
 			$array = $event['user_cache_data'];
 			$array['user_tpotm'] = $event['row']['user_tpotm'];
@@ -181,7 +222,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) && ($this->enable_miniprofile) )
+		if ( ($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()) )
 		{
 			$user_tpotm = (!empty($event['user_poster_data']['user_tpotm'])) ? $this->tpotm->style_miniprofile_badge($event['user_poster_data']['user_tpotm']) : '';
 
