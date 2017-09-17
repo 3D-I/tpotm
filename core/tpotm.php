@@ -15,6 +15,9 @@ class tpotm
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
+	/** @var \phpbb\cache\service */
+	protected $cache;
+
 	/** @var \phpbb\config\config */
 	protected $config;
 
@@ -39,10 +42,14 @@ class tpotm
 	/** @var string phpEx */
 	protected $php_ext;
 
+	/** @var \phpbb\template\template */
+	protected $template;
+
 	/**
 		* Constructor
 		*
 		* @param \phpbb\auth\auth			$auth			Authentication object
+		* @param \phpbb\cache\service		$cache
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\log\log				$log			phpBB log
@@ -51,12 +58,14 @@ class tpotm
 		* @param \phpbb\path_helper			$path_helper	Path helper object
 		* @var string phpBB root path		$root_path
 		* @var string phpEx					$phpExt
+		* @param \phpbb\template\template	$template		Template object
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
+		$this->cache			=	$cache;
 		$this->config			=	$config;
 		$this->db				=	$db;
 		$this->log				=	$log;
@@ -65,9 +74,19 @@ class tpotm
 		$this->path_helper		=	$path_helper;
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
+		$this->template			=	$template;
 
 		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
 		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
+
+		$this->enable_admin_mod_array	= ($this->config['threedi_tpotm_adm_mods']) ? true : false;
+		$this->enable_miniavatar		= ($this->config['threedi_tpotm_miniavatar']) ? true : false;
+		$this->enable_miniprofile		= ($this->config['threedi_tpotm_miniprofile']) ? true : false;
+
+		/* Config time for cache adjustable in ACP */
+		$this->config_time_cache		= (int) ($this->config['threedi_tpotm_ttl'] * 60);
+		/* Grabs the number of minutes to show for templating purposes */
+		$this->config_time_cache_min	= (int) ($this->config['threedi_tpotm_ttl']);
 	}
 
 	/**
@@ -193,6 +212,24 @@ class tpotm
 	}
 
 	/**
+	 * Don't run the code if the admin so wishes.
+	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
+	 *
+	 * @return array	empty array otherwise
+	 */
+	public function auth_admin_mody_ary()
+	{
+		if (!$this->enable_admin_mod_array)
+		{
+			return self::admin_mody_ary();
+		}
+		else
+		{
+			return array();
+		}
+	}
+
+	/**
 	 * Gets the complete list of banned users' ids.
 	 *
 	 * @return array	Array of banned users' ids if any, empty array otherwise
@@ -248,7 +285,188 @@ class tpotm
 	 */
 	public function perform_user_reset($tpotm_user_id)
 	{
-		$this->perform_user_db_clean();
-		$this->perform_user_db_update($tpotm_user_id);
+		self::perform_user_db_clean();
+		self::perform_user_db_update($tpotm_user_id);
+	}
+
+	/**
+	 * Template switches over all
+	 *
+	 * @return void
+	 */
+	public function template_switches_over_all()
+	{
+		$this->template->assign_vars(array(
+			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
+			'S_IS_RHEA'				=> self::is_rhea(),
+			'S_IS_BADGE_IMG'		=> self::style_badge_is_true() ? true : false,
+
+			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
+			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
+			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
+			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
+			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
+		));
+	}
+
+	/**
+	 * Gets the Unix Timestamp values for the current month.
+	 *
+	 * @return array	($month_start, $month_end) Unix Timestamp
+	 */
+	public function month_timegap()
+	{
+			$now = time();
+			$date_today = gmdate("Y-m-d", $now);
+			list($year_cur, $month_cur, $day1) = explode('-', $date_today);
+
+			/* Start time for current month */
+			$month_start_cur	= gmmktime (0,0,0, $month_cur, 1, $year_cur);
+			$month_start		= $month_start_cur;
+			$month_end			= $now;
+
+			return [$month_start, $month_end];
+	}
+
+	/*
+	* There can be only ONE, the TPOTM.
+	* If same tot posts and same exact post time then the post ID rules
+	* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+	*
+	 * @return array	[$row]		fetched rows
+	*/
+	public function perform_main_db_query()
+	{
+		list($month_start, $month_end) = self::month_timegap();
+
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+		WHERE u.user_id <> ' . ANONYMOUS . '
+				AND u.user_id = p.poster_id
+				AND ' . $this->db->sql_in_set('u.user_id', self::auth_admin_mody_ary(), true, true) . '
+				AND ' . $this->db->sql_in_set('u.user_id', self::banned_users_ids(), true, true) . '
+				AND (u.user_type <> ' . USER_FOUNDER . ')
+				AND p.post_visibility = ' . ITEM_APPROVED . '
+				AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+			GROUP BY u.user_id
+			ORDER BY total_posts DESC';
+		$result = $this->db->sql_query_limit($sql, 1);
+		$row = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		return $row;
+	}
+
+	/*
+	* Performs a chache check-in priot to delivery the final results
+	*
+	 * @return array $row		cached or not tesults
+	*/
+	public function perform_cache_on_main_db_query()
+	{
+		/**
+		 * If we are disabling the cache, the existing information
+		 * in the cache file is not valid. Let's clear it.
+		 */
+		if (($this->config_time_cache_min) === 0)
+		{
+			$this->cache->destroy('_tpotm');
+		}
+
+		/**
+		 * Check cached data
+		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 */
+		if (($row = $this->cache->get('_tpotm')) === false)
+		{
+			$row = self::perform_main_db_query();
+		}
+
+		/* If cache is enabled use it */
+		if (($this->config_time_cache) >= 1)
+		{
+			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache);
+		}
+
+		return $row;
+	}
+
+	/*
+	* There can be only ONE, the TPOTM.
+	* If same tot posts and same exact post time then the post ID rules
+	* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+	*
+	 * @return void
+	*/
+	public function show_the_winner()
+	{
+		$row = self::perform_cache_on_main_db_query();
+
+		/* Let's show the TPOTM then.. */
+		$tpotm_tot_posts = (int) $row['total_posts'];
+
+		/* If no posts for the current elapsed time there is not a TPOTM */
+		if ((int) $tpotm_tot_posts < 1)
+		{
+			self::perform_user_db_clean();
+		}
+
+		/* There is a TPOTM, let's update the DB then */
+		if ((int) $tpotm_tot_posts >= 1)
+		{
+			self::perform_user_reset((int) $row['user_id']);
+		}
+
+		/* Only auth'd users can view the profile */
+		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+
+		/* Fresh install or when a new Month starts gives zero posts */
+		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
+
+		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
+		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min);
+		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
+
+		$template_vars = array(
+			'TPOTM_NAME'		=> $tpotm_name,
+			'L_TPOTM_POST'		=> $tpotm_post,
+			'L_TPOTM_CACHE'		=> $tpotm_cache,
+		);
+
+		/**
+		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
+		 */
+		if ($this->enable_miniavatar && ((int) $tpotm_tot_posts >= 1))
+		{
+			if ( (self::style_badge_is_true()) && !self::is_rhea() )
+			{
+				// @ToDO: use phpbb_get_avatar here..
+				$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : self::style_mini_badge();
+
+				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+
+				$template_vars += array(
+					'TPOTM_AVATAR'			=> $tpotm_av_31,
+					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+				);
+			}
+			else if (self::is_rhea())
+			{
+				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+
+				$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : self::style_mini_badge_fa($tpotm_av_url);
+
+				$template_vars += array(
+					'TPOTM_AVATAR'			=> $tpotm_av_32,
+					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+				);
+			}
+			else
+			{
+				$template_vars += array();
+			}
+		}
+		/* You know.. template stuff */
+		$this->template->assign_vars($template_vars);
 	}
 }

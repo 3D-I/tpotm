@@ -19,6 +19,7 @@ services:
         class: threedi\tpotm\core\tpotm
         arguments:
             - '@auth'
+            - '@cache'
             - '@config'
             - '@dbal.conn'
             - '@log'
@@ -27,3 +28,4 @@ services:
             - '@path_helper'
             - '%core.root_path%'
             - '%core.php_ext%'
+            - '@template'
