@@ -47,7 +47,6 @@ class main
 		$this->user			= $user;
 
 		$this->tpotm		= $tpotm;
-		//	app.php/tpotm/hall_of_fame
 	}
 
 	/**

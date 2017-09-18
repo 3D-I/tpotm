@@ -20,61 +20,30 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\auth\auth */
-	protected $auth;
-
-	/** @var \phpbb\cache\service */
-	protected $cache;
-
-	/** @var \phpbb\config\config */
-	protected $config;
-
-	/** @var \phpbb\db\driver\driver */
-	protected $db;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/** @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
 
-	/** @var string phpBB root path */
-	protected $root_path;
-
-	/** @var string phpEx */
 	protected $php_ext;
-
-	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			$auth			Authentication object
-		* @param \phpbb\cache\service		$cache
-		* @param \phpbb\config\config		$config			Config Object
-		* @param \phpbb\db\driver\driver	$db				Database object
 		* @param \phpbb\controller\helper	$helper			Controller helper object
 		* @param \phpbb\template\template	$template		Template object
 		* @param \phpbb\user				$user			User Object
-		* @var string phpBB root path
+		*
 		* @var string phpEx
 		* @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
 		* @access public
 		*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $root_path, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
-		$this->auth			= $auth;
-		$this->cache		= $cache;
-		$this->config		= $config;
-		$this->db			= $db;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
-		$this->root_path	= $root_path;
+
 		$this->php_ext		= $phpExt;
 		$this->tpotm		= $tpotm;
 	}

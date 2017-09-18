@@ -11,14 +11,9 @@ services:
     threedi.tpotm.listener:
         class: threedi\tpotm\event\listener
         arguments:
-            - '@auth'
-            - '@cache'
-            - '@config'
-            - '@dbal.conn'
             - '@controller.helper'
             - '@template'
             - '@user'
-            - '%core.root_path%'
             - '%core.php_ext%'
             - '@threedi.tpotm.tpotm'
 

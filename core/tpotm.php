@@ -10,6 +10,15 @@
 
 namespace threedi\tpotm\core;
 
+use \phpbb\auth\auth;
+use \phpbb\cache\service;
+use \phpbb\config\config;
+use \phpbb\db\driver\driver_interface;
+use \phpbb\user;
+use \phpbb\extension\manager;
+use \phpbb\path_helper;
+use \phpbb\template\template;
+
 class tpotm
 {
 	protected $auth;
@@ -26,20 +35,20 @@ class tpotm
 	/**
 		* Constructor
 		*
-		* @param \phpbb\auth\auth			$auth			Authentication object
-		* @param \phpbb\cache\service		$cache
-		* @param \phpbb\config\config		$config			Config Object
-		* @param \phpbb\db\driver\driver	$db				Database object
-		* @param \phpbb\user				$user			User object
-		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
-		* @param \phpbb\path_helper			$path_helper	Path helper object
-		* @var string phpBB root path		$root_path
-		* @var string phpEx					$phpExt
-		* @param \phpbb\template\template	$template		Template object
+		* @param \phpbb\auth\auth					$auth			Authentication object
+		* @param \phpbb\cache\service				$cache
+		* @param \phpbb\config\config				$config			Config Object
+		* @param \phpbb\db\driver\driver_interface	$db				Database object
+		* @param \phpbb\user						$user			User object
+		* @param \phpbb\extension\manager			$ext_manager	Extension manager object
+		* @param \phpbb\path_helper					$path_helper	Path helper object
+		* @var string phpBB root path				$root_path
+		* @var string phpEx							$phpExt
+		* @param \phpbb\template\template			$template		Template object
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
+	public function __construct(auth $auth, service $cache, config $config, driver_interface $db, user $user, manager $ext_manager, path_helper $path_helper, $root_path, $phpExt, template $template)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
@@ -51,8 +60,6 @@ class tpotm
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
-
-		$this->ext_path_web		=	$this->ext_path_web();
 	}
 
 	/**
@@ -144,7 +151,7 @@ class tpotm
 	 */
 	public function style_badge()
 	{
-		return ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
+		return ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
 	}
 
 	/**
@@ -204,7 +211,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
@@ -226,7 +233,7 @@ class tpotm
 	 */
 	public function style_miniprofile_badge($user_tpotm)
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm . '') . '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm . '') . '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
