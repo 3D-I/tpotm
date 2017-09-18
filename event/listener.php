@@ -134,12 +134,12 @@ class listener implements EventSubscriberInterface
 	 *
 	 * @event core.page_header_after
 	 */
-	public function tpotm_template_switch($event)
+	public function tpotm_template_switch()
 	{
 		$this->tpotm->template_switches_over_all();
 	}
 
-	public function display_tpotm($event)
+	public function display_tpotm()
 	{
 		/**
 		 * Check perms first
