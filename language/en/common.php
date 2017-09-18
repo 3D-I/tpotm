@@ -40,6 +40,8 @@ $lang = array_merge($lang, array(
 	'TPOTM_BADGE'					=> 'TPOTM badge',
 	'TPOTM_BADGE_MINIPROFILE'		=> 'Top poster of the Month',
 	'TPOTM_BADGE_ERROR'				=> 'image?',
+	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
+	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
 
 	'TPOTM_CACHE'	=> array(
 		0				=>	' (<i>updates at every page load</i>)',

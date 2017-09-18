@@ -1,5 +1,6 @@
 {% if S_TPOTM %}
 	<h3>{{ lang('TPOTM_CAT') }}</h3>
 
-	<p>{{ lang('TPOTM_NOW') }}{% if S_TPOTM_AVATAR %}<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</a>{% endif %}<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TPOTM_CACHE') }}</p>
+	<p>{{ lang('TPOTM_NOW') }}{% if S_TPOTM_AVATAR %}<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</a>{% endif %}<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}{% if S_IS_RHEA %}&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" style="cursor: pointer;"></i>{% else %}&nbsp;{{ lang('TPOTM_EXPLAIN') }}{% endif %}{{ lang('TPOTM_CACHE') }}</p>
 {% endif %}
+

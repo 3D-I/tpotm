@@ -120,16 +120,6 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether the admin/mod array has been enabled or not
-	 *
-	 * @return bool
-	 */
-	public function enable_admin_mod_array()
-	{
-		return (bool) $this->config['threedi_tpotm_adm_mods'];
-	}
-
-	/**
 	 * Returns whether the miniavatar has been enabled or not
 	 *
 	 * @return bool
@@ -270,6 +260,15 @@ class tpotm
 		/* Groups the above results */
 		return array_unique(array_merge($admin_ary, $mod_ary));
 	}
+	/**
+	 * Returns whether the admin/mod array has been enabled or not
+	 *
+	 * @return bool
+	 */
+	public function enable_admin_mod_array()
+	{
+		return (bool) $this->config['threedi_tpotm_adm_mods'];
+	}
 
 	/**
 	 * Don't run the code if the admin so wishes.
@@ -279,13 +278,13 @@ class tpotm
 	 */
 	public function auth_admin_mody_ary()
 	{
-		if (!self::enable_admin_mod_array())
+		if (self::enable_admin_mod_array())
 		{
-			return self::admin_mody_ary();
+			return array();
 		}
 		else
 		{
-			return array();
+			return self::admin_mody_ary(array());
 		}
 	}
 
@@ -367,6 +366,7 @@ class tpotm
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
+			'TOTAL_MONTH'			=> (int) self::perform_cache_on_this_month_total_posts(),
 		));
 	}
 
@@ -387,6 +387,49 @@ class tpotm
 			$month_end			= $now;
 
 			return [$month_start, $month_end];
+	}
+
+
+	/**
+	 * Gets the total posts count for the current month till now
+	 *
+	 * @return int
+	 */
+	public function perform_cache_on_this_month_total_posts()
+	{
+		/**
+		 * If we are disabling the cache, the existing information
+		 * in the cache file is not valid. Let's clear it.
+		 */
+		if ((self::config_time_cache_min()) === 0)
+		{
+			$this->cache->destroy('_tpotm_total');
+		}
+
+		/**
+		 * Check cached data
+		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 */
+		if (($row = $this->cache->get('_tpotm_total')) === false)
+		{
+			list($month_start, $month_end) = self::month_timegap();
+
+			$sql = 'SELECT COUNT(post_id) AS post_count
+				FROM ' . POSTS_TABLE . '
+				WHERE post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+					AND post_visibility = ' . ITEM_APPROVED;
+			$result = $this->db->sql_query($sql);
+			$total_month = (int) $this->db->sql_fetchfield('post_count');
+			$this->db->sql_freeresult($result);
+		}
+
+		/* If cache is enabled use it */
+		if ((self::config_time_cache()) >= 1)
+		{
+			$this->cache->put('_tpotm_total', $row, (int) self::config_time_cache());
+		}
+
+		return $total_month;
 	}
 
 	/*
@@ -419,7 +462,7 @@ class tpotm
 	}
 
 	/*
-	* Performs a chache check-in priot to delivery the final results
+	* Performs a chache check-in prior to delivery the final results
 	*
 	 * @return array $row		cached or not tesults
 	*/
@@ -450,6 +493,20 @@ class tpotm
 		}
 
 		return $row;
+	}
+
+	/*
+	* Performs a date range costruction of the current month
+	*
+	 * @return string		user formatted data range (Thx Steve)
+	*/
+	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
+	{
+		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
+
+		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
+
+		return $format ? $this->user->format_date($data) : $data;
 	}
 
 	/*
@@ -487,11 +544,14 @@ class tpotm
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) self::config_time_cache_min());
 		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
+		$total_month = self::perform_cache_on_this_month_total_posts();
 
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
+			'L_TOTAL_MONTH'		=> $total_month > 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(($row['total_posts'] / $total_month) * 100)) : false,
+			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
 		/**
