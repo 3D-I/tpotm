@@ -284,7 +284,7 @@ class tpotm
 		}
 		else
 		{
-			return $this->admin_mody_ary(array());
+			return $this->admin_mody_ary();
 		}
 	}
 
