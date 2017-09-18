@@ -106,7 +106,7 @@ class tpotm
 	 */
 	public function is_authed()
 	{
-		return (bool) ( ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) );
+		return (bool) (($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')));
 	}
 
 	/**
@@ -216,7 +216,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png'). '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return '<img src="' . ($this->ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
 	}
 
 	/**
@@ -254,7 +254,7 @@ class tpotm
 		*/
 		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
 		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
-		$mod_ary = $this->auth->acl_get_list(false,'m_', false);
+		$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
 		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
 
 		/* Groups the above results */
@@ -559,7 +559,7 @@ class tpotm
 		 */
 		if ($this->enable_miniavatar() && ((int) $tpotm_tot_posts >= 1))
 		{
-			if ( ($this->style_badge_is_true()) && !$this->is_rhea() )
+			if (($this->style_badge_is_true()) && !$this->is_rhea())
 			{
 				// @ToDO: use phpbb_get_avatar here..
 				$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->style_mini_badge();
