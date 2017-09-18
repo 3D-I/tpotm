@@ -12,37 +12,15 @@ namespace threedi\tpotm\core;
 
 class tpotm
 {
-	/** @var \phpbb\auth\auth */
 	protected $auth;
-
-	/** @var \phpbb\cache\service */
 	protected $cache;
-
-	/** @var \phpbb\config\config */
 	protected $config;
-
-	/** @var \phpbb\db\driver\driver */
 	protected $db;
-
-	/** @var \phpbb\log */
-	protected $log;
-
-	/** @var \phpbb\user */
 	protected $user;
-
-	/** @var \phpbb\extension\manager "Extension Manager" */
 	protected $ext_manager;
-
-	/** @var \phpbb\path_helper */
 	protected $path_helper;
-
-	/** @var string phpBB root path */
 	protected $root_path;
-
-	/** @var string phpEx */
 	protected $php_ext;
-
-	/** @var \phpbb\template\template */
 	protected $template;
 
 	/**
@@ -52,7 +30,6 @@ class tpotm
 		* @param \phpbb\cache\service		$cache
 		* @param \phpbb\config\config		$config			Config Object
 		* @param \phpbb\db\driver\driver	$db				Database object
-		* @param \phpbb\log\log				$log			phpBB log
 		* @param \phpbb\user				$user			User object
 		* @param \phpbb\extension\manager	$ext_manager	Extension manager object
 		* @param \phpbb\path_helper			$path_helper	Path helper object
@@ -62,13 +39,12 @@ class tpotm
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
 		$this->config			=	$config;
 		$this->db				=	$db;
-		$this->log				=	$log;
 		$this->user				=	$user;
 		$this->ext_manager		=	$ext_manager;
 		$this->path_helper		=	$path_helper;
@@ -76,8 +52,19 @@ class tpotm
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
 
-		$this->ext_path			=	$this->ext_manager->get_extension_path('threedi/tpotm', true);
-		$this->ext_path_web		=	$this->path_helper->update_web_root_path($this->ext_path);
+		$this->ext_path_web		=	$this->ext_path_web();
+	}
+
+	/**
+	 * Returns the absolute URL to the ext_path_web
+	 *
+	 * @return string
+	 */
+	public function ext_path_web()
+	{
+		$ext_path =	$this->ext_manager->get_extension_path('threedi/tpotm', true);
+
+		return $this->path_helper->update_web_root_path($ext_path);
 	}
 
 	/**
@@ -89,6 +76,7 @@ class tpotm
 	{
 		return (int) ($this->config['threedi_tpotm_ttl'] * 60);
 	}
+
 	/**
 	 * Returns the number of minutes to show for templating purposes
 	 *
@@ -423,13 +411,14 @@ class tpotm
 			$this->db->sql_freeresult($result);
 		}
 
+		return $total_month;
+
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
 			$this->cache->put('_tpotm_total', $row, (int) $this->config_time_cache());
 		}
 
-		return $total_month;
 	}
 
 	/*

@@ -32,7 +32,6 @@ services:
             - '@cache'
             - '@config'
             - '@dbal.conn'
-            - '@log'
             - '@user'
             - '@ext.manager'
             - '@path_helper'
