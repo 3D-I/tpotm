@@ -59,12 +59,12 @@ class main
 	 */
 	public function handle($name)
 	{
-		if ( !$this->tpotm->is_authed() )
+		if (!$this->tpotm->is_authed())
 		{
 			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM__HALL');
 		}
 
-		if ( !$this->tpotm->is_hall() )
+		if (!$this->tpotm->is_hall())
 		{
 			throw new \phpbb\exception\http_exception(404, 'TPOTM__HALL_DISABLED');
 		}

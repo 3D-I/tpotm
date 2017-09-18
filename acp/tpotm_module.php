@@ -75,7 +75,7 @@ class tpotm_module
 			}
 
 			/* No errors? Great, let's go. */
-			if ( !count($errors) )
+			if (!count($errors))
 			{
 				$config->set('threedi_tpotm_index', $request->variable('threedi_tpotm_index', (int) $config['threedi_tpotm_index']));
 

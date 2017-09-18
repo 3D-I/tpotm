@@ -251,7 +251,7 @@ class tpotm
 		/**
 		 * Inspiration taken from Top Five ext
 		 * Grabs all admins and mods, it is a catch all.
-		*/
+		 */
 		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
 		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
 		$mod_ary = $this->auth->acl_get_list(false, 'm_', false);

@@ -132,7 +132,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->tpotm->is_authed()) && ($this->tpotm->is_hall()) )
+		if (($this->tpotm->is_authed()) && ($this->tpotm->is_hall()))
 		{
 			$this->template->assign_vars(array(
 				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller', array('name' => $this->user->lang('TPOTM_ROUTE_NAME'))),
@@ -150,7 +150,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->tpotm->is_authed()) && ($this->tpotm->is_hall()) )
+		if (($this->tpotm->is_authed()) && ($this->tpotm->is_hall()))
 		{
 			if ($event['on_page'][1] === 'app' && strrpos($event['row']['session_page'], 'app.' . $this->php_ext . '/tpotm') === 0)
 			{
@@ -194,7 +194,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()) )
+		if (($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()))
 		{
 			$array = $event['user_cache_data'];
 			$array['user_tpotm'] = $event['row']['user_tpotm'];
@@ -222,7 +222,7 @@ class listener implements EventSubscriberInterface
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ( ($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()) )
+		if (($this->tpotm->is_authed()) && ($this->tpotm->enable_miniprofile()))
 		{
 			$user_tpotm = (!empty($event['user_poster_data']['user_tpotm'])) ? $this->tpotm->style_miniprofile_badge($event['user_poster_data']['user_tpotm']) : '';
 
