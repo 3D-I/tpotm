@@ -11,17 +11,8 @@
 namespace threedi\tpotm\core;
 
 /**
-* @ignore
-*/
-use \phpbb\auth\auth;
-use \phpbb\cache\service;
-use \phpbb\config\config;
-use \phpbb\db\driver\driver_interface;
-use \phpbb\user;
-use \phpbb\extension\manager;
-use \phpbb\path_helper;
-use \phpbb\template\template;
-
+ * Top Poster Of The Month service.
+ */
 class tpotm
 {
 	protected $auth;
@@ -51,7 +42,7 @@ class tpotm
 		* @access public
 	*/
 
-	public function __construct(auth $auth, service $cache, config $config, driver_interface $db, user $user, manager $ext_manager, path_helper $path_helper, $root_path, $phpExt, template $template)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
