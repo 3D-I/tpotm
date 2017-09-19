@@ -10,6 +10,9 @@
 
 namespace threedi\tpotm\core;
 
+/**
+* @ignore
+*/
 use \phpbb\auth\auth;
 use \phpbb\cache\service;
 use \phpbb\config\config;
