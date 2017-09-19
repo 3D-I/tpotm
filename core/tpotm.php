@@ -69,7 +69,7 @@ class tpotm
 	 */
 	public function ext_path_web()
 	{
-		$ext_path =	$this->ext_manager->get_extension_path('threedi/tpotm', true);
+		$ext_path = $this->ext_manager->get_extension_path('threedi/tpotm', true);
 
 		return $this->path_helper->update_web_root_path($ext_path);
 	}

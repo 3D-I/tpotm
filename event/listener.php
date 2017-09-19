@@ -28,16 +28,16 @@ class listener implements EventSubscriberInterface
 	protected $tpotm;
 
 	/**
-		* Constructor
-		*
-		* @param \phpbb\controller\helper	$helper			Controller helper object
-		* @param \phpbb\template\template	$template		Template object
-		* @param \phpbb\user				$user			User Object
-		*
-		* @var string phpEx
-		* @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
-		* @access public
-		*/
+	 * Constructor
+	 *
+	 * @param \phpbb\controller\helper	$helper			Controller helper object
+	 * @param \phpbb\template\template	$template		Template object
+	 * @param \phpbb\user				$user			User Object
+	 *
+	 * @var string phpEx
+	 * @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
+	 * @access public
+	 */
 	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
 		$this->helper		= $helper;
