@@ -405,7 +405,7 @@ class tpotm
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (($row = $this->cache->get('_tpotm_total')) === false)
+		if (($total_month = $this->cache->get('_tpotm_total')) === false)
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
@@ -418,14 +418,13 @@ class tpotm
 			$this->db->sql_freeresult($result);
 		}
 
-		return $total_month;
-
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
-			$this->cache->put('_tpotm_total', $row, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm_total', $total_month, (int) $this->config_time_cache());
 		}
 
+		return $total_month;
 	}
 
 	/*
@@ -500,7 +499,7 @@ class tpotm
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
 
-		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
+		$data = gmmktime($hr, $min, $sec, $month, $start ? $day = (int) 1 : date("t"), $year);
 
 		return $format ? $this->user->format_date($data) : $data;
 	}
