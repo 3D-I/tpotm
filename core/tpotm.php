@@ -560,7 +560,7 @@ class tpotm
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
 				);
 			}
-			else if ($this->is_rhea())
+			else if (($this->style_badge_is_true()) && $this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
