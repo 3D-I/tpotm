@@ -548,10 +548,17 @@ class tpotm
 		 */
 		if ($this->enable_miniavatar() && ((int) $tpotm_tot_posts >= 1))
 		{
-			if (($this->style_badge_is_true()) && !$this->is_rhea())
+			/* Map arguments for  phpbb_get_avatar() */
+			$row_avatar = array(
+				'avatar'		=> $row['user_avatar'],
+				'avatar_type'	=> $row['user_avatar_type'],
+				'avatar_width'	=> (int) $row['user_avatar_width'],
+				'avatar_height'	=> (int) $row['user_avatar_height'],
+			);
+
+			if (!$this->is_rhea())
 			{
-				// @ToDO: use phpbb_get_avatar here..
-				$tpotm_av_31 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->style_mini_badge();
+				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE_ERROR'));
 
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
@@ -560,11 +567,11 @@ class tpotm
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
 				);
 			}
-			else if (($this->style_badge_is_true()) && $this->is_rhea())
+			else if ($this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
-				$tpotm_av_32 = (!empty($row['user_avatar_type'])) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : $this->style_mini_badge_fa($tpotm_av_url);
+				$tpotm_av_32 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge_fa($tpotm_av_url);
 
 				$template_vars += array(
 					'TPOTM_AVATAR'			=> $tpotm_av_32,

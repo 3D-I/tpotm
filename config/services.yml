@@ -3,10 +3,13 @@ services:
         class: threedi\tpotm\controller\main
         arguments:
             - '@config'
+            - '@ext.manager'
             - '@controller.helper'
+            - '@path_helper'
             - '@template'
             - '@user'
             - '@threedi.tpotm.tpotm'
+            - '%core.root_path%'
 
     threedi.tpotm.listener:
         class: threedi\tpotm\event\listener

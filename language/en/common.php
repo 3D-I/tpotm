@@ -39,7 +39,7 @@ $lang = array_merge($lang, array(
 	'TPOTM_NOBODY'					=> 'not yet available,',
 	'TPOTM_BADGE'					=> 'TPOTM badge',
 	'TPOTM_BADGE_MINIPROFILE'		=> 'Top poster of the Month',
-	'TPOTM_BADGE_ERROR'				=> 'image?',
+	'TPOTM_BADGE_ERROR'				=> '<em><strong>image?</strong></em>',
 	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
 	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
 

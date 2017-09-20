@@ -46,6 +46,8 @@ class listener implements EventSubscriberInterface
 
 		$this->php_ext		= $phpExt;
 		$this->tpotm		= $tpotm;
+
+		//var_dump($this->tpotm->ext_path_web());
 	}
 
 	static public function getSubscribedEvents()
