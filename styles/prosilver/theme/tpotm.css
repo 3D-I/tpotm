@@ -1,7 +1,6 @@
 a.tpotm-header-avatar img {
-	margin-bottom: 1px;
-	padding-right: 4px;
-	max-height: 12px;
+	padding-right: 2px;
+	max-height: 14px;
 	vertical-align: bottom;
 	width: auto;
 }
@@ -16,4 +15,13 @@ a.tpotm-header-avatar img {
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
+}
+
+.icon-tpotm-stats {
+	background-image: url("./images/icon-tpotm-hall.png");
+	background-repeat: no-repeat;
+	padding-left: 16px;
+	max-height: 14px;
+	vertical-align: bottom;
+	width: auto;
 }
