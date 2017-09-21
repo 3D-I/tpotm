@@ -7,9 +7,12 @@
 		<div class="item">
 			<div id="" class="flex-avatar">{{ tpotm_ever.USER_AVATAR }}</div>
 			<span>{{ tpotm_ever.USERNAME }}</span>
-			<p>
-				{{ tpotm_ever.USER_ID }}{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS }}&nbsp;{{ tpotm_ever.YEAR }}&nbsp;{{ tpotm_ever.MONTH }}
-			</p>
+			<div id="" class="">
+				{{ tpotm_ever.YEAR }}&nbsp;{{ tpotm_ever.MONTH }}{{ tpotm_ever.USER_ID }}
+			</div>
+			<div id="" class="">
+				{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}&nbsp;{{ tpotm_ever.YEAR }}&nbsp;{{ tpotm_ever.MONTH }}{{ tpotm_ever.USER_ID }}
+			</div>
 		</div>
 	</div>
 	{% endfor %}
