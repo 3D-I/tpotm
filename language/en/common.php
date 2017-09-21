@@ -43,6 +43,7 @@ $lang = array_merge($lang, array(
 	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
 	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
 	'TPOTM_TOT_POST'				=> 'Total posted in that month',
+	'TPOTM_DATE'					=> 'Year and Month',
 
 	'TPOTM_CACHE'	=> array(
 		0				=>	' (<i>updates at every page load</i>)',

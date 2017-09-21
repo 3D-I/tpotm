@@ -113,9 +113,7 @@ class main
 		$year_start = (int) ($this->config['board_start_date']);
 		$year_end = time();
 
-		//	, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month
-
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(MAX(p.post_time)), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(MAX(p.post_time)), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 		WHERE u.user_id <> ' . ANONYMOUS . '
 			AND u.user_id = p.poster_id
@@ -125,7 +123,7 @@ class main
 			AND p.post_visibility = ' . ITEM_APPROVED . '
 			AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
 		GROUP BY u.user_id
-		ORDER BY total_posts DESC';
+		ORDER BY total_posts DESC, year DESC, month DESC';
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
@@ -138,13 +136,12 @@ class main
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
 
-			//'USER_ID'		=> (int) $row['user_id'],
-			//	'YEAR'			=> (int) $row['year'],
-			//	'MONTH'			=> (int) $row['month'],
 			$this->template->assign_block_vars('tpotm_ever', array(
 				'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
 				'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				'TOTAL_POSTS'	=> (int) $row['total_posts'],
+				'YEAR'			=> (int) $row['year'],
+				'MONTH'			=> (int) $row['month'],
 				));
 			}
 
