@@ -63,9 +63,7 @@ class tpotm
 	 */
 	public function ext_path_web()
 	{
-		$ext_path = $this->ext_manager->get_extension_path('threedi/tpotm', true);
-
-		return $this->path_helper->update_web_root_path($ext_path);
+		return $this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/';
 	}
 
 	/**
@@ -231,35 +229,6 @@ class tpotm
 	}
 
 	/**
-	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
-	 *
-	 * @return array	empty array otherwise
-	 */
-	public function admin_mody_ary()
-	{
-		/**
-		 * Inspiration taken from Top Five ext
-		 * Grabs all admins and mods, it is a catch all.
-		 */
-		$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
-		$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
-		$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
-		$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
-
-		/* Groups the above results */
-		return array_unique(array_merge($admin_ary, $mod_ary));
-	}
-	/**
-	 * Returns whether the admin/mod array has been enabled or not
-	 *
-	 * @return bool
-	 */
-	public function enable_admin_mod_array()
-	{
-		return (bool) $this->config['threedi_tpotm_adm_mods'];
-	}
-
-	/**
 	 * Don't run the code if the admin so wishes.
 	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
 	 *
@@ -267,13 +236,23 @@ class tpotm
 	 */
 	public function auth_admin_mody_ary()
 	{
-		if ($this->enable_admin_mod_array())
+		if ((bool) $this->config['threedi_tpotm_adm_mods'])
 		{
 			return array();
 		}
 		else
 		{
-			return $this->admin_mody_ary();
+			/**
+			 * Inspiration taken from Top Five ext
+			 * Grabs all admins and mods, it is a catch all.
+			 */
+			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
+			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+			$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
+			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+
+			/* Groups the above results */
+			return array_unique(array_merge($admin_ary, $mod_ary));
 		}
 	}
 
@@ -375,9 +354,8 @@ class tpotm
 			$month_start		= $month_start_cur;
 			$month_end			= $now;
 
-			return [$month_start, $month_end];
+			return array($month_start, $month_end);
 	}
-
 
 	/**
 	 * Gets the total posts count for the current month till now
@@ -425,32 +403,6 @@ class tpotm
 	* There can be only ONE, the TPOTM.
 	* If same tot posts and same exact post time then the post ID rules
 	* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-	*
-	 * @return array	[$row]		fetched rows
-	*/
-	public function perform_main_db_query()
-	{
-		list($month_start, $month_end) = $this->month_timegap();
-
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-		WHERE u.user_id <> ' . ANONYMOUS . '
-				AND u.user_id = p.poster_id
-				AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . '
-				AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . '
-				AND (u.user_type <> ' . USER_FOUNDER . ')
-				AND p.post_visibility = ' . ITEM_APPROVED . '
-				AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
-			GROUP BY u.user_id
-			ORDER BY total_posts DESC';
-		$result = $this->db->sql_query_limit($sql, 1);
-		$row = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
-
-		return $row;
-	}
-
-	/*
 	* Performs a chache check-in prior to delivery the final results
 	*
 	 * @return array $row		cached or not tesults
@@ -472,7 +424,22 @@ class tpotm
 		 */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
-			$row = $this->perform_main_db_query();
+			list($month_start, $month_end) = $this->month_timegap();
+
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+			WHERE u.user_id <> ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+					AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . '
+					AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . '
+					AND (u.user_type <> ' . USER_FOUNDER . ')
+					AND p.post_visibility = ' . ITEM_APPROVED . '
+					AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC';
+			$result = $this->db->sql_query_limit($sql, 1);
+			$row = $this->db->sql_fetchrow($result);
+			$this->db->sql_freeresult($result);
 		}
 
 		/* If cache is enabled use it */
@@ -558,7 +525,7 @@ class tpotm
 
 			if (!$this->is_rhea())
 			{
-				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE_ERROR'));
+				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
 
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 

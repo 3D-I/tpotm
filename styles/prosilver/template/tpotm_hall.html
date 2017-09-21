@@ -1,6 +1,8 @@
 {% include 'overall_header.html' %}
 <h2 class="solo">{{ DEMO_MESSAGE }}</h2>
 
+{% include 'tpotm.html' %}
+
 <div id="tpotm-container" class="tpotm-container">
 	{% for tpotm_ever in loops.tpotm_ever %}
 	<div class="flex-cell">
