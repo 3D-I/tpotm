@@ -35,6 +35,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'TPOTM_CAT'						=> 'Top Poster of the Month',
+	'TPOTM_EVER_CAT'				=> 'Top Posters ever',
 	'TPOTM_NOW'						=> 'At the present time is ',
 	'TPOTM_NOBODY'					=> 'not yet available,',
 	'TPOTM_BADGE'					=> 'TPOTM badge',
@@ -42,7 +43,7 @@ $lang = array_merge($lang, array(
 	'TPOTM_BADGE_ERROR'				=> '<em><strong>image?</strong></em>',
 	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
 	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
-	'TPOTM_TOT_POST'				=> 'Total posted in that month',
+	'TPOTM_TOT_POST'				=> 'Total posts',
 	'TPOTM_DATE'					=> 'Year and Month',
 
 	'TPOTM_CACHE'	=> array(

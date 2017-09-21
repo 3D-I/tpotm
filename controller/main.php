@@ -114,16 +114,16 @@ class main
 		$year_end = time();
 
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-		WHERE u.user_id <> ' . ANONYMOUS . '
-			AND u.user_id = p.poster_id
-			AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
-			AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-			AND (u.user_type <> ' . USER_FOUNDER . ')
-			AND p.post_visibility = ' . ITEM_APPROVED . '
-			AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
-		GROUP BY u.user_id, month, year
-		ORDER BY year DESC, month DESC, total_posts DESC';
+			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+			WHERE u.user_id <> ' . ANONYMOUS . '
+				AND u.user_id = p.poster_id
+				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
+				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
+				AND (u.user_type <> ' . USER_FOUNDER . ')
+				AND p.post_visibility = ' . ITEM_APPROVED . '
+				AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
+			GROUP BY u.user_id, month, year
+			ORDER BY year DESC, month DESC, total_posts DESC';
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
