@@ -118,14 +118,14 @@ class main
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 		WHERE u.user_id <> ' . ANONYMOUS . '
-				AND u.user_id = p.poster_id
-				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
-				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-				AND (u.user_type <> ' . USER_FOUNDER . ')
-				AND p.post_visibility = ' . ITEM_APPROVED . '
-				AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
-			GROUP BY u.user_id
-			ORDER BY total_posts DESC';
+			AND u.user_id = p.poster_id
+			AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
+			AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
+			AND (u.user_type <> ' . USER_FOUNDER . ')
+			AND p.post_visibility = ' . ITEM_APPROVED . '
+			AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
+		GROUP BY u.user_id
+		ORDER BY total_posts DESC';
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
