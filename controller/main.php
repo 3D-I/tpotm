@@ -113,7 +113,7 @@ class main
 		$year_start = (int) ($this->config['board_start_date']);
 		$year_end = time();
 
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(MAX(p.post_time)), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(MAX(p.post_time)), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 		WHERE u.user_id <> ' . ANONYMOUS . '
 			AND u.user_id = p.poster_id
@@ -122,8 +122,8 @@ class main
 			AND (u.user_type <> ' . USER_FOUNDER . ')
 			AND p.post_visibility = ' . ITEM_APPROVED . '
 			AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
-		GROUP BY u.user_id
-		ORDER BY total_posts DESC, year DESC, month DESC';
+		GROUP BY u.user_id, month, year
+		ORDER BY year DESC, month DESC, total_posts DESC';
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
