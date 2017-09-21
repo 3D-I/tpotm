@@ -104,16 +104,17 @@ class main
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
 		/*
-		* top_posters_ever
-		* If same tot posts and same exact post time then the post ID rules
-		* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-		*
+		 * top_posters_ever
+		 * If same tot posts and same exact post time then the post ID rules
+		 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+		 *
 		 * @return void %m-%Y
 		*/
 		$year_start = (int) ($this->config['board_start_date']);
 		$year_end = time();
 
 		//	, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month
+
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 		WHERE u.user_id <> ' . ANONYMOUS . '
@@ -137,33 +138,18 @@ class main
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
 
+			//'USER_ID'		=> (int) $row['user_id'],
+			//	'YEAR'			=> (int) $row['year'],
+			//	'MONTH'			=> (int) $row['month'],
 			$this->template->assign_block_vars('tpotm_ever', array(
-				//'USER_ID'		=> (int) $row['user_id'],
 				'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
 				'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				'TOTAL_POSTS'	=> (int) $row['total_posts'],
-			//	'YEAR'			=> (int) $row['year'],
-			//	'MONTH'			=> (int) $row['month'],
 				));
 			}
 
 		$this->db->sql_freeresult($result);
 
-/*	$datetime	= array(
-		'1'		=> 'Jan',
-		'2'		=> 'Feb',
-		'3'		=> 'Mar',
-		'4'		=> 'Apr',
-		'5'		=> 'May',
-		'6'		=> 'Jun',
-		'7'		=> 'Jul',
-		'8'		=> 'Aug',
-		'9'		=> 'Sep',
-		'10'	=> 'Oct',
-		'11'	=> 'Nov',
-		'12'	=> 'Dec',
-	),
-*/
 		return $this->helper->render('tpotm_hall.html', $name);
 	}
 }
