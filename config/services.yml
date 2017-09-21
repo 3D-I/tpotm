@@ -2,6 +2,8 @@ services:
     threedi.tpotm.controller:
         class: threedi\tpotm\controller\main
         arguments:
+            - '@auth'
+            - '@dbal.conn'
             - '@config'
             - '@ext.manager'
             - '@controller.helper'
