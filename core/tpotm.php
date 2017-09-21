@@ -435,8 +435,8 @@ class tpotm
 				AND (u.user_type <> ' . USER_FOUNDER . ')
 				AND p.post_visibility = ' . ITEM_APPROVED . '
 				AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
-			GROUP BY u.user_id
-			ORDER BY total_posts DESC';
+			GROUP BY u.user_id,  p.post_time
+			ORDER BY total_posts DESC, p.post_time DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
