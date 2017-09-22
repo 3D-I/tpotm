@@ -4,7 +4,7 @@
 <div class="panel bg1">
 	<div class="inner">
 		<h3>{{ lang('TPOTM_CAT') }}</h3>
-		<div class="post" style="float: center;margin: 10px;box-shadow: 1px 2px 3px grey;font-size:14px;">
+		<div class="post" style="margin: 10px;box-shadow: 1px 2px 3px grey;font-size:14px;">
 			<div style="margin-left: -20px;margin-top: -15px;padding: 3px;">
 				{% if S_TPOTM_AVATAR %}
 					<a href="{{ U_TPOTM_AVATAR_URL }}" class="header-avatar-tpotm">{{ TPOTM_AVATAR }}</a>
@@ -20,7 +20,7 @@
 				</div>
 			</div>
 			<br>
-			<div style="float: auto; text-align: center;">
+			<div style="text-align: center;">
 				{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH_HALL') }}{{ TOT_POSTS_MONTH }}{{ lang('TPOTM_CACHE') }}
 				{% if S_IS_RHEA %}
 					&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" style="cursor: pointer;"></i>
