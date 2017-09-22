@@ -37,7 +37,7 @@ a.tpotm-header-avatar img {
 
 /* Main viewport container, uses flex row wrap */
 #tpotm-container {
-	background: lightyellow;
+	background: none;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -79,7 +79,7 @@ a.tpotm-header-avatar img {
 	border-style: solid;
 	border-color: #729ea5;
 	width: 200px;  /* Or whatever */
-	height: 7<em></em>0px; /* Or whatever */
+	height: 66px; /* Or whatever */
 	vertical-align: middle;
 	display: flex;
 	align-items: start;
