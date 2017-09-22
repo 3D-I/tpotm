@@ -103,21 +103,17 @@ class main
 		 */
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
-		/* Data range */
-		$data_begin = $this->user->format_date($this->config['board_startdate']);
-		$data_today = $this->user->format_date(time());
-
 		/*
 		 * top_posters_ever
 		 * If same tot posts and same exact post time then the post ID rules
 		 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
 		 *
-		 * @return void %m-%Y
+		 * @return void
 		*/
 		$year_start = (int) ($this->config['board_startdate']);
 		$year_end = time();
 
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 			WHERE u.user_id <> ' . ANONYMOUS . '
 				AND u.user_id = p.poster_id
@@ -149,6 +145,10 @@ class main
 				));
 			}
 		$this->db->sql_freeresult($result);
+
+		/* Data range */
+		$data_begin = $this->user->format_date($this->config['board_startdate']);
+		$data_today = $this->user->format_date(time());
 
 		$template_vars = array(
 			'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_today),

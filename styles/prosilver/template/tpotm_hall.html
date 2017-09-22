@@ -4,23 +4,23 @@
 <div class="panel bg1">
 	<div class="inner">
 		<h3>{{ lang('TPOTM_CAT') }}</h3>
-		<div class="post" style="margin: 10px;box-shadow: 1px 2px 3px grey;font-size:14px;">
-			<div style="margin-left: -20px;margin-top: -15px;padding: 3px;">
+		<div class="post tpotm-div-1">
+			<div class="tpotm-div-2">
 				{% if S_TPOTM_AVATAR %}
 					<a href="{{ U_TPOTM_AVATAR_URL }}" class="header-avatar-tpotm">{{ TPOTM_AVATAR }}</a>
 				{% endif %}
 				{{ TPOTM_NAME }}
 			</div>
 			{{ TPOTM_POST }}
-			<div style="margin: 2px auto;text-align: center;width: 120px;height: 120px;border-radius: 100%;background-color: #80BF00;background-image: linear-gradient({DEGREE}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
-				<div style="position: relative;top: 10px;left: 10px;text-align: center;width: 100px;height: 100px;border-radius: 100%;background-color: #ECF3F7;">
-					<span style="top: 40px;position: relative;font-size: 16px;font-weight: bold;">
+			<div class="tpotm-div-3" style="background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
+				<div class="tpotm-div-4">
+					<span class="tpotm-span-1">
 						{{ PERCENT }}&#37;
 					</span>
 				</div>
 			</div>
 			<br>
-			<div style="text-align: center;font-weight: bold;">
+			<div class="tpotm-div-5">
 				{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH_HALL') }}{{ TOT_POSTS_MONTH }}{{ lang('TPOTM_CACHE') }}
 				{% if S_IS_RHEA %}
 					&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" style="cursor: pointer;"></i>

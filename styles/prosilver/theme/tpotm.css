@@ -1,13 +1,3 @@
-/* hall of fame */
-a.header-avatar-tpotm img {
-	margin-bottom: 2px;
-	width: 80px;
-	height: 80px;
-	box-shadow: 1px 2px 3px grey;
-	border-radius: 25%;
-	background-color: transparent;
-}
-
 a.tpotm-header-avatar img {
 	padding-right: 2px;
 	max-height: 14px;
@@ -20,6 +10,62 @@ a.tpotm-header-avatar img {
 	max-height: 14px;
 	vertical-align: bottom;
 	width: auto;
+}
+
+/***************************************
+* This section is for the hall of fame *
+***************************************/
+.post, .tpotm-div-1 {
+	margin: 10px;
+	box-shadow: 1px 2px 3px grey;
+	font-size:14px;
+}
+
+.tpotm-div-2 {
+	margin-left: -20px;
+	margin-top: -15px;
+	padding: 3px;
+}
+
+.tpotm-div-3 {
+	margin: 2px auto;
+	text-align: center;
+	width: 120px;
+	height: 120px;
+	border-radius: 100%;
+	background-color: #80BF00;
+}
+
+.tpotm-div-4 {
+	position: relative;
+	top: 10px;
+	left: 10px;
+	text-align: center;
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+	background-color: #ECF3F7;
+}
+
+.tpotm-span-1 {
+	top: 40px;
+	position: relative;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tpotm-div-5 {
+	text-align: center;
+	font-weight: bold;
+}
+
+a.header-avatar-tpotm img {
+	margin-bottom: 2px;
+	width: 80px;
+	height: 80px;
+	box-shadow: 1px 2px 3px grey;
+	border-radius: 25%;
+	background-color: transparent;
 }
 
 .icon-tpotm-hall {
@@ -85,3 +131,7 @@ a.tpotm-header-avatar img {
 	display: flex;
 	align-items: start;
 }
+
+/***************************************
+* End section hall of fame             *
+***************************************/
