@@ -550,6 +550,17 @@ class tpotm
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
+		/* percentages for templating the Hall of fame */
+		$percent = min(100, $this->perform_cache_on_tpotm_tot_posts($row['user_id']) / (int) $this->perform_cache_on_this_month_total_posts()) * 100;
+		$degrees = (360 * $percent) / 100;
+		$start = 90;
+
+		$template_vars += array(
+			'PERCENT'			=> number_format((float) $percent, 1, '.', ','),
+			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
+			'TOT_POSTS_MONTH'	=> (int) $total_month,
+		);
+
 		/**
 		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
 		 */

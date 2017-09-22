@@ -2,8 +2,8 @@
 	<h3>{{ lang('TPOTM_CAT') }}</h3>
 
 	<p>{{ lang('TPOTM_NOW') }}
-		{% if S_TPOTM_AVATAR 
-			%}<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</a>
+		{% if S_TPOTM_AVATAR %}
+			<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</a>
 		{% endif %}
 		<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}
 		{% if S_IS_RHEA %}

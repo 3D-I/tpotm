@@ -42,7 +42,9 @@ $lang = array_merge($lang, array(
 	'TPOTM_BADGE_MINIPROFILE'		=> 'Top poster of the Month',
 	'TPOTM_BADGE_ERROR'				=> '<em><strong>image?</strong></em>',
 	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
+	'TOTAL_MONTH_HALL'				=> ' out of ',
 	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
+	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_TOT_POST'				=> 'Total posts',
 	'TPOTM_DATE'					=> 'Year and Month',
 

@@ -103,6 +103,10 @@ class main
 		 */
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
+		/* Data range */
+		$data_begin = $this->user->format_date($this->config['board_startdate']);
+		$data_today = $this->user->format_date(time());
+
 		/*
 		 * top_posters_ever
 		 * If same tot posts and same exact post time then the post ID rules
@@ -110,7 +114,7 @@ class main
 		 *
 		 * @return void %m-%Y
 		*/
-		$year_start = (int) ($this->config['board_start_date']);
+		$year_start = (int) ($this->config['board_startdate']);
 		$year_end = time();
 
 		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
@@ -144,8 +148,14 @@ class main
 				'MONTH'			=> (int) $row['month'],
 				));
 			}
-
 		$this->db->sql_freeresult($result);
+
+		$template_vars = array(
+			'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_today),
+		);
+
+		/* You know.. template stuff */
+		$this->template->assign_vars($template_vars);
 
 		return $this->helper->render('tpotm_hall.html', $name);
 	}
