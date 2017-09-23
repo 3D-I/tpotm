@@ -15,7 +15,13 @@ a.tpotm-header-avatar img {
 /***************************************
 * This section is for the hall of fame *
 ***************************************/
-.post, .tpotm-div-1 {
+.tpotm-div-1 {
+	padding: 5px 10px;
+	margin-bottom: 4px;
+	background-repeat: no-repeat;
+	background-position: 100% 0;
+	border-radius: 7px;
+	position: relative;
 	margin: 10px;
 	box-shadow: 1px 2px 3px grey;
 	font-size:14px;

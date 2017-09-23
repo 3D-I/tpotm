@@ -108,21 +108,6 @@ class main
 		 */
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
-		/**
-		 * If we are disabling the cache, the existing information
-		 * in the cache file is not valid. Let's clear it.
-		 */
-		if (($this->tpotm->config_time_cache_min()) === 0)
-		{
-			$this->cache->destroy('_tpotm_hall');
-		}
-
-		/**
-		 * Check cached data
-		 * Run the whole stuff only when needed or cache is disabled in ACP
-		 */
-		if (($row = $this->cache->get('_tpotm_hall')) === false)
-		{
 			/*
 			 * top_posters_ever
 			 * If same tot posts and same exact post time then the post ID rules
@@ -164,12 +149,7 @@ class main
 			}
 			$this->db->sql_freeresult($result);
 
-			/* If cache is enabled use it */
-			if (($this->tpotm->config_time_cache()) >= 1)
-			{
-				$this->cache->put('_tpotm_hall', $row, (int) $this->tpotm->config_time_cache());
-			}
-		}
+
 
 		/* Data range */
 		$data_begin = $this->user->format_date($this->config['board_startdate']);
