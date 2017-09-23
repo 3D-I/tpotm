@@ -117,8 +117,21 @@ class main
 			 * If same tot posts and same exact post time then the post ID rules
 			 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
 			*/
-			$year_start = (int) ($this->config['board_startdate']);
-			$year_end = time();
+			$board_start = (int) $this->config['board_startdate'];
+			$now = time();
+			$date_today = gmdate("Y-m", $now);
+			list($year_cur, $month_cur) = explode('-', $date_today);
+
+			/* top_posters_ever (minus the present month - Thx Steve) */
+			$month = (int) $month_cur -1;
+			$year = (int) $year_cur;
+			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
+			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
+
+			//$max_days = date('t', gmmktime(23, 59, 59, $month, 1, $year));
+			//$end_last_month = $this->user->create_datetime()
+			//			->setDate($year, $month, $max_days)
+			//			->setTime(23, 59, 59)->getTimestamp();
 
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
@@ -128,7 +141,7 @@ class main
 					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
 					AND (u.user_type <> ' . USER_FOUNDER . ')
 					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
+					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
 				GROUP BY u.user_id, month, year
 				ORDER BY year DESC, month DESC, total_posts DESC';
 			$result = $this->db->sql_query($sql);
@@ -155,10 +168,10 @@ class main
 
 			/* Data range */
 			$data_begin = $this->user->format_date($this->config['board_startdate']);
-			$data_today = $this->user->format_date(time());
+			$end_end = $this->user->format_date($end_last_month);
 
 			$template_vars = array(
-				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_today),
+				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $end_end),
 			);
 
 			/* You know.. template stuff */
