@@ -18,6 +18,9 @@ class main
 	/* @var \phpbb\auth\auth */
 	protected $auth;
 
+	/* @var \phpbb\cache\service */
+	protected $cache;
+
 	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
@@ -49,6 +52,7 @@ class main
 	 * Constructor
 	 *
 	 * @param \phpbb\auth\auth					$auth			Authentication object
+	 * @param \phpbb\cache\service				$cache
 	 * @param \phpbb\db\driver\driver_interface	$db				Database object
 	 * @param \phpbb\config\config				$config
 	 * @param \phpbb\extension\manager			$ext_manager
@@ -59,9 +63,10 @@ class main
 	 * @param threedi\tpotm\core\tpotm			$tpotm			Methods to be used by Class
 	 * @var string phpBB root path				$root_path
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache,  \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $root_path)
 	{
 		$this->auth			= $auth;
+		$this->cache		= $cache;
 		$this->db			= $db;
 		$this->config		= $config;
 		$this->ext_manager	= $ext_manager;
@@ -103,49 +108,68 @@ class main
 		 */
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
-		/*
-		 * top_posters_ever
-		 * If same tot posts and same exact post time then the post ID rules
-		 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-		 *
-		 * @return void
-		*/
-		$year_start = (int) ($this->config['board_startdate']);
-		$year_end = time();
-
-		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-			WHERE u.user_id <> ' . ANONYMOUS . '
-				AND u.user_id = p.poster_id
-				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
-				AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-				AND (u.user_type <> ' . USER_FOUNDER . ')
-				AND p.post_visibility = ' . ITEM_APPROVED . '
-				AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
-			GROUP BY u.user_id, month, year
-			ORDER BY year DESC, month DESC, total_posts DESC';
-		$result = $this->db->sql_query($sql);
-
-		while ($row = $this->db->sql_fetchrow($result))
+		/**
+		 * If we are disabling the cache, the existing information
+		 * in the cache file is not valid. Let's clear it.
+		 */
+		if (($this->tpotm->config_time_cache_min()) === 0)
 		{
-			/* Map arguments for  phpbb_get_avatar() */
-			$row_avatar = array(
-				'avatar'		=> $row['user_avatar'],
-				'avatar_type'	=> $row['user_avatar_type'],
-				'avatar_width'	=> (int) $row['user_avatar_width'],
-				'avatar_height'	=> (int) $row['user_avatar_height'],
-			);
+			$this->cache->destroy('_tpotm_hall');
+		}
 
-			$this->template->assign_block_vars('tpotm_ever', array(
-				'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
-				'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
-				'TOTAL_POSTS'	=> (int) $row['total_posts'],
-				'YEAR'			=> (int) $row['year'],
-				'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']]
+		/**
+		 * Check cached data
+		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 */
+		if (($row = $this->cache->get('_tpotm_hall')) === false)
+		{
+			/*
+			 * top_posters_ever
+			 * If same tot posts and same exact post time then the post ID rules
+			 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+			*/
+			$year_start = (int) ($this->config['board_startdate']);
+			$year_end = time();
+
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+				WHERE u.user_id <> ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
+					AND (u.user_type <> ' . USER_FOUNDER . ')
+					AND p.post_visibility = ' . ITEM_APPROVED . '
+					AND p.post_time BETWEEN ' . $year_start . ' AND ' . $year_end . '
+				GROUP BY u.user_id, month, year
+				ORDER BY year DESC, month DESC, total_posts DESC';
+			$result = $this->db->sql_query($sql);
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				/* Map arguments for  phpbb_get_avatar() */
+				$row_avatar = array(
+					'avatar'		=> $row['user_avatar'],
+					'avatar_type'	=> $row['user_avatar_type'],
+					'avatar_width'	=> (int) $row['user_avatar_width'],
+					'avatar_height'	=> (int) $row['user_avatar_height'],
+				);
+
+				$this->template->assign_block_vars('tpotm_ever', array(
+					'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
+					'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
+					'TOTAL_POSTS'	=> (int) $row['total_posts'],
+					'YEAR'			=> (int) $row['year'],
+					'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']]
 				));
 			}
+			$this->db->sql_freeresult($result);
 
-		$this->db->sql_freeresult($result);
+			/* If cache is enabled use it */
+			if (($this->tpotm->config_time_cache()) >= 1)
+			{
+				$this->cache->put('_tpotm_hall', $row, (int) $this->tpotm->config_time_cache());
+			}
+		}
 
 		/* Data range */
 		$data_begin = $this->user->format_date($this->config['board_startdate']);

@@ -288,7 +288,7 @@ class tpotm
 	}
 
 	/**
-	 * Update the user_tpotm with the badge HTML markup for the present winner
+	 * Update the user_tpotm with the badge filename for the present winner
 	 *
 	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void

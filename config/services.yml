@@ -3,6 +3,7 @@ services:
         class: threedi\tpotm\controller\main
         arguments:
             - '@auth'
+            - '@cache'
             - '@dbal.conn'
             - '@config'
             - '@ext.manager'
