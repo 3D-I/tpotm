@@ -23,7 +23,6 @@ class listener implements EventSubscriberInterface
 	protected $helper;
 	protected $template;
 	protected $user;
-
 	protected $php_ext;
 	protected $tpotm;
 
@@ -33,7 +32,6 @@ class listener implements EventSubscriberInterface
 	 * @param \phpbb\controller\helper	$helper			Controller helper object
 	 * @param \phpbb\template\template	$template		Template object
 	 * @param \phpbb\user				$user			User Object
-	 *
 	 * @var string phpEx
 	 * @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
 	 * @access public
@@ -43,11 +41,8 @@ class listener implements EventSubscriberInterface
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
-
 		$this->php_ext		= $phpExt;
 		$this->tpotm		= $tpotm;
-
-		//var_dump($this->tpotm->ext_path_web());
 	}
 
 	static public function getSubscribedEvents()

@@ -97,22 +97,21 @@ class main
 			throw new \phpbb\exception\http_exception(404, 'TPOTM__HALL_DISABLED');
 		}
 
-		$l_message = $this->user->lang('DEMO_HELLO');
-		$this->template->assign_var(
-			'DEMO_MESSAGE', $this->user->lang($l_message, $name)
-			);
-
-		/**
-		 * Gives an avatar as default if missing.
-		 * For the sake of the layout
-		 */
-		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
-
 		/**
 		 * Check permissions prior to run the code
 		 */
-		if ($this->tpotm->is_authed())
+		if ($this->tpotm->is_authed() && $this->tpotm->is_hall())
 		{
+			$l_message = $this->user->lang('DEMO_HELLO');
+			$this->template->assign_var(
+				'DEMO_MESSAGE', $this->user->lang($l_message, $name)
+				);
+
+			/**
+			 * Gives an avatar as default if missing.
+			 * For the sake of the layout
+			 */
+			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 			/*
 			 * top_posters_ever
 			 * If same tot posts and same exact post time then the post ID rules
@@ -153,19 +152,19 @@ class main
 				));
 			}
 			$this->db->sql_freeresult($result);
+
+			/* Data range */
+			$data_begin = $this->user->format_date($this->config['board_startdate']);
+			$data_today = $this->user->format_date(time());
+
+			$template_vars = array(
+				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_today),
+			);
+
+			/* You know.. template stuff */
+			$this->template->assign_vars($template_vars);
+
+			return $this->helper->render('tpotm_hall.html', $name);
 		}
-
-		/* Data range */
-		$data_begin = $this->user->format_date($this->config['board_startdate']);
-		$data_today = $this->user->format_date(time());
-
-		$template_vars = array(
-			'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_today),
-		);
-
-		/* You know.. template stuff */
-		$this->template->assign_vars($template_vars);
-
-		return $this->helper->render('tpotm_hall.html', $name);
 	}
 }
