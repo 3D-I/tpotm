@@ -48,25 +48,40 @@ $lang = array_merge($lang, array(
 	'TPOTM_TOT_POST'				=> 'Total posts',
 	'TPOTM_DATE'					=> 'Year and Month',
 
+	'tpotm_months'	=> array(
+		'01'	=> 'Jan',
+		'02'	=> 'Feb',
+		'03'	=> 'Mar',
+		'04'	=> 'Apr',
+		'05'	=> 'May',
+		'06'	=> 'Jun',
+		'07'	=> 'Jul',
+		'08'	=> 'Aug',
+		'09'	=> 'Sep',
+		'10'	=> 'Oct',
+		'11'	=> 'Nov',
+		'12'	=> 'Dec',
+	),
+
 	'TPOTM_CACHE'	=> array(
-		0				=>	' (<i>updates at every page load</i>)',
-		1				=> ' (<i>updates every <strong>%d</strong> minute</i>)',
-		2				=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
+		0	=> ' (<i>updates at every page load</i>)',
+		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
+		2	=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
 	),
 
 	'TPOTM_POST'	=> array(
-		1				=> ' with a total of <strong>%d</strong> post',
-		2				=> ' with a total of <strong>%d</strong> posts',
+		1	=> ' with a total of <strong>%d</strong> post',
+		2	=> ' with a total of <strong>%d</strong> posts',
 	),
 
 	// Translators please do not change the following line, no need to translate it!
-	'TPOTM_CREDIT_LINE'	=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
+	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
 
 	// Hall of fame
-	'VIEWING_TPOTM_HALL'	=> 'Viewing TPOTM Hall of fame',
-	'TPOTM_PAGE'			=> 'Hall of fame',
-	'DEMO_HELLO'			=> 'Welcome to the TPOTM Hall of fame - W.I.P.',
-	'TPOTM_ROUTE_NAME'		=> 'hall_of_fame',
+	'VIEWING_TPOTM_HALL'			=> 'Viewing TPOTM Hall of fame',
+	'TPOTM_PAGE'					=> 'Hall of fame',
+	'DEMO_HELLO'					=> 'Welcome to the TPOTM Hall of fame - W.I.P.',
+	'TPOTM_ROUTE_NAME'				=> 'hall_of_fame',
 	// Hall of fame - controller exceptions
 	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
 	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',

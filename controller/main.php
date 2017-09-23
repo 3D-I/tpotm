@@ -141,9 +141,10 @@ class main
 				'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 				'TOTAL_POSTS'	=> (int) $row['total_posts'],
 				'YEAR'			=> (int) $row['year'],
-				'MONTH'			=> (int) $row['month'],
+				'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']]
 				));
 			}
+
 		$this->db->sql_freeresult($result);
 
 		/* Data range */
