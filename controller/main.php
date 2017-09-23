@@ -63,7 +63,7 @@ class main
 	 * @param threedi\tpotm\core\tpotm			$tpotm			Methods to be used by Class
 	 * @var string phpBB root path				$root_path
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache,  \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $root_path)
 	{
 		$this->auth			= $auth;
 		$this->cache		= $cache;
@@ -108,6 +108,11 @@ class main
 		 */
 		$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
+		/**
+		 * Check permissions prior to run the code
+		 */
+		if ($this->tpotm->is_authed())
+		{
 			/*
 			 * top_posters_ever
 			 * If same tot posts and same exact post time then the post ID rules
@@ -143,13 +148,12 @@ class main
 					'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
 					'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 					'TOTAL_POSTS'	=> (int) $row['total_posts'],
-					'YEAR'			=> (int) $row['year'],
+					'YEAR'			=> (!empty($row['year'])) ? (int) $row['year'] : '',
 					'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']]
 				));
 			}
 			$this->db->sql_freeresult($result);
-
-
+		}
 
 		/* Data range */
 		$data_begin = $this->user->format_date($this->config['board_startdate']);

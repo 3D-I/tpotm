@@ -483,6 +483,18 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
+
+			/* If no posts for the current elapsed time there is not a TPOTM */
+			if ((int) $tpotm_tot_posts < 1)
+			{
+				$this->perform_user_db_clean();
+			}
+
+			/* There is a TPOTM, let's update the DB then */
+			if ((int) $tpotm_tot_posts >= 1)
+			{
+				$this->perform_user_reset((int) $user_id);
+			}
 		}
 
 		/* If cache is enabled use it */
@@ -490,6 +502,7 @@ class tpotm
 		{
 			$this->cache->put('_tpotm_tot_posts', $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
+
 		return $tpotm_tot_posts;
 	}
 
@@ -518,18 +531,6 @@ class tpotm
 	{
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts($row['user_id']);
-
-		/* If no posts for the current elapsed time there is not a TPOTM */
-		if ((int) $tpotm_tot_posts < 1)
-		{
-			$this->perform_user_db_clean();
-		}
-
-		/* There is a TPOTM, let's update the DB then */
-		if ((int) $tpotm_tot_posts >= 1)
-		{
-			$this->perform_user_reset((int) $row['user_id']);
-		}
 
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
