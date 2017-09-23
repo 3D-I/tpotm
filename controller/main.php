@@ -161,14 +161,14 @@ class main
 					'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 					'TOTAL_POSTS'	=> (int) $row['total_posts'],
 					'YEAR'			=> (!empty($row['year'])) ? (int) $row['year'] : '',
-					'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']]
+					'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']] // Do not cast to INT!
 				));
 			}
 			$this->db->sql_freeresult($result);
 
 			/* Data range */
-			$data_begin = $this->user->format_date($this->config['board_startdate']);
-			$end_end = $this->user->format_date($end_last_month);
+			$data_begin = $this->user->format_date((int) $board_start);
+			$end_end = $this->user->format_date((int) $end_last_month);
 
 			$template_vars = array(
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $end_end),
