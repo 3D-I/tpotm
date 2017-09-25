@@ -79,37 +79,6 @@ class main
 	}
 
 	/**
-	 * Get month and year of given timestamps
-	 *
-	 * @param	string	$timestamp	Unix timestamp
-	 * @return	arrays	string		Formatted string mm and YYYY (09 2017)
-	 */
-	public function dateformat_from_unixtime($timestamp)
-	{
-		$month = new \DateTime();
-		$month = $month->setTimestamp((int) $timestamp)->format('"m"');
-
-		//$year = new \DateTime();
-		//$year = $year->setTimestamp((int) $timestamp);
-
-		return $month;
-	}
-
-	/**
-	 * Get month and year of given timestamps
-	 *
-	 * @param	string	$timestamp	Unix timestamp
-	 * @return	arrays	string		Formatted string mm and YYYY (09 2017)
-	 */
-	public function from_unixtime($timestamp)
-	{
-		$timestamp = new \DateTime();
-		$timestamp = $timestamp->setTimestamp((int) $timestamp);
-
-		return (int) $timestamp;
-	}
-
-	/**
 	 * Controller for route /tpotm/{name}
 	 *
 	 * @param string $name
