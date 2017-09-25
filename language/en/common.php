@@ -47,6 +47,7 @@ $lang = array_merge($lang, array(
 	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_TOT_POST'				=> 'Total posts',
 	'TPOTM_DATE'					=> 'Year and Month',
+	'TPOTM_LAST_POST_IN_MONTH'		=> 'Last in',
 
 	'tpotm_months'	=> array(
 		'01'	=> 'Jan',

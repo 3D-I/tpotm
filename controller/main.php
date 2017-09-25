@@ -79,6 +79,37 @@ class main
 	}
 
 	/**
+	 * Get month and year of given timestamps
+	 *
+	 * @param	string	$timestamp	Unix timestamp
+	 * @return	arrays	string		Formatted string mm and YYYY (09 2017)
+	 */
+	public function dateformat_from_unixtime($timestamp)
+	{
+		$month = new \DateTime();
+		$month = $month->setTimestamp((int) $timestamp)->format('"m"');
+
+		//$year = new \DateTime();
+		//$year = $year->setTimestamp((int) $timestamp);
+
+		return $month;
+	}
+
+	/**
+	 * Get month and year of given timestamps
+	 *
+	 * @param	string	$timestamp	Unix timestamp
+	 * @return	arrays	string		Formatted string mm and YYYY (09 2017)
+	 */
+	public function from_unixtime($timestamp)
+	{
+		$timestamp = new \DateTime();
+		$timestamp = $timestamp->setTimestamp((int) $timestamp);
+
+		return (int) $timestamp;
+	}
+
+	/**
 	 * Controller for route /tpotm/{name}
 	 *
 	 * @param string $name
@@ -112,23 +143,27 @@ class main
 			 * For the sake of the layout
 			 */
 			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
-			/*
-			 * top_posters_ever
-			 * If same tot posts and same exact post time then the post ID rules
-			 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-			*/
-			$board_start = (int) $this->config['board_startdate'];
-
-			$now = time();
+			/* Starting point in time */
+			$board_start = (int) $this->config['board_startdate']; // UNIX
+			/**
+			 * if the current month is 01 (January) date() will decrement the year by one
+			 * and wrap the month back round to 12
+			 */
+			$now = time(); // UNIX
 			$date_today = gmdate("Y-m", $now);
 			list($year_cur, $month_cur) = explode('-', $date_today);
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
 			/* top_posters_ever (minus the present month - Thx Steve) */
 			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
-			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
-
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%Y") AS year, DATE_FORMAT(FROM_UNIXTIME(p.post_time), "%m") AS month, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year); // UNIX
+			/*
+			 * top_posters_ever
+			 * Show the top posters ever sorted by total posts DESC
+			 * If same tot posts and same exact post time then the post ID rules
+			 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+			*/
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
@@ -137,8 +172,8 @@ class main
 					AND (u.user_type <> ' . USER_FOUNDER . ')
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
-				GROUP BY u.user_id, year, month
-				ORDER BY year DESC, month DESC, total_posts DESC';
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC';
 			$result = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
 
 			while ($row = $this->db->sql_fetchrow($result))
@@ -155,8 +190,9 @@ class main
 					'USER_AVATAR'	=> (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar,
 					'USERNAME'		=> ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']),
 					'TOTAL_POSTS'	=> (int) $row['total_posts'],
-					'YEAR'			=> (!empty($row['year'])) ? (int) $row['year'] : '',
-					'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']] // Do not cast to INT!
+				//	'YEAR'			=> (!empty($row['year'])) ? (int) $row['year'] : '',
+				//	'MONTH'			=> $this->user->lang['tpotm_months'][$row['month']], // Do not cast to INT!
+					'POST_TIME'		=> $this->user->format_date((int) $row['MAX(p.post_time)'])
 				));
 			}
 			$this->db->sql_freeresult($result);

@@ -48,11 +48,14 @@
 				<div class="item">
 					<div id="" class="flex-avatar">{{ tpotm_ever.USER_AVATAR }}</div>
 					<span>{{ tpotm_ever.USERNAME }}</span>
-					<div id="" class="">
+					<!-- <div id="" class="">
 						{{ lang('TPOTM_DATE') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.YEAR }}&nbsp;{{ tpotm_ever.MONTH }}
-					</div>
+					</div> -->
 					<div id="" class="">
 						{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
+					</div>
+					<div id="" class="">
+						{{ lang('TPOTM_LAST_POST_IN_MONTH') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.POST_TIME	}}
 					</div>
 				</div>
 			</div>
