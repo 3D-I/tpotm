@@ -38,6 +38,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 			array('config.add', array('threedi_tpotm_index', 1)),
 			array('config.add', array('threedi_tpotm_ttl', 30)),
 			array('config.add', array('threedi_default_badge_exists', 1)),
+			array('config.add', array('threedi_tpotm_users_page', 4)),
 		);
 	}
 }

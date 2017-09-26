@@ -9,6 +9,8 @@ services:
             - '@ext.manager'
             - '@controller.helper'
             - '@path_helper'
+            - '@pagination'
+            - '@request'
             - '@template'
             - '@user'
             - '@threedi.tpotm.tpotm'

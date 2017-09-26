@@ -32,6 +32,8 @@
 	</div>	
 </div>
 
+{# start Hall of fame #}
+
 <h3>{{ lang('TPOTM_EVER_CAT') }}
 	{% if S_IS_RHEA %}
 		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN_HALL') }}" style="cursor: pointer;"></i>
@@ -39,6 +41,19 @@
 		&nbsp;<img class="icon icon-tpotm-stats" title="{{ lang('TPOTM_EXPLAIN_HALL') }}" style="cursor: pointer;"></img>
 	{% endif %}
 </h3>
+
+<div class="action-bar top">
+	{% if pagination or TOTAL_USERS %}
+	<div class="pagination">
+		 {COUNT}
+		{% if pagination %}
+			{% include 'pagination.html' %}
+		{% else %}
+			&bull; {PAGE_NUMBER}
+		{% endif %}
+	</div>
+	{% endif %}
+</div>
 
 <div class="panel bg1">
 	<div class="inner">
@@ -48,9 +63,6 @@
 				<div class="item">
 					<div id="" class="flex-avatar">{{ tpotm_ever.USER_AVATAR }}</div>
 					<span>{{ tpotm_ever.USERNAME }}</span>
-					<!-- <div id="" class="">
-						{{ lang('TPOTM_DATE') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.YEAR }}&nbsp;{{ tpotm_ever.MONTH }}
-					</div> -->
 					<div id="" class="">
 						{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
 					</div>
@@ -64,4 +76,20 @@
 	</div>
 </div>
 
+<div class="action-bar bottom">
+	{% if pagination or TOTAL_USERS %}
+	<div class="pagination">
+		 {COUNT}
+		{% if pagination %}
+			{% include 'pagination.html' %}
+		{% else %}
+			&bull; {PAGE_NUMBER}
+		{% endif %}
+	</div>
+	{% endif %}
+</div>
+
+{# end Hall of fame #}
+
+{% include 'jumpbox.html' %}
 {% include 'overall_footer.html' %}

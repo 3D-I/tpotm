@@ -81,9 +81,20 @@ $lang = array_merge($lang, array(
 	// Hall of fame
 	'VIEWING_TPOTM_HALL'			=> 'Viewing TPOTM Hall of fame',
 	'TPOTM_PAGE'					=> 'Hall of fame',
-	'DEMO_HELLO'					=> 'Welcome to the TPOTM Hall of fame - W.I.P.',
+	'DEMO_HELLO'					=> 'Welcome to the TPOTM Hall of fame',
 	'TPOTM_ROUTE_NAME'				=> 'hall_of_fame',
-	// Hall of fame - controller exceptions
+
+	'HALL_OF_FAME'	=> array(
+		0	=> 'Hall of fame',
+		1	=> 'Hall of fame &bull; page %d',
+		2	=> 'Hall of fame &bull; page %d',
+	),
+
+	'TPOTM_HALL_COUNT'	=> array(
+		1	=> ' Found a total of <strong>%d</strong> top poster',
+		2	=> ' Found a total of <strong>%d</strong> top posters',
+	),
+
 	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
 	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
 ));
