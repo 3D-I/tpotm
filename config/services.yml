@@ -14,6 +14,7 @@ services:
             - '@template'
             - '@user'
             - '@threedi.tpotm.tpotm'
+            - '%core.php_ext%'
             - '%core.root_path%'
 
     threedi.tpotm.listener:
