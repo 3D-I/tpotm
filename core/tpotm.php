@@ -584,8 +584,8 @@ class tpotm
 			/* Avatar as IMG or FA? Depends on version */
 			if (!$this->is_rhea())
 			{
-				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
 
 				$template_vars += array(
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
