@@ -112,10 +112,13 @@ a.hall-avatar-tpotm img {
 /* Avatar container */
 .flex-avatar {
 	border-width: 2px;
-	padding: 1px;
+	padding: 2px;
 	border-style: solid;
 	vertical-align: middle;
 	display: inline-flex;
+	box-shadow: 1px 2px 3px grey;
+	border-radius: 5px;
+	background-color: transparent;
 }
 
 /* Avatar image */
@@ -134,6 +137,8 @@ a.hall-avatar-tpotm img {
 	width: 200px;  /* Or whatever */
 	height: 66px; /* Or whatever */
 	vertical-align: middle;
+	border-radius: 7px;
+	box-shadow: 1px 2px 3px grey;
 	display: flex;
 	align-items: start;
 }
