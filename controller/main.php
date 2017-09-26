@@ -191,7 +191,7 @@ class main
 				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar;
 
 				$this->template->assign_block_vars('tpotm_ever', array(
-					'USER_AVATAR'	=> ($this->auth->acl_get('viewavatars')) ? $user_avatar : $no_avatar,
+					'USER_AVATAR'	=> $user_avatar,
 					'USERNAME'		=> $username,
 					'TOTAL_POSTS'	=> (int) $row['total_posts'],
 					'POST_TIME'		=> $this->user->format_date((int) $row['MAX(p.post_time)'])
