@@ -81,13 +81,15 @@ class tpotm_module
 
 				$config->set('threedi_tpotm_forums', $request->variable('threedi_tpotm_forums', (int) $config['threedi_tpotm_forums']));
 
+				$config->set('threedi_tpotm_hall', $request->variable('threedi_tpotm_hall', (int) $config['threedi_tpotm_hall']));
+
+				$config->set('threedi_tpotm_users_page', $request->variable('threedi_tpotm_users_page', (int) $config['threedi_tpotm_users_page']));
+
 				$config->set('threedi_tpotm_ttl', $request->variable('threedi_tpotm_ttl', (int) $config['threedi_tpotm_ttl']));
 
 				$config->set('threedi_tpotm_miniavatar', $request->variable('threedi_tpotm_miniavatar', (int) $config['threedi_tpotm_miniavatar']));
 
 				$config->set('threedi_tpotm_miniprofile', $request->variable('threedi_tpotm_miniprofile', (int) $config['threedi_tpotm_miniprofile']));
-
-				$config->set('threedi_tpotm_hall', $request->variable('threedi_tpotm_hall', (int) $config['threedi_tpotm_hall']));
 
 				$config->set('threedi_tpotm_adm_mods', $request->variable('threedi_tpotm_adm_mods', (int) $config['threedi_tpotm_adm_mods']));
 
@@ -105,11 +107,13 @@ class tpotm_module
 			// Template locations
 			'TPOTM_INDEX'			=> ($config['threedi_tpotm_index']) ? true : false,
 			'TPOTM_FORUMS'			=> ($config['threedi_tpotm_forums']) ? true : false,
+			// Hall of fame
+			'TPOTM_HALL'			=> ($config['threedi_tpotm_hall']) ? true : false,
+			'TPOTM_USERS_PAGE'		=> (int) $config['threedi_tpotm_users_page'],
 			// General Settings
 			'TPOTM_TTL'				=> (int) $config['threedi_tpotm_ttl'],
 			'TPOTM_MINIAVATAR'		=> ($config['threedi_tpotm_miniavatar']) ? true : false,
 			'TPOTM_MINIPROFILE'		=> ($config['threedi_tpotm_miniprofile']) ? true : false,
-			'TPOTM_HALL'			=> ($config['threedi_tpotm_hall']) ? true : false,
 			'TPOTM_ADM_MODS'		=> ($config['threedi_tpotm_adm_mods']) ? true : false,
 		));
 	}

@@ -140,9 +140,9 @@ class main
 			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
 			/* these are for pagination */
-			$total_users = $this->request->variable('user_id', 0);
-			$start = $this->request->variable('start', 0);
-			$limit = 3;//$this->config['threedi_tpotm_users_page']; // default 4
+			$total_users	= $this->request->variable('user_id', 0);
+			$start			= $this->request->variable('start', 0);
+			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
 			/*
 			 * top_posters_ever

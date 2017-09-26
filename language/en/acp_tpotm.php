@@ -20,13 +20,22 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'TPOTM_GENERAL'							=>	'General Settings',
-	// Tpl locations
+	// Legend Tpl locations
 	'ACP_TPOTM_TEMPLATE_LOCATIONS'			=>	'Template locations',
 	'ACP_TPOTM_TEMPLATE_LOCATIONS_EXPLAIN'	=>	'You may choose the location on index to be at the bottom or top of the page but both. In addition you might want to display the result also in viewforum.',
+	// Legend Hall of fame
+	'ACP_TPOTM_HALL'						=>	'HOF viewport settings',
+
+	// Tpl locations
 	'TPOTM_INDEX'							=>	'Index page',
 	'TPOTM_BOTTOM'							=>	'Bottom',
 	'TPOTM_TOP'								=>	'Top',
 	'TPOTM_FORUMS'							=>	'Forum pages',
+	// Hall of fame
+	'TPOTM_HALL'							=>	'Hall of fame',
+	'TPOTM_HALL_EXPLAIN'					=>	'Enable the page?',
+	'TPOTM_USERS_PAGE'						=>	'Top posters',
+	'TPOTM_USERS_PAGE_EXPLAIN'				=>	'How many users to show at once',
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Variouses',
 	'TPOTM_TTL'								=>	'Time to live',
@@ -35,8 +44,6 @@ $lang = array_merge($lang, array(
 	'TPOTM_AVATAR_EXPLAIN'					=>	'Prepends the TPOTM avatar to the result',
 	'TPOTM_MINIPROFILE'						=>	'Mini profile next to posts',
 	'TPOTM_MINIPROFILE_EXPLAIN'				=>	'Display the TPOTM mini-badge',
-	'TPOTM_HALL'							=>	'Hall of fame',
-	'TPOTM_HALL_EXPLAIN'					=>	'Display the HOF link on nav bar',
 	'TPOTM_ADM_MODS'						=>	'Admin and Moderators',
 	'TPOTM_ADM_MODS_EXPLAIN'				=>	'Include also those users in the TPOTM',
 	// Errors
