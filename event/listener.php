@@ -32,7 +32,7 @@ class listener implements EventSubscriberInterface
 	 * @param \phpbb\controller\helper	$helper			Controller helper object
 	 * @param \phpbb\template\template	$template		Template object
 	 * @param \phpbb\user				$user			User Object
-	 * @var string phpEx
+	 * @var string phpEx				$phpExt
 	 * @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
 	 * @access public
 	 */

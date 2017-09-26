@@ -51,6 +51,9 @@ class main
 	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
+	/* @var string phpEx */
+	protected $php_ext;
+
 	/* @var string phpBB root path */
 	protected $root_path;
 
@@ -70,9 +73,10 @@ class main
 	 * @param \phpbb\template\template			$template
 	 * @param \phpbb\user						$user
 	 * @param threedi\tpotm\core\tpotm			$tpotm			Methods to be used by Class
+	 * @var string phpEx						$phpExt
 	 * @var string phpBB root path				$root_path
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
 	{
 		$this->auth			= $auth;
 		$this->cache		= $cache;
@@ -86,6 +90,7 @@ class main
 		$this->template		= $template;
 		$this->user			= $user;
 		$this->tpotm		= $tpotm;
+		$this->php_ext		= $phpExt;
 		$this->root_path	= $root_path;
 	}
 
@@ -208,7 +213,7 @@ class main
 			$this->pagination->generate_template_pagination($url, 'pagination', 'start', $total_users, $limit, $start);
 			$name = $this->user->lang('HALL_OF_FAME', $this->pagination->get_on_page($limit, $start));
 
-			make_jumpbox(append_sid("{$this->root_path}viewforum.php"));
+			make_jumpbox(append_sid("{$this->root_path}viewforum.{$this->php_ext}"));
 
 			return $this->helper->render('tpotm_hall.html', $name);
 		}
