@@ -187,7 +187,6 @@ class main
 					'avatar_height'	=> (int) $row['user_avatar_height'],
 				);
 
-				$user_id = $row['user_id'];
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar;
 
