@@ -49,21 +49,6 @@ $lang = array_merge($lang, array(
 	'TPOTM_DATE'					=> 'Year and Month',
 	'TPOTM_LAST_POST_IN_MONTH'		=> 'Last in',
 
-	'tpotm_months'	=> array(
-		'01'	=> 'Jan',
-		'02'	=> 'Feb',
-		'03'	=> 'Mar',
-		'04'	=> 'Apr',
-		'05'	=> 'May',
-		'06'	=> 'Jun',
-		'07'	=> 'Jul',
-		'08'	=> 'Aug',
-		'09'	=> 'Sep',
-		'10'	=> 'Oct',
-		'11'	=> 'Nov',
-		'12'	=> 'Dec',
-	),
-
 	'TPOTM_CACHE'	=> array(
 		0	=> ' (<i>updates at every page load</i>)',
 		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
