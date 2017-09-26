@@ -214,7 +214,7 @@ class tpotm
 	 */
 	public function style_mini_badge_fa($tpotm_av_url)
 	{
-		return '<a href="' . $tpotm_av_url . '" class="tpotm-header-avatar"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
+		return '<a href="' . $tpotm_av_url . '"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
 	}
 
 	/**
@@ -327,7 +327,6 @@ class tpotm
 			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
 			'S_IS_RHEA'				=> $this->is_rhea(),
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true() ? true : false,
-
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
@@ -575,26 +574,32 @@ class tpotm
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
 
+			/* Hall's avatar must be IMG for both versions */
+			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_badge();
+
+			$template_vars += array(
+				'TPOTM_AVATAR_HALL'		=> '<img src="' . $tpotm_av_3132_hall . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />',
+			);
+
+			/* Avatar as IMG or FA? Depends on version */
 			if (!$this->is_rhea())
 			{
 				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
-
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
 				$template_vars += array(
-					'TPOTM_AVATAR'			=> $tpotm_av_31,
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+					'TPOTM_AVATAR'			=> $tpotm_av_31,
 				);
 			}
 			else if ($this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
-
 				$tpotm_av_32 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge_fa($tpotm_av_url);
 
 				$template_vars += array(
-					'TPOTM_AVATAR'			=> $tpotm_av_32,
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+					'TPOTM_AVATAR'			=> $tpotm_av_32,
 				);
 			}
 			else

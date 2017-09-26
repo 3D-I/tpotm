@@ -7,7 +7,7 @@
 		<div class="tpotm-div-1">
 			<div class="tpotm-div-2">
 				{% if S_TPOTM_AVATAR %}
-					<a href="{{ U_TPOTM_AVATAR_URL }}" class="header-avatar-tpotm">{{ TPOTM_AVATAR }}</a>
+					<a href="{{ U_TPOTM_AVATAR_URL }}" class="hall-avatar-tpotm">{{ TPOTM_AVATAR_HALL }}</a>
 				{% endif %}
 				{{ TPOTM_NAME }}
 			</div>
@@ -76,7 +76,7 @@
 	</div>
 </div>
 
-<div class="action-bar bottom">
+<div class="action-bar top">
 	{% if loops.pagination or TOTAL_USERS %}
 	<div class="pagination">
 		 {COUNT}
