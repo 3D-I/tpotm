@@ -587,8 +587,9 @@ class tpotm
 			);
 
 			/**
-			 * Hall's avatar must be IMG for both versions
 			 * DAE (Default Avatar Extended) extension compatibility
+			 *
+			 * Hall's avatar must be IMG for both versions
 			 */
 			if ($this->is_dae())
 			{
@@ -605,7 +606,7 @@ class tpotm
 				);
 			}
 
-			/* Avatar as IMG or FA? Depends on version */
+			/* Avatar as IMG or FA-icon? Depends on the version */
 			if (!$this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
