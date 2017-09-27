@@ -215,6 +215,7 @@ class main
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_end),
 				'COUNT'					=> $this->user->lang('TPOTM_HALL_COUNT', (int) $total_users),
 			);
+
 			$this->template->assign_vars($template_vars);
 
 			$url = $this->helper->route('threedi_tpotm_controller', array('name' => $name));

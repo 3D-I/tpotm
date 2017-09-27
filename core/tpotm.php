@@ -600,13 +600,13 @@ class tpotm
 			}
 			else
 			{
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_badge();
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
 				$template_vars += array(
 					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
 				);
 			}
 
-			/* Avatar as IMG or FA-icon? Depends on the version */
+			/* Avatar as IMG or FA-icon depends on the phpBB version */
 			if (!$this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
