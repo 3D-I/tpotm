@@ -333,6 +333,7 @@ class tpotm
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
+			'S_IS_DAE'				=> $this->is_dae(),
 			'TOTAL_MONTH'			=> (int) $this->perform_cache_on_this_month_total_posts(),
 		));
 	}
@@ -519,6 +520,17 @@ class tpotm
 		return $format ? $this->user->format_date($data) : $data;
 	}
 
+	/**
+	 * Returns whether DAE (Default Avatar Extended) extension it's installed and TRUE
+	 *
+	 * @return bool
+	 */
+	public function is_dae()
+	{
+		return ((isset($this->config['threedi_default_avatar_version']) && $this->config['threedi_default_avatar_extended'] >= 1) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>='));
+	}
+
+
 	/*
 	* There can be only ONE, the TPOTM.
 	* If same tot posts and same exact post time then the post ID rules
@@ -574,18 +586,39 @@ class tpotm
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
 
-			/* Hall's avatar must be IMG for both versions */
-			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_badge();
-
-			$template_vars += array(
-				'TPOTM_AVATAR_HALL'		=> '<img src="' . $tpotm_av_3132_hall . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />',
-			);
+			/**
+			 * Hall's avatar must be IMG for both versions
+			 * DAE (Default Avatar Extended) extension compatibility
+			 */
+			if ($this->is_dae())
+			{
+				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+				$template_vars += array(
+					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
+				);
+			}
+			else
+			{
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_badge();
+				$template_vars += array(
+					'TPOTM_AVATAR_HALL'		=> '<img src="' . $tpotm_av_3132_hall . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />',
+				);
+			}
 
 			/* Avatar as IMG or FA? Depends on version */
 			if (!$this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
-				$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
+
+				/* DAE (Default Avatar Extended) extension compatibility */
+				if ($this->is_dae())
+				{
+					$tpotm_av_31 = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+				}
+				else
+				{
+					$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
+				}
 
 				$template_vars += array(
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
@@ -595,7 +628,16 @@ class tpotm
 			else if ($this->is_rhea())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
-				$tpotm_av_32 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge_fa($tpotm_av_url);
+
+				/* DAE (Default Avatar Extended) extension compatibility */
+				if ($this->is_dae())
+				{
+					$tpotm_av_32 = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+				}
+				else
+				{
+					$tpotm_av_32 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge_fa($tpotm_av_url);
+				}
 
 				$template_vars += array(
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,

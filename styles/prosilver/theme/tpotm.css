@@ -74,6 +74,15 @@ a.hall-avatar-tpotm img {
 	background-color: transparent;
 }
 
+.hall-avatar-dae img {
+	margin-bottom: 2px;
+	width: 80px;
+	height: 80px;
+	box-shadow: 1px 2px 3px grey;
+	border-radius: 25%;
+	background-color: transparent;
+}
+
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;

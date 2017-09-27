@@ -7,9 +7,13 @@
 		<div class="tpotm-div-1">
 			<div class="tpotm-div-2">
 				{% if S_TPOTM_AVATAR %}
-					<a href="{{ U_TPOTM_AVATAR_URL }}" class="hall-avatar-tpotm">{{ TPOTM_AVATAR_HALL }}</a>
+					{% if S_IS_DAE %}
+						<span class="hall-avatar-dae">{{ TPOTM_AVATAR_HALL }}</span>
+					{% else %}
+						<a href="{{ U_TPOTM_AVATAR_URL }}" class="hall-avatar-tpotm">{{ TPOTM_AVATAR_HALL }}</a>
+					{% endif %}
 				{% endif %}
-				{{ TPOTM_NAME }}
+			{{ TPOTM_NAME }}
 			</div>
 			{{ TPOTM_POST }}
 			<div class="tpotm-div-3" style="background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
