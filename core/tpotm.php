@@ -601,7 +601,7 @@ class tpotm
 			{
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_badge();
 				$template_vars += array(
-					'TPOTM_AVATAR_HALL'		=> '<img src="' . $tpotm_av_3132_hall . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />',
+					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
 				);
 			}
 
