@@ -1,5 +1,5 @@
 {% include 'overall_header.html' %}
-<h2 class="solo">{{ DEMO_MESSAGE }}</h2>
+<h2 class="head-text">{{ DEMO_MESSAGE }}</h2>
 
 <div class="panel bg1">
 	<div class="inner">
@@ -7,15 +7,11 @@
 		<div class="tpotm-div-1">
 			<div class="tpotm-div-2">
 				{% if S_TPOTM_AVATAR %}
-					{% if S_IS_DAE %}
-						<span class="hall-avatar-dae">{{ TPOTM_AVATAR_HALL }}</span>
-					{% else %}
 						<a href="{{ U_TPOTM_AVATAR_URL }}" class="hall-avatar-tpotm">{{ TPOTM_AVATAR_HALL }}</a>
-					{% endif %}
 				{% endif %}
-			{{ TPOTM_NAME }}
+				<span class="text2">&nbsp;{{ TPOTM_NAME }}</span>
 			</div>
-			{{ TPOTM_POST }}
+			<span class="text1">{{ TPOTM_POST }}</span>
 			<div class="tpotm-div-3" style="background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
 				<div class="tpotm-div-4">
 					<span class="tpotm-span-1">
@@ -65,12 +61,13 @@
 			{% for tpotm_ever in loops.tpotm_ever %}
 			<div class="flex-cell">
 				<div class="item">
-					<div id="" class="flex-avatar">{{ tpotm_ever.USER_AVATAR }}</div>
-					<span>{{ tpotm_ever.USERNAME }}</span>
-					<div id="" class="">
+					<div class="flex-avatar">
+						{{ tpotm_ever.USER_AVATAR }}&nbsp;{{ tpotm_ever.USERNAME }}
+					</div>
+					<div class="flex-text">
 						{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
 					</div>
-					<div id="" class="">
+					<div class="flex-text">
 						{{ lang('TPOTM_LAST_POST_IN_MONTH') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.POST_TIME	}}
 					</div>
 				</div>

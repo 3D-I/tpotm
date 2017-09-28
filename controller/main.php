@@ -138,12 +138,6 @@ class main
 			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
 			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year); // UNIX
 
-			/**
-			 * Gives an avatar as default if missing.
-			 * For the sake of the layout
-			 */
-			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
-
 			/* these are for pagination */
 			$total_users	= $this->request->variable('user_id', 0);
 			$start			= $this->request->variable('start', 0);
@@ -176,6 +170,12 @@ class main
 			$total_users = (int) count($row2);
 			$this->db->sql_freeresult($result);
 			unset($row2);
+
+			/**
+			 * Gives an avatar as default if missing.
+			 * For the sake of the layout
+			 */
+			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
 			foreach ($rows as $row)
 			{

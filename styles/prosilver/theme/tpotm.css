@@ -15,6 +15,13 @@ a.tpotm-header-avatar img {
 /***************************************
 * This section is for the hall of fame *
 ***************************************/
+.head-text {
+	font-size: 2.2em;
+	text-decoration: bold;
+	text-align: center;
+	color: blue;
+}
+
 .tpotm-div-1 {
 	padding: 5px 10px;
 	margin-bottom: 4px;
@@ -24,7 +31,13 @@ a.tpotm-header-avatar img {
 	position: relative;
 	margin: 10px;
 	box-shadow: 1px 2px 3px grey;
-	font-size:14px;
+	font-size: 14px;
+	color: blue;
+}
+
+.tpotm-div-1, .text1 {
+	font-size: 1.2em;
+	text-decoration: none;
 }
 
 .tpotm-div-2 {
@@ -33,6 +46,12 @@ a.tpotm-header-avatar img {
 	padding: 3px;
 }
 
+.tpotm-div-2, .text2 {
+	font-size: 1.5em;
+	text-decoration: none;
+}
+
+
 .tpotm-div-3 {
 	margin: 2px auto;
 	text-align: center;
@@ -40,6 +59,7 @@ a.tpotm-header-avatar img {
 	height: 120px;
 	border-radius: 100%;
 	background-color: #80BF00;
+	/* background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%) */
 }
 
 .tpotm-div-4 {
@@ -74,15 +94,6 @@ a.hall-avatar-tpotm img {
 	background-color: transparent;
 }
 
-.hall-avatar-dae img {
-	margin-bottom: 2px;
-	width: 80px;
-	height: 80px;
-	box-shadow: 1px 2px 3px grey;
-	border-radius: 25%;
-	background-color: transparent;
-}
-
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
@@ -106,7 +117,7 @@ a.hall-avatar-tpotm img {
 	-ms-flex-flow: row wrap;
 	flex-flow: row wrap;
 	overflow: auto;
-	max-height: 420px;
+	max-height: 568px; /* 66 x 8 flex-cell height */
 	justify-content: space-around;
 
 }
@@ -120,14 +131,15 @@ a.hall-avatar-tpotm img {
 
 /* Avatar container */
 .flex-avatar {
-	border-width: 2px;
+	border-width: 1px;
 	padding: 2px;
-	border-style: solid;
+	border-style: none;
 	vertical-align: middle;
-	display: inline-flex;
 	box-shadow: 1px 2px 3px grey;
 	border-radius: 5px;
 	background-color: transparent;
+	width: 194px; /* (200 - (1+1+2+2)) flex-cell width */
+	display: inline-flex;
 }
 
 /* Avatar image */
@@ -143,13 +155,26 @@ a.hall-avatar-tpotm img {
 	padding: 3px;
 	border-style: solid;
 	border-color: #729ea5;
-	width: 200px;  /* Or whatever */
-	height: 66px; /* Or whatever */
+	width: 200px;
+	height: 66px;
 	vertical-align: middle;
 	border-radius: 7px;
 	box-shadow: 1px 2px 3px grey;
 	display: flex;
 	align-items: start;
+}
+
+/* Each text entry, with or without a link - default packed */
+.flex-text,
+.flex-text a {
+	flex: 1;
+	font-size: 1em;
+	text-decoration: none;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 196px; /* (200 - (2+2)) flex-cell width */
+	line-height: 1.6em;
 }
 
 /***************************************

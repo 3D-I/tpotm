@@ -214,7 +214,7 @@ class tpotm
 	 */
 	public function style_mini_badge_fa($tpotm_av_url)
 	{
-		return '<a href="' . $tpotm_av_url . '"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i><span class="sr-only"></span></a>';
+		return '<a href="' . $tpotm_av_url . '"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i></a>';
 	}
 
 	/**
