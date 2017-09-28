@@ -397,6 +397,7 @@ class tpotm
 		}
 
 		return (int) $total_month;
+		//$this->config->set('threedi_this_month_total_posts', (int) $total_month);
 	}
 
 	/*
@@ -527,9 +528,8 @@ class tpotm
 	 */
 	public function is_dae()
 	{
-		return ((isset($this->config['threedi_default_avatar_version']) && $this->config['threedi_default_avatar_extended'] >= 1) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>='));
+		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && ($this->config['threedi_default_avatar_extended'] >= 1));
 	}
-
 
 	/*
 	* There can be only ONE, the TPOTM.
@@ -546,7 +546,7 @@ class tpotm
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-		/* Fresh install or when a new Month starts gives zero posts */
+		/* Fresh install or if a new Month has began results to zero posts */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
@@ -562,7 +562,7 @@ class tpotm
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
-		/* percentages for templating the Hall of fame */
+		/* percentages for the Hall of fame's styling */
 		$percent = min(100, $this->perform_cache_on_tpotm_tot_posts($row['user_id']) / (int) $this->perform_cache_on_this_month_total_posts()) * 100;
 		$degrees = (360 * $percent) / 100;
 		$start = 90;
@@ -585,10 +585,8 @@ class tpotm
 				'avatar_width'	=> (int) $row['user_avatar_width'],
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
-
 			/**
 			 * DAE (Default Avatar Extended) extension compatibility
-			 *
 			 * Hall's avatar must be IMG for both versions
 			 */
 			if ($this->is_dae())

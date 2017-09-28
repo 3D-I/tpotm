@@ -164,16 +164,15 @@ class main
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
-			/* Pagination's total users count */
 			$result = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
 			$row2 = $this->db->sql_fetchrowset($result);
 			$total_users = (int) count($row2);
+			//$this->config->set('threedi_hall_total_users', (int) $total_users);
 			$this->db->sql_freeresult($result);
 			unset($row2);
 
 			/**
-			 * Gives an avatar as default if missing.
-			 * For the sake of the layout
+			 * Gives an avatar as default if missing for the sake of the layout
 			 */
 			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
