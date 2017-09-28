@@ -164,11 +164,25 @@ class main
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
-			$result = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
-			$row2 = $this->db->sql_fetchrowset($result);
+			/* For pagination */
+			$sql2 = 'SELECT u.user_id, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+				WHERE u.user_id <> ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
+					AND (u.user_type <> ' . USER_FOUNDER . ')
+					AND p.post_visibility = ' . ITEM_APPROVED . '
+					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC';
+			$result2 = $this->db->sql_query($sql2, (int) $this->tpotm->config_time_cache());
+			$row2 = $this->db->sql_fetchrowset($result2);
+			/* For pagination */
 			$total_users = (int) count($row2);
-			//$this->config->set('threedi_hall_total_users', (int) $total_users);
-			$this->db->sql_freeresult($result);
+			/* Free results */
+			$this->db->sql_freeresult($result2);
+			/* No need of it anymore */
 			unset($row2);
 
 			/**
