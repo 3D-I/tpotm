@@ -163,7 +163,7 @@ class tpotm
 	 */
 	public function update_img_config_to_false()
 	{
-		$this->config->set('threedi_default_badge_exists', 0);
+		$this->config->set('threedi_tpotm_badge_exists', 0);
 	}
 
 	/**
@@ -173,7 +173,7 @@ class tpotm
 	 */
 	public function update_img_config_to_true()
 	{
-		$this->config->set('threedi_default_badge_exists', 1);
+		$this->config->set('threedi_tpotm_badge_exists', 1);
 	}
 
 	/**
@@ -326,7 +326,6 @@ class tpotm
 		$this->template->assign_vars(array(
 			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
 			'S_IS_RHEA'				=> $this->is_rhea(),
-			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true() ? true : false,
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
 			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
@@ -334,7 +333,6 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_DAE'				=> $this->is_dae(),
-			'TOTAL_MONTH'			=> (int) $this->perform_cache_on_this_month_total_posts(),
 		));
 	}
 
@@ -358,9 +356,9 @@ class tpotm
 	}
 
 	/**
-	 * Gets the total posts count for the current month till now
+	 * Gets/store the total posts count for the current month till now
 	 *
-	 * @return int	$total_month
+	 * @return void|int	$total_month
 	 */
 	public function perform_cache_on_this_month_total_posts()
 	{
@@ -372,7 +370,6 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm_total');
 		}
-
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -389,15 +386,12 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 		}
-
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
 			$this->cache->put('_tpotm_total', $total_month, (int) $this->config_time_cache());
 		}
-
-		return (int) $total_month;
-		//$this->config->set('threedi_this_month_total_posts', (int) $total_month);
+		return $this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 	}
 
 	/*
@@ -504,7 +498,7 @@ class tpotm
 			$this->cache->put('_tpotm_tot_posts', $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 
-		return $tpotm_tot_posts;
+		return $tpotm_tot_posts;//threedi_tpotm_tot_posts
 	}
 
 	/*
@@ -528,7 +522,7 @@ class tpotm
 	 */
 	public function is_dae()
 	{
-		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && ($this->config['threedi_default_avatar_extended'] >= 1));
+		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
 	}
 
 	/*
@@ -540,6 +534,7 @@ class tpotm
 	*/
 	public function show_the_winner()
 	{
+		$this->perform_cache_on_this_month_total_posts();
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts($row['user_id']);
 
@@ -552,18 +547,18 @@ class tpotm
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
-		$total_month = $this->perform_cache_on_this_month_total_posts();
+		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
 
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
-			'L_TOTAL_MONTH'		=> $total_month > 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(($tpotm_tot_posts / $total_month) * 100)) : false,
+			'L_TOTAL_MONTH'		=> (int) $total_month > 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
 		/* percentages for the Hall of fame's styling */
-		$percent = min(100, $this->perform_cache_on_tpotm_tot_posts($row['user_id']) / (int) $this->perform_cache_on_this_month_total_posts()) * 100;
+		$percent = min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
 		$degrees = (360 * $percent) / 100;
 		$start = 90;
 
@@ -576,7 +571,7 @@ class tpotm
 		/**
 		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
 		 */
-		if ($this->enable_miniavatar() && ((int) $tpotm_tot_posts >= 1))
+		if ((int) $tpotm_tot_posts >= 1)
 		{
 			/* Map arguments for  phpbb_get_avatar() */
 			$row_avatar = array(
@@ -592,6 +587,7 @@ class tpotm
 			if ($this->is_dae())
 			{
 				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+
 				$template_vars += array(
 					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
 				);
@@ -599,13 +595,14 @@ class tpotm
 			else
 			{
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
+
 				$template_vars += array(
 					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
 				);
 			}
 
 			/* Avatar as IMG or FA-icon depends on the phpBB version */
-			if (!$this->is_rhea())
+			if (!$this->is_rhea() && $this->enable_miniavatar())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
@@ -624,7 +621,7 @@ class tpotm
 					'TPOTM_AVATAR'			=> $tpotm_av_31,
 				);
 			}
-			else if ($this->is_rhea())
+			else if ($this->is_rhea() && $this->enable_miniavatar())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 

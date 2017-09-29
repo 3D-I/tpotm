@@ -66,7 +66,7 @@ class tpotm_module
 				$tpotm->check_point_badge_img();
 
 				/* You changed filenames? No party! */
-				if (!$config['threedi_default_badge_exists'])
+				if (!$config['threedi_tpotm_badge_exists'])
 				{
 					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID');
 					/* Log the error. */
