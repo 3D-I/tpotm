@@ -577,10 +577,11 @@ class tpotm
 			/**
 			 * DAE (Default Avatar Extended) extension compatibility
 			 * Hall's avatar must be IMG for both versions
+			 * The Hall of fame doesn't care about the UCP prefs view avatars
 			 */
 			if ($this->is_dae())
 			{
-				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, '');
 
 				$template_vars += array(
 					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
@@ -588,14 +589,17 @@ class tpotm
 			}
 			else
 			{
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
 
 				$template_vars += array(
 					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
 				);
 			}
 
-			/* Avatar as IMG or FA-icon depends on the phpBB version */
+			/**
+			 * Avatar as IMG or FA-icon depends on the phpBB version
+			 * Here we care about the UCP prefs view avatars
+			 */
 			if (!$this->is_rhea() && $this->enable_miniavatar())
 			{
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
@@ -603,11 +607,11 @@ class tpotm
 				/* DAE (Default Avatar Extended) extension compatibility */
 				if ($this->is_dae())
 				{
-					$tpotm_av_31 = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+					$tpotm_av_31 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}
 				else
 				{
-					$tpotm_av_31 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge();
+					$tpotm_av_31 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : $this->style_mini_badge();
 				}
 
 				$template_vars += array(
@@ -622,11 +626,11 @@ class tpotm
 				/* DAE (Default Avatar Extended) extension compatibility */
 				if ($this->is_dae())
 				{
-					$tpotm_av_32 = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+					$tpotm_av_32 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';;
 				}
 				else
 				{
-					$tpotm_av_32 = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $this->style_mini_badge_fa($tpotm_av_url);
+					$tpotm_av_32 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : $this->style_mini_badge_fa($tpotm_av_url);
 				}
 
 				$template_vars += array(

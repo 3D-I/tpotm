@@ -203,13 +203,14 @@ class main
 				/* DAE (Default Avatar Extended) extension compatibility */
 				if ($this->tpotm->is_dae())
 				{
-					$user_avatar = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
+					$user_avatar = phpbb_get_avatar($row_avatar, '');
 				}
 				else
 				{
-					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar;
+					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $no_avatar;
 				}
 
+				/* The Hall of fame doesn't care about the UCP prefs view avatars */
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,
 					'USERNAME'		=> $username,
