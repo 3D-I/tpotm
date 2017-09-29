@@ -39,13 +39,13 @@ $lang = array_merge($lang, array(
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Variouses',
 	'TPOTM_TTL'								=>	'Time to live',
-	'TPOTM_TTL_EXPLAIN'						=>	'Cache time in minutes. 0 = Disabled.',
+	'TPOTM_TTL_EXPLAIN'						=>	'Cache time in minutes. 0 = Disabled<br><em>Suggested to use the cache for better performances.</em>',
 	'TPOTM_AVATAR'							=>	'Mini Avatar',
 	'TPOTM_AVATAR_EXPLAIN'					=>	'Prepends the TPOTM avatar to the result',
 	'TPOTM_MINIPROFILE'						=>	'Mini profile next to posts',
 	'TPOTM_MINIPROFILE_EXPLAIN'				=>	'Display the TPOTM mini-badge',
 	'TPOTM_ADM_MODS'						=>	'Admin and Moderators',
-	'TPOTM_ADM_MODS_EXPLAIN'				=>	'Include also those users in the TPOTM',
+	'TPOTM_ADM_MODS_EXPLAIN'				=>	'Include them in the TPOTM?<br><em>Excluding them increases DB queries.</em>',
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors explaination',
 	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
