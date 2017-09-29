@@ -12,7 +12,7 @@ namespace threedi\tpotm\migrations;
 
 /*
  * Adds the column "user_tpotm" to the fields list of the USERS_TABLE
- * Index is being populated with 0 as default
+ * Index is being populated with empty string  as default
  */
 class m4_install_user_schema extends \phpbb\db\migration\migration
 {

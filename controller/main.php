@@ -164,16 +164,27 @@ class main
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
-			/* Pagination's total users count */
-			$result = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
-			$row2 = $this->db->sql_fetchrowset($result);
+			/* For pagination */
+			$sql2 = 'SELECT u.user_id, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+				WHERE u.user_id <> ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
+					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
+					AND (u.user_type <> ' . USER_FOUNDER . ')
+					AND p.post_visibility = ' . ITEM_APPROVED . '
+					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC';
+			$result2 = $this->db->sql_query($sql2, (int) $this->tpotm->config_time_cache());
+			$row2 = $this->db->sql_fetchrowset($result2);
 			$total_users = (int) count($row2);
-			$this->db->sql_freeresult($result);
+			$this->db->sql_freeresult($result2);
+			/* No need of it anymore */
 			unset($row2);
 
 			/**
-			 * Gives an avatar as default if missing.
-			 * For the sake of the layout
+			 * Gives an avatar as default if missing for the sake of the layout
 			 */
 			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
 
@@ -189,15 +200,10 @@ class main
 
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->tpotm->is_dae())
-				{
-					$user_avatar = phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR'));
-				}
-				else
-				{
-					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, $alt = $this->user->lang('USER_AVATAR')) : $no_avatar;
-				}
+				/* Hall's avatars must be TPOTM's IMG for both versions
+				 * and doesn't take care about the UCP prefs view avatars
+				*/
+				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $no_avatar;
 
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,
