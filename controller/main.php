@@ -200,17 +200,11 @@ class main
 
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->tpotm->is_dae())
-				{
-					$user_avatar = phpbb_get_avatar($row_avatar, '');
-				}
-				else
-				{
-					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $no_avatar;
-				}
+				/* Hall's avatars must be TPOTM's IMG for both versions
+				 * and doesn't take care about the UCP prefs view avatars
+				*/
+				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $no_avatar;
 
-				/* The Hall of fame doesn't care about the UCP prefs view avatars */
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,
 					'USERNAME'		=> $username,

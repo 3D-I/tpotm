@@ -575,26 +575,14 @@ class tpotm
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 			);
 			/**
-			 * DAE (Default Avatar Extended) extension compatibility
-			 * Hall's avatar must be IMG for both versions
+			 * Hall's avatar must be TPOTM's IMG for both versions
 			 * The Hall of fame doesn't care about the UCP prefs view avatars
 			 */
-			if ($this->is_dae())
-			{
-				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, '');
+			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
 
-				$template_vars += array(
-					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
-				);
-			}
-			else
-			{
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
-
-				$template_vars += array(
-					'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
-				);
-			}
+			$template_vars += array(
+				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
+			);
 
 			/**
 			 * Avatar as IMG or FA-icon depends on the phpBB version
