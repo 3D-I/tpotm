@@ -386,12 +386,14 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 		}
+
+		$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
+
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
 			$this->cache->put('_tpotm_total', $total_month, (int) $this->config_time_cache());
 		}
-		return $this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 	}
 
 	/*
@@ -498,7 +500,7 @@ class tpotm
 			$this->cache->put('_tpotm_tot_posts', $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 
-		return $tpotm_tot_posts;//threedi_tpotm_tot_posts
+		return $tpotm_tot_posts;
 	}
 
 	/*
@@ -534,7 +536,6 @@ class tpotm
 	*/
 	public function show_the_winner()
 	{
-		$this->perform_cache_on_this_month_total_posts();
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts($row['user_id']);
 
@@ -546,7 +547,7 @@ class tpotm
 
 		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
-		$tpotm_name = ($tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
+		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
 
 		$template_vars = array(
