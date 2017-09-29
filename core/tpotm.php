@@ -385,10 +385,9 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
+
+			$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 		}
-
-		$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
-
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
@@ -414,7 +413,6 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm');
 		}
-
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -438,13 +436,11 @@ class tpotm
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 		}
-
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
-
 		return $row;
 	}
 
@@ -464,7 +460,6 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm_tot_posts');
 		}
-
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -493,13 +488,11 @@ class tpotm
 				$this->perform_user_reset((int) $user_id);
 			}
 		}
-
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
 			$this->cache->put('_tpotm_tot_posts', $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
-
 		return $tpotm_tot_posts;
 	}
 
