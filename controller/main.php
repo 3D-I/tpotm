@@ -178,9 +178,7 @@ class main
 				ORDER BY total_posts DESC';
 			$result2 = $this->db->sql_query($sql2, (int) $this->tpotm->config_time_cache());
 			$row2 = $this->db->sql_fetchrowset($result2);
-			/* For pagination */
 			$total_users = (int) count($row2);
-			/* Free results */
 			$this->db->sql_freeresult($result2);
 			/* No need of it anymore */
 			unset($row2);
