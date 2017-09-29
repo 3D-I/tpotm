@@ -614,7 +614,7 @@ class tpotm
 				/* DAE (Default Avatar Extended) extension compatibility */
 				if ($this->is_dae())
 				{
-					$tpotm_av_32 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';;
+					$tpotm_av_32 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}
 				else
 				{
