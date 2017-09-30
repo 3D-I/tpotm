@@ -118,36 +118,36 @@ class main
 		 */
 		if ($this->tpotm->is_authed() && $this->tpotm->is_hall())
 		{
-			$l_message = $this->user->lang('TPOTM_HELLO');
-			$this->template->assign_var(
-				'TPOTM_MESSAGE', $this->user->lang($l_message, $name)
-				);
+			$message = $this->user->lang('TPOTM_HELLO');
+			$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message, $name));
 
 			/* Starting point in time */
-			$board_start = (int) $this->config['board_startdate']; // UNIX
+			$board_start = (int) $this->config['board_startdate'];
+
 			/**
 			 * if the current month is 01 (January) date() will decrement the year by one
 			 * and wrap the month back round to 12
 			 */
-			$now = time(); // UNIX
+			$now = time();
 			$date_today = gmdate("Y-m", $now);
 			list($year_cur, $month_cur) = explode('-', $date_today);
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
-			/* top_posters_ever (minus the present month - Thx Steve) */
-			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
-			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year); // UNIX
 
-			/* these are for pagination */
+			/* Top posters_ever (minus the present month - Thx Steve) */
+			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
+			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
+
+			/* These are for pagination */
 			$total_users	= $this->request->variable('user_id', 0);
 			$start			= $this->request->variable('start', 0);
 			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
 			/*
-			 * top_posters_ever
+			 * Top posters ever
 			 * Show the top posters ever sorted by total posts DESC
 			 * If same tot posts and same exact post time then the post ID rules
-			 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+			 * SQL errors for empty arrays skipped by setting the fourth parm as true within "sql_in_set"
 			*/
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
@@ -164,7 +164,7 @@ class main
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
-			/* For pagination */
+			/* Total users count for pagination */
 			$sql2 = 'SELECT u.user_id, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
@@ -180,18 +180,19 @@ class main
 			$row2 = $this->db->sql_fetchrowset($result2);
 			$total_users = (int) count($row2);
 			$this->db->sql_freeresult($result2);
-			/* No need of it anymore */
+
+			/* No need of this any more */
 			unset($row2);
 
 			/**
-			 * Gives an avatar as default if missing for the sake of the layout
-			 * If the TPOTM img has been manipulated returns no avatar at all and notice
+			 * Gives the user an avatar as default if missing, for the sake of the layout.
+			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 			 */
 			$no_avatar =  (!$this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
 
 			foreach ($rows as $row)
 			{
-				/* Map arguments for  phpbb_get_avatar() */
+				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar = array(
 					'avatar'		=> $row['user_avatar'],
 					'avatar_type'	=> $row['user_avatar_type'],
@@ -199,11 +200,11 @@ class main
 					'avatar_height'	=> (int) $row['user_avatar_height'],
 				);
 
-				/* Giv'em an username if any */
+				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 				/* Hall's avatars must be TPOTM's IMG for both versions
-				 * and doesn't take care about the UCP prefs view avatars
+				 * We don't care here about the UCP prefs -> view avatars
 				*/
 				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $no_avatar;
 
@@ -227,7 +228,9 @@ class main
 			$this->template->assign_vars($template_vars);
 
 			$url = $this->helper->route('threedi_tpotm_controller', array('name' => $name));
+
 			$this->pagination->generate_template_pagination($url, 'pagination', 'start', $total_users, $limit, $start);
+
 			$name = $this->user->lang('HALL_OF_FAME', $this->pagination->get_on_page($limit, $start));
 
 			make_jumpbox(append_sid("{$this->root_path}viewforum.{$this->php_ext}"));
