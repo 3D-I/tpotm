@@ -118,9 +118,9 @@ class main
 		 */
 		if ($this->tpotm->is_authed() && $this->tpotm->is_hall())
 		{
-			$l_message = $this->user->lang('DEMO_HELLO');
+			$l_message = $this->user->lang('TPOTM_HELLO');
 			$this->template->assign_var(
-				'DEMO_MESSAGE', $this->user->lang($l_message, $name)
+				'TPOTM_MESSAGE', $this->user->lang($l_message, $name)
 				);
 
 			/* Starting point in time */

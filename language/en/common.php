@@ -66,7 +66,7 @@ $lang = array_merge($lang, array(
 	// Hall of fame
 	'VIEWING_TPOTM_HALL'			=> 'Viewing TPOTM Hall of fame',
 	'TPOTM_PAGE'					=> 'Hall of fame',
-	'DEMO_HELLO'					=> 'Welcome to the TPOTM Hall of fame',
+	'TPOTM_HELLO'					=> 'Top Poster Of The Month - Hall Of Fame',
 	'TPOTM_ROUTE_NAME'				=> 'hall_of_fame',
 
 	'HALL_OF_FAME'	=> array(
