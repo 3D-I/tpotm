@@ -159,7 +159,7 @@ class main
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
 				GROUP BY u.user_id
-				ORDER BY total_posts DESC';
+				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
 			$result = $this->db->sql_query_limit($sql, $limit , $start, (int) $this->tpotm->config_time_cache());
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
