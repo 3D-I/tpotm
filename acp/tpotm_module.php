@@ -32,17 +32,13 @@ class tpotm_module
 
 		/**
 		 * If Img Badge filename wrong then stop the party and go dormant.
-		 * Valid only if phpBB 3.1
 		 */
-		if (!$tpotm->is_rhea())
+		if (!$tpotm->style_badge_is_true())
 		{
-			if (!$tpotm->style_badge_is_true())
-			{
-				/* Log the error. */
-				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
+			/* Log the error. */
+			$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
 
-				trigger_error($user->lang('TPOTM_BADGE_IMG_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
-			}
+			trigger_error($user->lang('TPOTM_BADGE_IMG_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
 		}
 
 		/* Do this now and forget */
@@ -55,23 +51,18 @@ class tpotm_module
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
 
-			/* Valid only if phpBB 3.1 */
-			if (!$tpotm->is_rhea())
-			{
-				/**
-				 * If Img Badge filename error..
-				 * state is false and return, else go on..
-				 * Valid only if phpBB 3.1
-				 */
-				$tpotm->check_point_badge_img();
+			/**
+			 * If Img Badge filename error..
+			 * state is false and return, else go on..
+			 */
+			$tpotm->check_point_badge_img();
 
-				/* You changed filenames? No party! */
-				if (!$config['threedi_tpotm_badge_exists'])
-				{
-					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID');
-					/* Log the error. */
-					$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
-				}
+			/* You changed filenames? No party! */
+			if (!$config['threedi_tpotm_badge_exists'])
+			{
+				$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID');
+				/* Log the error. */
+				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
 			}
 
 			/* No errors? Great, let's go. */

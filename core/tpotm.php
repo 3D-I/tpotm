@@ -137,43 +137,13 @@ class tpotm
 	}
 
 	/**
-	 * Returns the absolute URL to the badge image file
-	 *
-	 * @return string
-	 */
-	public function style_badge()
-	{
-		return ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
-	}
-
-	/**
 	 * Returns whether the basic badge img exists
 	 *
 	 * @return	bool
 	 */
 	public function style_badge_is_true()
 	{
-		return file_exists($this->style_badge());
-	}
-
-	/**
-	 * Update config to false
-	 *
-	 * @return void
-	 */
-	public function update_img_config_to_false()
-	{
-		$this->config->set('threedi_tpotm_badge_exists', 0);
-	}
-
-	/**
-	 * Update config to true
-	 *
-	 * @return void
-	 */
-	public function update_img_config_to_true()
-	{
-		$this->config->set('threedi_tpotm_badge_exists', 1);
+		return file_exists($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
 	}
 
 	/**
@@ -186,13 +156,13 @@ class tpotm
 		/* If Img badge filename mistmach error, state is false and return */
 		if (!$this->style_badge_is_true())
 		{
-			$this->update_img_config_to_false();
+			$this->config->set('threedi_tpotm_badge_exists', 0);
 			return;
 		}
 		else
 		{
 			/* Check passed, let's set it back to true. */
-			$this->update_img_config_to_true();
+			$this->config->set('threedi_tpotm_badge_exists', 1);
 		}
 	}
 
@@ -578,7 +548,7 @@ class tpotm
 			 * Hall's avatar must be TPOTM's IMG for both versions
 			 * The Hall of fame doesn't care about the UCP prefs view avatars
 			 */
-			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
+			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (!$this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
 
 			$template_vars += array(
 				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
@@ -599,7 +569,7 @@ class tpotm
 				}
 				else
 				{
-					$tpotm_av_31 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : $this->style_mini_badge();
+					$tpotm_av_31 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : ($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
 				}
 
 				$template_vars += array(

@@ -25,5 +25,5 @@ $lang = array_merge($lang, array(
 
 	// Error log
 	'TPOTM_LOG_CONFIG_SAVED'		=> '<strong>TPOTM general configuration saved.</strong>',
-	'TPOTM_LOG_BADGE_IMG_INVALID'	=> '<strong>The Badge filename is wrong or totally missing.</strong>',
+	'TPOTM_LOG_BADGE_IMG_INVALID'	=> '<strong>TPOTM - Badge IMG filename wrong or totally missing.</strong>',
 ));

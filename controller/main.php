@@ -185,8 +185,9 @@ class main
 
 			/**
 			 * Gives an avatar as default if missing for the sake of the layout
+			 * If the TPOTM img has been manipulated returns no avatar at all and notice
 			 */
-			$no_avatar = '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />';
+			$no_avatar =  (!$this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
 
 			foreach ($rows as $row)
 			{
@@ -198,6 +199,7 @@ class main
 					'avatar_height'	=> (int) $row['user_avatar_height'],
 				);
 
+				/* Giv'em an username if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 				/* Hall's avatars must be TPOTM's IMG for both versions
