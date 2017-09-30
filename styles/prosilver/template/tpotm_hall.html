@@ -1,5 +1,5 @@
 {% include 'overall_header.html' %}
-<h2 class="head-text">{{ DEMO_MESSAGE }}</h2>
+<h2 class="tpotm-head-text">{{ DEMO_MESSAGE }}</h2>
 
 <div class="panel bg1">
 	<div class="inner">
@@ -57,15 +57,15 @@
 	<div class="inner">
 		<div id="tpotm-container" class="tpotm-container">
 			{% for tpotm_ever in loops.tpotm_ever %}
-			<div class="flex-cell">
-				<div class="item">
-					<div class="flex-avatar">
+			<div class="tpotm-flex-cell">
+				<div class="tpotm-flex-item">
+					<div class="tpotm-flex-avatar">
 						{{ tpotm_ever.USER_AVATAR }}&nbsp;{{ tpotm_ever.USERNAME }}
 					</div>
-					<div class="flex-text">
+					<div class="tpotm-flex-text">
 						{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
 					</div>
-					<div class="flex-text">
+					<div class="tpotm-flex-text">
 						{{ lang('TPOTM_LAST_POST_IN_MONTH') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.POST_TIME	}}
 					</div>
 				</div>
