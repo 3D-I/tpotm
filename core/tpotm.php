@@ -332,6 +332,12 @@ class tpotm
 	 */
 	public function perform_cache_on_this_month_total_posts()
 	{
+		/* Prevents a potential Division by Zero */
+		if ($this->config['threedi_tpotm_month_total_posts'] === 0)
+		{
+			$this->config->set('threedi_tpotm_month_total_posts', 1);
+		}
+
 		/**
 		 * If we are disabling the cache, the existing information
 		 * in the cache file is not valid. Let's clear it.
@@ -340,8 +346,9 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm_total');
 		}
+
 		/**
-		 * Check cached data
+		 * Check cached data (cache it is used to keep things in syncro)
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
 		if (($total_month = $this->cache->get('_tpotm_total')) === false)
@@ -358,6 +365,7 @@ class tpotm
 
 			$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 		}
+
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
