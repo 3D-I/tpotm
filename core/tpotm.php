@@ -475,7 +475,7 @@ class tpotm
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
 
-		$data = gmmktime($hr, $min, $sec, $month, /** @scrutinizer ignore-type */ $start ? 1 : date("t"), $year);
+		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
 
 		return $format ? $this->user->format_date($data) : $data;
 	}
