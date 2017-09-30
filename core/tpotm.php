@@ -363,6 +363,7 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
+			/* Using a config as well for multiple uses */
 			$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 		}
 
@@ -507,6 +508,8 @@ class tpotm
 	*/
 	public function show_the_winner()
 	{
+		/* Syncro */
+		$this->perform_cache_on_this_month_total_posts();
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts($row['user_id']);
 
