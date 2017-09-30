@@ -521,8 +521,13 @@ class tpotm
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
-		/* percentages for the Hall of fame's styling */
-		$percent = min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
+		/**
+		 * Percentages for Hall of Fame's styling etc..
+		 * It could happen an user posted more than the total posts in the month.
+		 * Ask Quick-Install, yup. o_0
+		 */
+		$percent = ($tpotm_tot_posts > $total_month) ? 0 : min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
+
 		$degrees = (360 * $percent) / 100;
 		$start = 90;
 
