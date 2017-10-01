@@ -44,7 +44,6 @@ $lang = array_merge($lang, array(
 	'TOTAL_MONTH'					=> ' out of <strong>%1s</strong> (%2s%%)',
 	'TOTAL_MONTH_HALL'				=> ' out of ',
 	'TPOTM_EXPLAIN'					=> 'From %1s to %2s',
-	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_TOT_POST'				=> 'Total posts',
 	'TPOTM_DATE'					=> 'Year and Month',
 	'TPOTM_LAST_POST_IN_MONTH'		=> 'Last on',
@@ -68,6 +67,7 @@ $lang = array_merge($lang, array(
 	'TPOTM_PAGE'					=> 'Hall of fame',
 	'TPOTM_HELLO'					=> 'Top Poster Of The Month - Hall Of Fame',
 	'TPOTM_ROUTE_NAME'				=> 'hall_of_fame',
+	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 
 	'HALL_OF_FAME'	=> array(
 		0	=> 'Hall of fame',
