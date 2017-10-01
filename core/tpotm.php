@@ -354,7 +354,7 @@ class tpotm
 		 */
 		if (($total_month = $this->cache->get('_tpotm_total')) === false)
 		{
-			list((int) $month_start, (int) $month_end) = $this->month_timegap();
+			list($month_start, $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT COUNT(post_id) AS post_count
 				FROM ' . POSTS_TABLE . '
@@ -394,12 +394,11 @@ class tpotm
 			$this->cache->destroy('_tpotm');
 		}
 		/**
-		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
-			list((int) $month_start, (int) $month_end) = $this->month_timegap();
+			list($month_start, $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
@@ -446,7 +445,7 @@ class tpotm
 		 */
 		if (((int) $tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
 		{
-			list((int) $month_start, (int) $month_end) = $this->month_timegap();
+			list($month_start, $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT COUNT(post_id) AS total_posts
 				FROM ' . POSTS_TABLE . '
