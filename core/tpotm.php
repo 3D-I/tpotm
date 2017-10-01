@@ -192,7 +192,7 @@ class tpotm
 	 */
 	public function style_miniprofile_badge($user_tpotm)
 	{
-		return '<img src="' . ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm . '') . '" class="tpotm-miniprofile-badge" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
+		return $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm;
 	}
 
 	/**
@@ -299,6 +299,7 @@ class tpotm
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
+			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
 		));
 	}
 
