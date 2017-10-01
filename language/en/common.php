@@ -48,9 +48,9 @@ $lang = array_merge($lang, array(
 	'TPOTM_LAST_POST_IN_MONTH'		=> 'Last on',
 
 	'TPOTM_CACHE'	=> array(
-		0	=> ' (<i>updates at every page load</i>)',
-		1	=> ' (<i>updates every <strong>%d</strong> minute</i>)',
-		2	=> ' (<i>updates every <strong>%d</strong> minutes</i>)',
+		0	=> ' <i>[updates at every page load]</i>',
+		1	=> ' <i>[updates every <strong>%d</strong> minute]</i>',
+		2	=> ' <i>[updates every <strong>%d</strong> minutes]</i>',
 	),
 
 	'TPOTM_POST'	=> array(
