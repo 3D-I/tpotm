@@ -5,16 +5,22 @@
 
 {% INCLUDE 'overall_header.html' %}
 
-<div class="tpotm-acp-rules" style="text-align:center;margin-bottom:.5em;">
-	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:.5em;">
-		<input type="hidden" name="cmd" value="_s-xclick">
-		<input type="hidden" name="hosted_button_id" value="ZLN6KTV2WQSRN">
-		<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="">
-		<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-	</form>
-</div>
-
 <h1>{{ lang('ACP_TPOTM_TITLE') }}</h1>
+
+<fieldset class="tpotm-acp-outer">
+	<fieldset class="tpotm-acp-middle">
+		<fieldset class="tpotm-acp-inner">
+			<div class="" style="text-align:center;margin-bottom:.5em;">
+				<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="margin-top:.5em;">
+				<input type="hidden" name="cmd" value="_s-xclick">
+				<input type="hidden" name="hosted_button_id" value="ZLN6KTV2WQSRN">
+				<input type="image" src="https://www.paypal.com/en_GB/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="">
+				<img alt="" border="0" src="https://www.paypalobjects.com/en_GB/i/scr/pixel.gif" width="1" height="1">
+				</form>
+			</div>
+		</fieldset>
+	</fieldset>
+</fieldset>
 
 {% if S_ERRORS %}
 {# Non invasive error reporting #}
