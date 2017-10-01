@@ -340,8 +340,8 @@ class tpotm
 		}
 
 		/**
-		 * If we are disabling the cache, the existing information
-		 * in the cache file is not valid. Let's clear it.
+		 * If we are disabling the cache the existing data
+		 * in the cache file are not of use. Let's delete.
 		 */
 		if (($this->config_time_cache_min()) === 0)
 		{
@@ -443,7 +443,7 @@ class tpotm
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (((int) $tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
+		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
@@ -518,29 +518,29 @@ class tpotm
 
 		/* Fresh install or if a new Month has began results to zero posts */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
-		$tpotm_post = (int) $tpotm_tot_posts >= 1 ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
+		$tpotm_post = (((int) $tpotm_tot_posts) >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
-		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
+		$tpotm_name = (((int) $tpotm_tot_posts) < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
 
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
-			'L_TOTAL_MONTH'		=> (int) $total_month >= 1 ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
+			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round((((int) $tpotm_tot_posts) / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
 		/* Prevents a potential Division by Zero below */
-		$tpotm_tot_posts = ((int) $tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
+		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
 
 		/**
 		 * Percentages for Hall of Fame's styling etc..
 		 * It could happen an user posted more than the total posts in the month.
 		 * Ask Quick-Install, LoL o_0
 		 */
-		$percent = ((int) $tpotm_tot_posts > (int) $total_month) ? 0 : min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
+		$percent = (((int) $tpotm_tot_posts) > (int) $total_month) ? 0 : min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
 
 		$degrees = (360 * $percent) / 100;
 		$start = 90;
@@ -553,7 +553,7 @@ class tpotm
 		/**
 		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
 		 */
-		if ((int) $tpotm_tot_posts >= 1)
+		if (((int) $tpotm_tot_posts) >= 1)
 		{
 			/* Map arguments for  phpbb_get_avatar() */
 			$row_avatar = array(
