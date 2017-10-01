@@ -532,6 +532,9 @@ class tpotm
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
+		/* Prevents a potential Division by Zero below */
+		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true ; (int) $tpotm_tot_posts;
+
 		/**
 		 * Percentages for Hall of Fame's styling etc..
 		 * It could happen an user posted more than the total posts in the month.
@@ -543,7 +546,7 @@ class tpotm
 		$start = 90;
 
 		$template_vars += array(
-			'PERCENT'			=> number_format((float) $percent, 1, '.', ','),
+			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
 			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
 			'TOT_POSTS_MONTH'	=> (int) $total_month,
 		);
