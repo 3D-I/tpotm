@@ -3,7 +3,20 @@
 
 	<p>{{ lang('TPOTM_NOW') }}
 		{% if S_TPOTM_AVATAR %}
-			<a href="{{ U_TPOTM_AVATAR_URL }}" class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</a>
+			{% if not S_IS_RHEA %}
+				{% if S_IS_DAE %}
+					<a href="{{ U_TPOTM_AVATAR_URL }}"><span class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</span>
+				{% else %}
+					<a href="{{ U_TPOTM_AVATAR_URL }}"><img src="{{ TPOTM_AVATAR }}" class="tpotm-header-avatar" ></span>
+				{% endif %}
+			{% endif %}
+			{% if S_IS_RHEA %}
+				{% if S_IS_DAE %}
+					<a href="{{ U_TPOTM_AVATAR_URL }}"><span class="tpotm-header-avatar">{{ TPOTM_AVATAR }}</span>
+				{% else %}
+					a href="{{ U_TPOTM_AVATAR_URL }}"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i></a>
+				{% endif %}
+			{% endif %}
 		{% endif %}
 		<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}
 		{% if S_IS_RHEA %}
@@ -13,3 +26,5 @@
 		{% endif %}
 	{{ lang('TPOTM_CACHE') }}</p>
 {% endif %}
+
+<!-- S_IS_DAE -->

@@ -164,35 +164,24 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniavatar image file
-	 *
-	 * @return string	Formatted HTML markup
-	 */
-	public function style_mini_badge()
-	{
-		return '<img src="' . ($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" alt="' . $this->user->lang('TPOTM_BADGE') . '" />';
-	}
-
-	/**
-	 * Returns the Fontawesome HTML markup for the miniavatar image file
-	 *
-	 * @param string	$tpotm_av_url	the profile URL
-	 * @return string					Formatted HTML markup
-	 */
-	public function style_mini_badge_fa($tpotm_av_url)
-	{
-		return '<a href="' . $tpotm_av_url . '"><i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true"></i></a>';
-	}
-
-	/**
 	 * Returns the style related URL and HTML to the miniprofile badge image file
 	 *
 	 * @param string	$user_tpotm		the miniprofile image filename with extension
-	 * @return string					Formatted HTML markup
+	 * @return string					URL
 	 */
 	public function style_miniprofile_badge($user_tpotm)
 	{
 		return $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm;
+	}
+
+	/**
+	 * Returns the style related URL and HTML to the miniavatar image file
+	 *
+	 * @return string	Formatted URL
+	 */
+	public function style_mini_badge()
+	{
+		return $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png';
 	}
 
 	/**
@@ -300,7 +289,18 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
+			'S_IS_DAE'				=> $this->is_dae(),
 		));
+	}
+
+	/**
+	 * Returns whether DAE (Default Avatar Extended) extension it's installed and TRUE
+	 *
+	 * @return bool
+	 */
+	public function is_dae()
+	{
+		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
 	}
 
 	/**
@@ -486,16 +486,6 @@ class tpotm
 		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
 
-	/**
-	 * Returns whether DAE (Default Avatar Extended) extension it's installed and TRUE
-	 *
-	 * @return bool
-	 */
-	public function is_dae()
-	{
-		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
-	}
-
 	/*
 	* There can be only ONE, the TPOTM.
 	* If same tot posts and same exact post time then the post ID rules
@@ -552,15 +542,15 @@ class tpotm
 			/* Map arguments for  phpbb_get_avatar() */
 			$row_avatar = array(
 				'avatar'		=> $row['user_avatar'],
-				'avatar_type'	=> $row['user_avatar_type'],
 				'avatar_width'	=> (int) $row['user_avatar_width'],
 				'avatar_height'	=> (int) $row['user_avatar_height'],
+				'avatar_type'	=> $row['user_avatar_type'],
 			);
 			/**
 			 * Hall's avatar must be TPOTM's IMG for both versions
 			 * The Hall of fame doesn't care about the UCP prefs view avatars
 			 */
-			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : ((!$this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 
 			$template_vars += array(
 				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
@@ -583,7 +573,7 @@ class tpotm
 					}
 					else
 					{
-						$tpotm_av_31 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : ($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
+						$tpotm_av_31 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 					}
 
 					$template_vars += array(
@@ -602,7 +592,7 @@ class tpotm
 					}
 					else
 					{
-						$tpotm_av_32 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '' : $this->style_mini_badge_fa($tpotm_av_url);
+						$tpotm_av_32 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars') ? phpbb_get_avatar($row_avatar, '') : '') : $tpotm_av_url;
 					}
 
 					$template_vars += array(
