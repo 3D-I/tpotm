@@ -363,7 +363,7 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
-			/* Using a config as well for multiple uses */
+			/* Using a config for multiple uses and to avoid to use list() as well */
 			$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 		}
 
