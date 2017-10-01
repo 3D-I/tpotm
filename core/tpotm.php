@@ -317,12 +317,13 @@ class tpotm
 			$date_today = gmdate("Y-m-d", $now);
 			list($year_cur, $month_cur, $day1) = explode('-', $date_today);
 
-			/* Start time for current month */
-			$month_start_cur	= gmmktime (0,0,0, $month_cur, 1, $year_cur);
-			$month_start		= $month_start_cur;
-			$month_end			= $now;
+			$month_start_cur = gmmktime (0,0,0, $month_cur, 1, $year_cur);
+			/* Start timestamp for current month */
+			$month_start = $month_start_cur;
+			/* End timestamp for current month */
+			$month_end = $now;
 
-			return array($month_start, $month_end);
+			return array((int) $month_start, (int) $month_end);
 	}
 
 	/**
@@ -353,11 +354,11 @@ class tpotm
 		 */
 		if (($total_month = $this->cache->get('_tpotm_total')) === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
+			list((int) $month_start, (int) $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT COUNT(post_id) AS post_count
 				FROM ' . POSTS_TABLE . '
-				WHERE post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+				WHERE post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 					AND post_visibility = ' . ITEM_APPROVED;
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
@@ -370,7 +371,7 @@ class tpotm
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
-			$this->cache->put('_tpotm_total', $total_month, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
 		}
 	}
 
@@ -398,7 +399,7 @@ class tpotm
 		 */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
+			list((int) $month_start, (int) $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
@@ -408,7 +409,7 @@ class tpotm
 					AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . '
 					AND (u.user_type <> ' . USER_FOUNDER . ')
 					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
 				ORDER BY p.post_time DESC, p.post_id DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
@@ -443,13 +444,13 @@ class tpotm
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
+		if (((int) $tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
+			list((int) $month_start, (int) $month_end) = $this->month_timegap();
 
 			$sql = 'SELECT COUNT(post_id) AS total_posts
 				FROM ' . POSTS_TABLE . '
-				WHERE post_time BETWEEN ' . $month_start . ' AND ' . $month_end . '
+				WHERE post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 					AND poster_id = ' . (int) $user_id;
 			$result = $this->db->sql_query($sql);
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
@@ -470,9 +471,9 @@ class tpotm
 		/* If cache is enabled use it */
 		if (($this->config_time_cache()) >= 1)
 		{
-			$this->cache->put('_tpotm_tot_posts', $tpotm_tot_posts, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
-		return $tpotm_tot_posts;
+		return (int) $tpotm_tot_posts;
 	}
 
 	/*
@@ -486,7 +487,7 @@ class tpotm
 
 		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
 
-		return $format ? $this->user->format_date($data) : $data;
+		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
 
 	/**
@@ -511,7 +512,7 @@ class tpotm
 		/* Syncro */
 		$this->perform_cache_on_this_month_total_posts();
 		$row = $this->perform_cache_on_main_db_query();
-		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts($row['user_id']);
+		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
 
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
@@ -528,12 +529,12 @@ class tpotm
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
-			'L_TOTAL_MONTH'		=> (int) $total_month >= 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
+			'L_TOTAL_MONTH'		=> (int) $total_month >= 1 ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
 		/* Prevents a potential Division by Zero below */
-		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
+		$tpotm_tot_posts = ((int) $tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
 
 		/**
 		 * Percentages for Hall of Fame's styling etc..
@@ -548,7 +549,6 @@ class tpotm
 		$template_vars += array(
 			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
 			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
-			//'TOT_POSTS_MONTH'	=> (int) $total_month,
 		);
 
 		/**
