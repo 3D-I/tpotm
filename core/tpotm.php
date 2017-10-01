@@ -20,7 +20,6 @@ class tpotm
 	protected $config;
 	protected $db;
 	protected $user;
-	protected $ext_manager;
 	protected $path_helper;
 	protected $root_path;
 	protected $php_ext;
@@ -34,7 +33,6 @@ class tpotm
 		* @param \phpbb\config\config				$config			Config Object
 		* @param \phpbb\db\driver\driver_interface	$db				Database object
 		* @param \phpbb\user						$user			User object
-		* @param \phpbb\extension\manager			$ext_manager	Extension manager object
 		* @param \phpbb\path_helper					$path_helper	Path helper object
 		* @var string phpBB root path				$root_path
 		* @var string phpEx							$phpExt
@@ -42,14 +40,13 @@ class tpotm
 		* @access public
 	*/
 
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\extension\manager $ext_manager, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
 		$this->config			=	$config;
 		$this->db				=	$db;
 		$this->user				=	$user;
-		$this->ext_manager		=	$ext_manager;
 		$this->path_helper		=	$path_helper;
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
@@ -302,7 +299,6 @@ class tpotm
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
-			'S_IS_DAE'				=> $this->is_dae(),
 		));
 	}
 
