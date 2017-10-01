@@ -96,7 +96,11 @@
 						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="0"{% if not TPOTM_MINIPROFILE %} checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
+			</fieldset>
 
+			<fieldset class="tpotm-acp-inner">
+				<legend>{{ lang('ACP_TPOTM_MANAGEMENT') }}</legend>
+				<div class="tpotm-acp-rules">{{ lang('ACP_TPOTM_MANAGEMENT_EXPLAIN') }}</div>
 				<dl>
 					<dt>
 						<label for="threedi_tpotm_adm_mods">{{ lang('TPOTM_ADM_MODS') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_ADM_MODS_EXPLAIN') }}
@@ -104,6 +108,16 @@
 					<dd>
 						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="1"{% if TPOTM_ADM_MODS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
 						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="0"{% if not TPOTM_ADM_MODS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_founders">{{ lang('TPOTM_FOUNDERS') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_FOUNDERS_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_founders" value="1"{% if TPOTM_FOUNDERS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_founders" value="0"{% if not TPOTM_FOUNDERS %} checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 			</fieldset>

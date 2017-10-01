@@ -133,6 +133,9 @@ class main
 			$start			= $this->request->variable('start', 0);
 			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
+			/* If the Admin so wishes */
+			$and_founder = $this->tpotm->wishes_founder();
+
 			/*
 			 * Top posters ever
 			 * Show the top posters ever sorted by total posts DESC
@@ -145,7 +148,7 @@ class main
 					AND u.user_id = p.poster_id
 					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
 					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-					AND (u.user_type <> ' . USER_FOUNDER . ')
+					' . $and_founder . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
 				GROUP BY u.user_id
@@ -161,7 +164,7 @@ class main
 					AND u.user_id = p.poster_id
 					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
 					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-					AND (u.user_type <> ' . USER_FOUNDER . ')
+					' . $and_founder . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
 				GROUP BY u.user_id

@@ -372,6 +372,16 @@ class tpotm
 		}
 	}
 
+	/**
+	 * Returns whether to include Founders in the query and provides SQL string
+	 *
+	 * @return string	empty string if false
+	 */
+	public function wishes_founder()
+	{
+		return ($this->config['threedi_tpotm_founders']) ? $and_founder = '' : $and_founder = 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
+	}
+
 	/*
 	* There can be only ONE, the TPOTM.
 	* If same tot posts and same exact post time then the post ID rules
@@ -397,13 +407,16 @@ class tpotm
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
+			/* If the Admin so wishes */
+			$and_founder = $this->wishes_founder();
+
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
 					AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . '
 					AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . '
-					AND (u.user_type <> ' . USER_FOUNDER . ')
+					' . $and_founder . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
