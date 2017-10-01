@@ -558,7 +558,7 @@ class tpotm
 				 * Hall's avatar must be TPOTM's IMG for both versions
 				 * The Hall of fame doesn't care about the UCP prefs view avatars
 				 */
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') :  $this->style_mini_badge();
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 			}
 
 			$template_vars += array(
