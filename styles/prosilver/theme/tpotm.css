@@ -87,7 +87,7 @@ a.tpotm-header-avatar img {
 
 a.hall-avatar-tpotm img {
 	margin-bottom: 2px;
-	width: 80px;
+	width: auto;
 	height: 80px;
 	box-shadow: 1px 2px 3px grey;
 	border-radius: 25%;
@@ -138,7 +138,7 @@ a.hall-avatar-tpotm img {
 	box-shadow: 1px 2px 3px grey;
 	border-radius: 5px;
 	background-color: transparent;
-	width: 194px; /* (200 - (1+1+2+2)) tpotm-flex-cell width */
+	width: auto;
 	display: inline-flex;
 }
 
