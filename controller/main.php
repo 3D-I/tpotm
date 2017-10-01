@@ -18,17 +18,11 @@ class main
 	/* @var \phpbb\auth\auth */
 	protected $auth;
 
-	/* @var \phpbb\cache\service */
-	protected $cache;
-
 	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
 	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\extension\manager */
-	protected $ext_manager;
 
 	/* @var \phpbb\controller\helper */
 	protected $helper;
@@ -61,10 +55,8 @@ class main
 	 * Constructor
 	 *
 	 * @param \phpbb\auth\auth					$auth			Authentication object
-	 * @param \phpbb\cache\service				$cache
 	 * @param \phpbb\db\driver\driver_interface	$db				Database object
 	 * @param \phpbb\config\config				$config
-	 * @param \phpbb\extension\manager			$ext_manager
 	 * @param \phpbb\controller\helper			$helper
 	 * @param \phpbb\path_helper				$path_helper
 	 * @param \phpbb\pagination					$pagination
@@ -76,13 +68,11 @@ class main
 	 * @var string phpEx						$phpExt
 	 * @var string phpBB root path				$root_path
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\extension\manager $ext_manager, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
 	{
 		$this->auth			= $auth;
-		$this->cache		= $cache;
 		$this->db			= $db;
 		$this->config		= $config;
-		$this->ext_manager	= $ext_manager;
 		$this->helper		= $helper;
 		$this->path_helper	= $path_helper;
 		$this->pagination 	= $pagination;
