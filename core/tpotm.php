@@ -518,8 +518,8 @@ class tpotm
 
 		/* Fresh install or if a new Month has began results to zero posts */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
+		$tpotm_post = (int) $tpotm_tot_posts >= 1 ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 
-		$tpotm_post = $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts);
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
@@ -528,7 +528,7 @@ class tpotm
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
-			'L_TOTAL_MONTH'		=> (int) $total_month > 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
+			'L_TOTAL_MONTH'		=> (int) $total_month >= 1 ? $this->user->lang('TOTAL_MONTH', $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
 		);
 
@@ -548,7 +548,7 @@ class tpotm
 		$template_vars += array(
 			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
 			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
-			'TOT_POSTS_MONTH'	=> (int) $total_month,
+			//'TOT_POSTS_MONTH'	=> (int) $total_month,
 		);
 
 		/**
