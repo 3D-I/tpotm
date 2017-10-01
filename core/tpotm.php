@@ -181,7 +181,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png';
+		return '<img src="' . $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png" />';
 	}
 
 	/**
@@ -546,11 +546,20 @@ class tpotm
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 				'avatar_type'	=> $row['user_avatar_type'],
 			);
-			/**
-			 * Hall's avatar must be TPOTM's IMG for both versions
-			 * The Hall of fame doesn't care about the UCP prefs view avatars
-			 */
-			$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+
+			/* DAE (Default Avatar Extended) extension compatibility */
+			if ($this->is_dae())
+			{
+				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
+			}
+			else
+			{
+				/**
+				 * Hall's avatar must be TPOTM's IMG for both versions
+				 * The Hall of fame doesn't care about the UCP prefs view avatars
+				 */
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') :  $this->style_mini_badge();
+			}
 
 			$template_vars += array(
 				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
@@ -562,48 +571,22 @@ class tpotm
 			 */
 			if ($this->enable_miniavatar())
 			{
-				if (!$this->is_rhea())
+				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+
+				/* DAE (Default Avatar Extended) extension compatibility */
+				if ($this->is_dae())
 				{
-					$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
-
-					/* DAE (Default Avatar Extended) extension compatibility */
-					if ($this->is_dae())
-					{
-						$tpotm_av_31 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
-					}
-					else
-					{
-						$tpotm_av_31 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
-					}
-
-					$template_vars += array(
-						'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
-						'TPOTM_AVATAR'			=> $tpotm_av_31,
-					);
-				}
-				else if ($this->is_rhea())
-				{
-					$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
-
-					/* DAE (Default Avatar Extended) extension compatibility */
-					if ($this->is_dae())
-					{
-						$tpotm_av_32 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
-					}
-					else
-					{
-						$tpotm_av_32 = (!empty($row['user_avatar'])) ? ($this->user->optionget('viewavatars') ? phpbb_get_avatar($row_avatar, '') : '') : $tpotm_av_url;
-					}
-
-					$template_vars += array(
-						'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
-						'TPOTM_AVATAR'			=> $tpotm_av_32,
-					);
+					$tpotm_av_3132 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}
 				else
 				{
-					$template_vars += array();
+					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 				}
+
+				$template_vars += array(
+					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
+					'TPOTM_AVATAR'			=> $tpotm_av_3132,
+				);
 			}
 		}
 		/* You know.. template stuff */
