@@ -575,7 +575,7 @@ class tpotm
 
 			/**
 			 * Avatar as IMG or FA-icon depends on the phpBB version
-			 * Here we care about the UCP prefs view avatars
+			 * Here we do care about the UCP prefs -> view avatars
 			 */
 			if (!$this->is_rhea() && $this->enable_miniavatar())
 			{
