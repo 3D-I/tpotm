@@ -533,7 +533,7 @@ class tpotm
 		);
 
 		/* Prevents a potential Division by Zero below */
-		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true ; (int) $tpotm_tot_posts;
+		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
 
 		/**
 		 * Percentages for Hall of Fame's styling etc..
