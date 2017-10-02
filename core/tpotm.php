@@ -331,16 +331,10 @@ class tpotm
 	/**
 	 * Gets/store the total posts count for the current month till now
 	 *
-	 * @return void|int	$total_month
+	 * @return int	$total_month
 	 */
 	public function perform_cache_on_this_month_total_posts()
 	{
-		/* Prevents a potential Division by Zero */
-		if ($this->config['threedi_tpotm_month_total_posts'] === 0)
-		{
-			$this->config->set('threedi_tpotm_month_total_posts', 1);
-		}
-
 		/**
 		 * If we are disabling the cache the existing data
 		 * in the cache file are not of use. Let's delete.
@@ -365,9 +359,6 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
-
-			/* Using a config for multiple uses and to avoid to use list() as well */
-			$this->config->set('threedi_tpotm_month_total_posts', (int) $total_month);
 		}
 
 		/* If cache is enabled use it */
@@ -375,12 +366,14 @@ class tpotm
 		{
 			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache_min());
 		}
+
+		return (int) $total_month;
 	}
 
 	/**
 	 * Returns whether to include Founders in the query and provides SQL string
 	 *
-	 * @return string	empty string if false
+	 * @return string
 	 */
 	public function wishes_founder()
 	{
@@ -405,6 +398,7 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm');
 		}
+
 		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
@@ -430,11 +424,13 @@ class tpotm
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 		}
+
 		/* If cache is enabled use it */
 		if ((int) $this->config_time_cache_min() >= 1)
 		{
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache_min());
 		}
+
 		return $row;
 	}
 
@@ -454,6 +450,7 @@ class tpotm
 		{
 			$this->cache->destroy('_tpotm_tot_posts');
 		}
+
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -481,18 +478,19 @@ class tpotm
 			{
 				$this->perform_user_reset((int) $user_id);
 			}
-
 		}
+
 		/* If cache is enabled use it */
 		if ((int) $this->config_time_cache_min() >= 1)
 		{
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache_min());
 		}
+
 		return (int) $tpotm_tot_posts;
 	}
 
 	/**
-	  Performs a date range costruction of the current month
+	 * Performs a date range costruction of the current month
 	 *
 	 * @return string		user formatted data range (Thx Steve)
 	 */
@@ -515,9 +513,9 @@ class tpotm
 	public function show_the_winner()
 	{
 		/* Syncro */
-		$this->perform_cache_on_this_month_total_posts();
 		$row = $this->perform_cache_on_main_db_query();
-		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
+		$tpotm_tot_posts = (int) $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
+		$total_month = (int) $this->perform_cache_on_this_month_total_posts();
 
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
@@ -527,7 +525,6 @@ class tpotm
 		$tpotm_post = ((int) $tpotm_tot_posts >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
-		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
 
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
