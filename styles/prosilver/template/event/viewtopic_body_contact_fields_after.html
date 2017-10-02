@@ -2,7 +2,7 @@
 	<dd>
 		<strong>{{ lang('TPOTM_BADGE_MINIPROFILE') }}</strong>
 		{% if S_IS_RHEA %}
-			<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" style="cursor: pointer;"></i>
+			<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" ></i>
 		{% elseif S_IS_BADGE_IMG %}
 			<img src="{{ postrow.TPOTM_BADGE }}" class="tpotm-miniprofile-badge" title="{{ lang('TPOTM_EXPLAIN') }}" />
 		{% else %}

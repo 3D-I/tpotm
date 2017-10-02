@@ -6,6 +6,11 @@
 	width: auto;
 }
 
+i.fa-trophy {
+	cursor: pointer;
+	color: blue;
+}
+
 /***************************************
 * This section is for the hall of fame *
 ***************************************/
