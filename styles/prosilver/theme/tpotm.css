@@ -111,6 +111,7 @@ a.hall-avatar-tpotm img {
 	vertical-align: middle;
 	width: auto;
 	cursor: pointer;
+	margin-bottom: 4px;
 }
 
 /* Main viewport container, uses flex row wrap */
