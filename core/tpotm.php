@@ -51,6 +51,11 @@ class tpotm
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
+/*		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
+		{
+			define('PHPBB_USE_BOARD_URL_PATH', true);
+		}
+*/
 	}
 
 	/**
@@ -366,9 +371,9 @@ class tpotm
 		}
 
 		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache() >= 1)
+		if ((int) $this->config_time_cache_min() >= 1)
 		{
-			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache_min());
 		}
 	}
 
@@ -379,7 +384,7 @@ class tpotm
 	 */
 	public function wishes_founder()
 	{
-		return ($this->config['threedi_tpotm_founders']) ? $and_founder = '' : $and_founder = 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
+		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
 
 	/*
@@ -426,9 +431,9 @@ class tpotm
 			$this->db->sql_freeresult($result);
 		}
 		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache() >= 1)
+		if ((int) $this->config_time_cache_min() >= 1)
 		{
-			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache_min());
 		}
 		return $row;
 	}
@@ -466,7 +471,7 @@ class tpotm
 			$this->db->sql_freeresult($result);
 
 			/* If no posts for the current elapsed time there is not a TPOTM */
-			if ((int) $tpotm_tot_posts < 1)
+			if ($tpotm_tot_posts == 0)
 			{
 				$this->perform_user_db_clean();
 			}
@@ -476,11 +481,12 @@ class tpotm
 			{
 				$this->perform_user_reset((int) $user_id);
 			}
+
 		}
 		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache() >= 1)
+		if ((int) $this->config_time_cache_min() >= 1)
 		{
-			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache_min());
 		}
 		return (int) $tpotm_tot_posts;
 	}
@@ -520,7 +526,7 @@ class tpotm
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 		$tpotm_post = ((int) $tpotm_tot_posts >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
-		$tpotm_name = ((int) $tpotm_tot_posts) < 1 ? $tpotm_un_nobody : $tpotm_un_string;
+		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 		$total_month = (int) $this->config['threedi_tpotm_month_total_posts'];
 
 		$template_vars = array(
