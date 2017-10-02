@@ -11,6 +11,11 @@ i.fa-trophy {
 	color: blue;
 }
 
+/* index and hall */
+i.fa-question-circle-o fa-fw {
+	cursor: pointer;
+}
+
 /***************************************
 * This section is for the hall of fame *
 ***************************************/
@@ -102,9 +107,10 @@ a.hall-avatar-tpotm img {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
 	padding-left: 16px;
-	max-height: 14px;
-	vertical-align: bottom;
+	max-height: 16px;
+	vertical-align: middle;
 	width: auto;
+	cursor: pointer;
 }
 
 /* Main viewport container, uses flex row wrap */
