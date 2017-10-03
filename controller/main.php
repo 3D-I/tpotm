@@ -93,6 +93,8 @@ class main
 	 */
 	public function handle($name)
 	{
+//var_dump($this->tpotm->ext_path_web());
+
 		if (!$this->tpotm->is_authed())
 		{
 			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM__HALL');
@@ -191,15 +193,23 @@ class main
 				'avatar_width'	=> (int) $row['user_avatar_width'],
 				'avatar_height'	=> (int) $row['user_avatar_height'],
 				'avatar_type'	=> $row['user_avatar_type'],
-			);
+				);
 
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 				/* Hall's avatars must be TPOTM's IMG for both versions
 				 * We don't care here about the UCP prefs -> view avatars
+				 * DAE compatibility in act checked too.
 				*/
-				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
+				if ($this->config['threedi_default_avatar_extended'])
+				{
+					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
+				}
+				else
+				{
+					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
+				}
 
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,

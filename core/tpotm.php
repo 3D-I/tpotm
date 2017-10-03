@@ -294,7 +294,7 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
-			'S_IS_DAE'				=> $this->is_dae(),
+			//'S_IS_DAE'				=> $this->is_dae(),
 		));
 	}
 
@@ -303,10 +303,11 @@ class tpotm
 	 *
 	 * @return bool
 	 */
-	public function is_dae()
+/*	public function is_dae()
 	{
-		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
+		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended']);
 	}
+*/
 
 	/**
 	 * Gets the Unix Timestamp values for the current month.
@@ -564,7 +565,7 @@ class tpotm
 			);
 
 			/* DAE (Default Avatar Extended) extension compatibility */
-			if ($this->is_dae())
+			if ($this->config['threedi_default_avatar_extended'])
 			{
 				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 			}
@@ -591,7 +592,7 @@ class tpotm
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
 				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->is_dae())
+				if ($this->config['threedi_default_avatar_extended'])
 				{
 					$tpotm_av_3132 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}
