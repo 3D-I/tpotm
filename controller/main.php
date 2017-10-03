@@ -82,6 +82,12 @@ class main
 		$this->tpotm		= $tpotm;
 		$this->php_ext		= $phpExt;
 		$this->root_path	= $root_path;
+
+		//fixes smilies and avatar not loading properly on index page
+/*		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
+		{
+			define('PHPBB_USE_BOARD_URL_PATH', true);
+		}	*/
 	}
 
 	/**
@@ -202,7 +208,7 @@ class main
 				 * We don't care here about the UCP prefs -> view avatars
 				 * DAE compatibility in act checked too.
 				*/
-				if ($this->config['threedi_default_avatar_extended'])
+				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
 				{
 					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
 				}
