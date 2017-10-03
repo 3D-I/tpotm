@@ -388,7 +388,7 @@ class tpotm
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
 
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
@@ -398,7 +398,7 @@ class tpotm
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
-				ORDER BY total_posts DESC, p.post_time DESC, p.post_id DESC';
+				ORDER BY p.post_time DESC, p.post_id DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
