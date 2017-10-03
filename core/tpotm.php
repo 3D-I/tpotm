@@ -75,7 +75,7 @@ class tpotm
 	 */
 	public function config_time_cache()
 	{
-		return (int) ($this->config['threedi_tpotm_ttl'] * 60);
+		return (int) $this->config['threedi_tpotm_ttl'] * 60;
 	}
 
 	/**
@@ -85,7 +85,7 @@ class tpotm
 	 */
 	public function config_time_cache_min()
 	{
-		return (int) ($this->config['threedi_tpotm_ttl']);
+		return (int) $this->config['threedi_tpotm_ttl'];
 	}
 
 	/**
@@ -337,19 +337,10 @@ class tpotm
 	public function perform_cache_on_this_month_total_posts()
 	{
 		/**
-		 * If we are disabling the cache the existing data
-		 * in the cache file are not of use. Let's delete.
-		 */
-		if ($this->config_time_cache_min() === 0)
-		{
-			$this->cache->destroy('_tpotm_total');
-		}
-
-		/**
 		 * Check cached data (cache it is used to keep things in syncro)
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($total_month = $this->cache->get('_tpotm_total') === false)
+		if (($total_month = $this->cache->get('_tpotm_total') === false) || $this->config['threedi_tpotm_ttl'] < 1)
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
@@ -360,12 +351,8 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
-		}
 
-		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache_min() >= 1)
-		{
-			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache_min());
+			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
 		}
 
 		return (int) $total_month;
@@ -392,25 +379,16 @@ class tpotm
 	public function perform_cache_on_main_db_query()
 	{
 		/**
-		 * If we are disabling the cache, the existing information
-		 * in the cache file is not valid. Let's clear it.
-		 */
-		if (($this->config_time_cache_min()) === 0)
-		{
-			$this->cache->destroy('_tpotm');
-		}
-
-		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($row = $this->cache->get('_tpotm') === false)
+		if (($row = $this->cache->get('_tpotm') === false) || $this->config['threedi_tpotm_ttl'] < 1)
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
 
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
@@ -420,16 +398,12 @@ class tpotm
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
-				ORDER BY p.post_time DESC, p.post_id DESC';
+				ORDER BY total_posts DESC, p.post_time DESC, p.post_id DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
-		}
 
-		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache_min() >= 1)
-		{
-			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache_min());
+			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
 
 		return $row;
@@ -444,19 +418,10 @@ class tpotm
 	public function perform_cache_on_tpotm_tot_posts($user_id)
 	{
 		/**
-		 * If we are disabling the cache, the existing information
-		 * in the cache file is not valid. Let's clear it.
-		 */
-		if ($this->config_time_cache_min() === 0)
-		{
-			$this->cache->destroy('_tpotm_tot_posts');
-		}
-
-		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts') === false)
+		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts') === false) || $this->config['threedi_tpotm_ttl'] < 1)
 		{
 			list($month_start, $month_end) = $this->month_timegap();
 
@@ -468,23 +433,7 @@ class tpotm
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
 
-			/* If no posts for the current elapsed time there is not a TPOTM */
-			if ($tpotm_tot_posts == 0)
-			{
-				$this->perform_user_db_clean();
-			}
-
-			/* There is a TPOTM, let's update the DB then */
-			if ((int) $tpotm_tot_posts >= 1)
-			{
-				$this->perform_user_reset((int) $user_id);
-			}
-		}
-
-		/* If cache is enabled use it */
-		if ((int) $this->config_time_cache_min() >= 1)
-		{
-			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache_min());
+			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 
 		return (int) $tpotm_tot_posts;
@@ -517,6 +466,22 @@ class tpotm
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = (int) $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
 		$total_month = (int) $this->perform_cache_on_this_month_total_posts();
+
+//var_dump($row);
+//var_dump($tpotm_tot_posts);
+//var_dump($total_month);
+
+		/* If no posts for the current elapsed time there is not a TPOTM */
+		if ($tpotm_tot_posts < 1)
+		{
+			$this->perform_user_db_clean();
+		}
+
+		/* There is a TPOTM, let's update the DB then */
+		if ((int) $tpotm_tot_posts >= 1)
+		{
+			$this->perform_user_reset((int) $row['user_id']);
+		}
 
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
