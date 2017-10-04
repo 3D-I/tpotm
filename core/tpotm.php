@@ -51,11 +51,6 @@ class tpotm
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
-/*		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
-		{
-			define('PHPBB_USE_BOARD_URL_PATH', true);
-		}
-*/
 	}
 
 	/**
@@ -294,20 +289,22 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
-			//'S_IS_DAE'				=> $this->is_dae(),
 		));
 	}
 
 	/**
-	 * Returns whether DAE (Default Avatar Extended) extension it's installed and TRUE
+	 * Performs a date range costruction of the current month
 	 *
-	 * @return bool
+	 * @return string		user formatted data range (Thx Steve)
 	 */
-/*	public function is_dae()
+	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
-		return (isset($this->config['threedi_default_avatar_version']) && phpbb_version_compare($this->config['threedi_default_avatar_version'], '1.0.0-rc2', '>=') && $this->config['threedi_default_avatar_extended']);
+		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
+
+		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
+
+		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
-*/
 
 	/**
 	 * Gets the Unix Timestamp values for the current month.
@@ -334,16 +331,19 @@ class tpotm
 	 *
 	 * @return int	$total_month
 	 */
-	public function perform_cache_on_this_month_total_posts()
+	public function perform_cache_on_this_month_total_posts($month_start, $month_end)
 	{
+		/* Disable cache option */
+		if ($this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm_total');
+		}
 		/**
 		 * Check cached data (cache it is used to keep things in syncro)
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (($total_month = $this->cache->get('_tpotm_total') === false) || $this->config['threedi_tpotm_ttl'] < 1)
+		if ($total_month = $this->cache->get('_tpotm_total') === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
-
 			$sql = 'SELECT COUNT(post_id) AS post_count
 				FROM ' . POSTS_TABLE . '
 				WHERE post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
@@ -352,9 +352,12 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
-			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			/* If cache is enabled use it */
+			if ($this->config_time_cache_min() >= 1)
+			{
+				$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			}
 		}
-
 		return (int) $total_month;
 	}
 
@@ -376,15 +379,19 @@ class tpotm
 	*
 	 * @return array $row		cached or not results
 	*/
-	public function perform_cache_on_main_db_query()
+	public function perform_cache_on_main_db_query($month_start, $month_end)
 	{
+		/* Disable cache option */
+		if ($this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm');
+		}
+
 		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (($row = $this->cache->get('_tpotm') === false) || $this->config['threedi_tpotm_ttl'] < 1)
+		if ($row = $this->cache->get('_tpotm') === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
-
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
 
@@ -403,9 +410,12 @@ class tpotm
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
-			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			/* If cache is enabled use it */
+			if ($this->config_time_cache_min() >= 1)
+			{
+				$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			}
 		}
-
 		return $row;
 	}
 
@@ -415,16 +425,20 @@ class tpotm
 	 * @param int	$user_id	the current TPOTM user_id
 	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
 	*/
-	public function perform_cache_on_tpotm_tot_posts($user_id)
+	public function perform_cache_on_tpotm_tot_posts($month_start, $month_end, $user_id)
 	{
+		/* Disable cache option */
+		if ($this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm_tot_posts');
+		}
+
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts') === false) || $this->config['threedi_tpotm_ttl'] < 1)
+		if ($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts') === false)
 		{
-			list($month_start, $month_end) = $this->month_timegap();
-
 			$sql = 'SELECT COUNT(post_id) AS total_posts
 				FROM ' . POSTS_TABLE . '
 				WHERE post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
@@ -433,24 +447,13 @@ class tpotm
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
 
-			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			/* If cache is enabled use it */
+			if ($this->config_time_cache_min() >= 1)
+			{
+				$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			}
 		}
-
 		return (int) $tpotm_tot_posts;
-	}
-
-	/**
-	 * Performs a date range costruction of the current month
-	 *
-	 * @return string		user formatted data range (Thx Steve)
-	 */
-	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
-	{
-		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
-
-		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
-
-		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
 
 	/*
@@ -463,13 +466,14 @@ class tpotm
 	public function show_the_winner()
 	{
 		/* Syncro */
-		$row = $this->perform_cache_on_main_db_query();
-		$tpotm_tot_posts = (int) $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
-		$total_month = (int) $this->perform_cache_on_this_month_total_posts();
+		list($month_start, $month_end) = $this->month_timegap();
+		$row = $this->perform_cache_on_main_db_query((int) $month_start, (int) $month_end);
+		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $month_start, (int) $month_end, (int) $row['user_id']);
+		$total_month = $this->perform_cache_on_this_month_total_posts((int) $month_start, (int) $month_end);
 
-//var_dump($row);
-//var_dump($tpotm_tot_posts);
-//var_dump($total_month);
+		//var_dump($row);
+		//var_dump($tpotm_tot_posts);
+		//var_dump($total_month);
 
 		/* If no posts for the current elapsed time there is not a TPOTM */
 		if ($tpotm_tot_posts < 1)
@@ -505,7 +509,7 @@ class tpotm
 		/**
 		 * Percentages for Hall of Fame's styling etc..
 		 * It could happen an user posted more than the total posts in the month.
-		 * Ask Quick-Install, LoL o_0
+		 * Ask Quick-Install o_0
 		 */
 		$percent = ((int) $tpotm_tot_posts > (int) $total_month) ? 0 : min(100, ((int) $tpotm_tot_posts) / (int) $total_month) * 100;
 		$degrees = (360 * $percent) / 100;

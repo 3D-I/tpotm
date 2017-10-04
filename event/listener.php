@@ -50,10 +50,10 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.user_setup'						=>	'load_language_on_setup',
 			'core.permissions'						=>	'permissions',
-			'core.page_header'						=> 'add_page_header_link',
-			'core.viewonline_overwrite_location'	=> 'viewonline_page',
+			'core.page_header'						=>	'add_page_header_link',
+			'core.viewonline_overwrite_location'	=>	'viewonline_page',
 			'core.page_header_after'				=>	'tpotm_template_switch',
-			'core.page_footer'						=>	'display_tpotm',
+			'core.user_setup_after'					=>	'display_tpotm',
 			'core.viewtopic_cache_user_data'		=>	'viewtopic_cache_user_data',
 			'core.viewtopic_modify_post_row'		=>	'viewtopic_tpotm',
 		);
