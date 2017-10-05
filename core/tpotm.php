@@ -160,7 +160,7 @@ class tpotm
 	 */
 	public function style_badge_exists()
 	{
-		return file_exists(generate_board_url() . '/ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
+		return file_exists($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
 	}
 
 	/**
@@ -485,6 +485,22 @@ class tpotm
 	*/
 	public function show_the_winner()
 	{
+		/**
+		 * If Img Badge filename error..
+		 * state is false and go on..
+		 */
+		if (!$this->style_badge_exists())
+		{
+			$this->config->set('threedi_tpotm_badge_exists', 0);
+		}
+		else
+		{
+			/* Check passed, let's set it back to true. */
+			$this->config->set('threedi_tpotm_badge_exists', 1);
+		}
+
+//var_dump($this->style_badge_exists());
+
 		/* Syncro */
 		list($month_start, $month_end) = $this->month_timegap();
 		$row = $this->perform_cache_on_main_db_query((int) $month_start, (int) $month_end);

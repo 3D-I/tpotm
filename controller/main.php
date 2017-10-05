@@ -82,12 +82,6 @@ class main
 		$this->tpotm		= $tpotm;
 		$this->php_ext		= $phpExt;
 		$this->root_path	= $root_path;
-
-		//fixes smilies and avatar not loading properly on index page
-//		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
-//		{
-//			define('PHPBB_USE_BOARD_URL_PATH', true);
-//		}
 	}
 
 	/**
@@ -188,7 +182,7 @@ class main
 			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 			 */
 			$no_avatar =  ($this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
-
+//var_dump($this->tpotm->style_badge_exists());
 			foreach ($rows as $row)
 			{
 				/* Map arguments for phpbb_get_avatar() */
