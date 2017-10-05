@@ -181,8 +181,10 @@ class main
 			 * Gives the user an avatar as default if missing, for the sake of the layout.
 			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 			 */
-			$no_avatar =  ($this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
+			$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
+
 //var_dump($this->tpotm->style_badge_exists());
+
 			foreach ($rows as $row)
 			{
 				/* Map arguments for phpbb_get_avatar() */
@@ -197,7 +199,7 @@ class main
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])//($this->tpotm->is_dae())
+				if ($this->tpotm->is_dae())
 				{
 					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');

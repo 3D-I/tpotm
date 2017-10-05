@@ -486,8 +486,7 @@ class tpotm
 	public function show_the_winner()
 	{
 		/**
-		 * If Img Badge filename error..
-		 * state is false and go on..
+		 * If Img Badge filename error state it is false and go on.
 		 */
 		if (!$this->style_badge_exists())
 		{
@@ -570,7 +569,7 @@ class tpotm
 			);
 
 			/* DAE (Default Avatar Extended) extension compatibility */
-			if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])//($this->is_dae())
+			if ($this->is_dae())
 			{
 				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 			}
@@ -596,7 +595,7 @@ class tpotm
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
 				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])//($this->is_dae())
+				if ($this->is_dae())
 				{
 					$tpotm_av_3132 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}
