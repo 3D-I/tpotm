@@ -31,6 +31,12 @@ class tpotm_module
 		add_form_key('threedi/tpotm');
 
 		/**
+		 * If Img Badge filename error..
+		 * state is false and return, else go on..
+		 */
+		$tpotm->check_point_badge_img();
+
+		/**
 		 * If Img Badge filename wrong then stop the party and go dormant.
 		 */
 		if (!$tpotm->style_badge_is_true())
