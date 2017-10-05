@@ -64,6 +64,16 @@ class tpotm
 	}
 
 	/**
+	 * Returns whether the DAE is enabled
+	 *
+	 * @return bool
+	 */
+	public function is_dae()
+	{
+		return ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
+	}
+
+	/**
 	 * Returns the time for cache adjustable in ACP
 	 *
 	 * @return int
@@ -534,7 +544,7 @@ class tpotm
 			);
 
 			/* DAE (Default Avatar Extended) extension compatibility */
-			if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
+			if ($this->is_dae())
 			{
 				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 			}
@@ -561,7 +571,7 @@ class tpotm
 				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
 
 				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
+				if ($this->is_dae())
 				{
 					$tpotm_av_3132 = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
 				}

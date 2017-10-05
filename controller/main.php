@@ -99,8 +99,6 @@ class main
 	 */
 	public function handle($name)
 	{
-//var_dump($this->tpotm->ext_path_web());
-
 		if (!$this->tpotm->is_authed())
 		{
 			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM__HALL');
@@ -206,7 +204,7 @@ class main
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 				/* DAE (Default Avatar Extended) extension compatibility */
-				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
+				if ($this->tpotm->is_dae())
 				{
 					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
