@@ -527,10 +527,10 @@ class tpotm
 		{
 			/* Map arguments for  phpbb_get_avatar() */
 			$row_avatar = array(
-				'avatar'		=> $row['user_avatar'],
-				'avatar_width'	=> (int) $row['user_avatar_width'],
-				'avatar_height'	=> (int) $row['user_avatar_height'],
-				'avatar_type'	=> $row['user_avatar_type'],
+				'avatar'		 => $row['user_avatar'],
+				'avatar_type'	 => $row['user_avatar_type'],
+				'avatar_height'	 => $row['user_avatar_height'],
+				'avatar_width'	 => $row['user_avatar_width'],
 			);
 
 			/* DAE (Default Avatar Extended) extension compatibility */

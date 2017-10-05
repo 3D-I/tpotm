@@ -84,10 +84,10 @@ class main
 		$this->root_path	= $root_path;
 
 		//fixes smilies and avatar not loading properly on index page
-/*		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
-		{
-			define('PHPBB_USE_BOARD_URL_PATH', true);
-		}	*/
+//		if (!defined('PHPBB_USE_BOARD_URL_PATH'))
+//		{
+//			define('PHPBB_USE_BOARD_URL_PATH', true);
+//		}
 	}
 
 	/**
@@ -188,6 +188,7 @@ class main
 			/**
 			 * Gives the user an avatar as default if missing, for the sake of the layout.
 			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
+			 * NOTE; (!$this->tpotm->style_badge_is_true()) it's hackish, false negative due to controller
 			 */
 			$no_avatar =  (!$this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
 
@@ -195,27 +196,17 @@ class main
 			{
 				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar_hall = array(
-				'avatar'		=> $row['user_avatar'],
-				'avatar_width'	=> (int) $row['user_avatar_width'],
-				'avatar_height'	=> (int) $row['user_avatar_height'],
-				'avatar_type'	=> $row['user_avatar_type'],
+					'avatar'		 => $row['user_avatar'],
+					'avatar_type'	 => $row['user_avatar_type'],
+					'avatar_height'	 => $row['user_avatar_height'],
+					'avatar_width'	 => $row['user_avatar_width'],
 				);
 
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* Hall's avatars must be TPOTM's IMG for both versions
-				 * We don't care here about the UCP prefs -> view avatars
-				 * DAE compatibility in act checked too.
-				*/
-				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
-				{
-					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
-				}
-				else
-				{
-					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
-				}
+				/* We don't care here about the UCP prefs -> view avatars */
+				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
 
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,
