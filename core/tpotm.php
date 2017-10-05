@@ -144,13 +144,23 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether the basic badge img exists
+	 * Returns whether the basic badge img is true (not corrupted)
 	 *
 	 * @return	bool
 	 */
 	public function style_badge_is_true()
 	{
-		return file_exists($this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
+		return ($this->config['threedi_tpotm_badge_exists']) ? true : false;
+	}
+
+	/**
+	 * Returns whether the basic badge img exists
+	 *
+	 * @return	bool
+	 */
+	public function style_badge_exists()
+	{
+		return file_exists(generate_board_url() . '/ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
 	}
 
 	/**
@@ -161,7 +171,7 @@ class tpotm
 	public function check_point_badge_img()
 	{
 		/* If Img badge filename mistmach error, state is false and return */
-		if (!$this->style_badge_is_true())
+		if (!$this->style_badge_exists())
 		{
 			$this->config->set('threedi_tpotm_badge_exists', 0);
 			return;
@@ -181,7 +191,7 @@ class tpotm
 	 */
 	public function style_miniprofile_badge($user_tpotm)
 	{
-		return $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm;
+		return generate_board_url() . '/ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/' . $user_tpotm;
 	}
 
 	/**
@@ -191,7 +201,7 @@ class tpotm
 	 */
 	public function style_mini_badge()
 	{
-		return '<img src="' . $this->ext_path_web() . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png" />';
+		return '<img src="' . generate_board_url() . '/ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png" />';
 	}
 
 	/**
@@ -554,8 +564,7 @@ class tpotm
 				 * Hall's avatar must be TPOTM's IMG for both versions
 				 * The Hall of fame doesn't care about the UCP prefs view avatars
 				 */
-				 //@ToDo: !$this->style_badge_is_true() - is hackish! (! due to absolute URL)
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : ((!$this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
 			}
 
 			$template_vars += array(

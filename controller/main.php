@@ -186,9 +186,8 @@ class main
 			/**
 			 * Gives the user an avatar as default if missing, for the sake of the layout.
 			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
-			 * NOTE; (!$this->tpotm->style_badge_is_true()) it's hackish, false negative due to controller
 			 */
-			$no_avatar =  (!$this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
+			$no_avatar =  ($this->tpotm->style_badge_is_true()) ? '<img src="' . ($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png') . '" />' : $this->user->lang('TPOTM_BADGE');
 
 			foreach ($rows as $row)
 			{
