@@ -205,8 +205,17 @@ class main
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* We don't care here about the UCP prefs -> view avatars */
-				$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
+				/* DAE (Default Avatar Extended) extension compatibility */
+				if ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists'])
+				{
+					/* We don't care here about the UCP prefs -> view avatars */
+					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
+				}
+				else
+				{
+					/* We don't care here about the UCP prefs -> view avatars */
+					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
+				}
 
 				$this->template->assign_block_vars('tpotm_ever', array(
 					'USER_AVATAR'	=> $user_avatar,
