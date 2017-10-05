@@ -343,7 +343,7 @@ class tpotm
 			/* End timestamp for current month */
 			$month_end = $now;
 
-			return array((int) $month_start, (int) $month_end);
+			return [(int) $month_start, (int) $month_end];
 	}
 
 	/**
