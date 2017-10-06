@@ -1,4 +1,5 @@
 {% include 'overall_header.html' %}
+
 <h2 class="tpotm-head-text">{{ TPOTM_MESSAGE }}</h2>
 
 <div class="panel bg1">
@@ -31,7 +32,6 @@
 </div>
 
 {# start Hall of fame #}
-
 <h3>{{ lang('TPOTM_EVER_CAT') }}
 	{% if S_IS_RHEA %}
 		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN_HALL') }}" style="cursor: pointer;"></i>
@@ -88,8 +88,8 @@
 	</div>
 	{% endif %}
 </div>
-
 {# end Hall of fame #}
 
 {% include 'jumpbox.html' %}
+
 {% include 'overall_footer.html' %}
