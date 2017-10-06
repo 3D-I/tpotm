@@ -218,11 +218,19 @@ class main
 				));
 			}
 
-			/* Data range */
-			$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
-			$data_end = $this->user->format_date((int) $end_last_month);
-
-			//$user_time = $this->user->format_date($row['user_regdate'], $this->config['threedi_tpotm_utc']);
+			/* Date range (tooltip) */
+			if ($this->user->data['user_tooltip'])
+			{
+				/* User prefs hard-coded since it is a fake any way */
+				$data_begin = $this->user->format_date((int) $this->config['board_startdate'], 'd m Y H:i');
+				$data_end = $this->user->format_date((int) $end_last_month, 'd m Y') . ' 00:00';
+			}
+			else
+			{
+				/* Classic data range based on UCP prefs native */
+				$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
+				$data_end = $this->user->format_date((int) $end_last_month);
+			}
 
 			$template_vars = array(
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_end),

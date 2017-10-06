@@ -495,12 +495,15 @@ class tpotm
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
+		/* Date range (tooltip) */
 		if ($this->user->data['user_tooltip'])
 		{
-			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), 'd m Y'), $this->user->format_date($this->get_month_data(23, 59, 59, false, false), 'd m Y'));
+			/* User prefs hard-coded since it is a fake any way */
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), 'd m Y') . ' 00:01', $this->user->format_date($this->get_month_data(23, 59, 59, false, false), 'd m Y')) . ' 00:00';
 		}
 		else
 		{
+			/* Classic data range based on UCP prefs native */
 			$time = $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true));
 		}
 
