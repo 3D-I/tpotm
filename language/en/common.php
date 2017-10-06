@@ -58,7 +58,7 @@ $lang = array_merge($lang, array(
 	),
 
 	// Translators please do not change the following line, no need to translate it!
-	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2017 - 3Di',
+	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2005, 2017 - 3Di',
 
 	// Hall of fame
 	'VIEWING_TPOTM_HALL'			=> 'Viewing TPOTM Hall of fame',
