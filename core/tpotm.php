@@ -54,16 +54,6 @@ class tpotm
 	}
 
 	/**
-	 * Returns the absolute URL to the ext_path_web
-	 *
-	 * @return string
-	 */
-	public function ext_path_web()
-	{
-		return $this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/';
-	}
-
-	/**
 	 * Returns whether the DAE is enabled
 	 *
 	 * @return bool

@@ -98,11 +98,13 @@ a.hall-avatar-tpotm img {
 	background-color: transparent;
 }
 
+/* for 3.1 */
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
 }
 
+/* for 3.1 */
 .icon-tpotm-stats {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
