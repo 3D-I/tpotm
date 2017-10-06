@@ -82,6 +82,6 @@ $lang = array_merge($lang, array(
 	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
 
 	// UCP
-	'USER_TOOLTIP'			=> 'Tooltip',
-	'USER_TOOLTIP_EXPLAIN'	=> 'Yes = UTC - No = Your date format',
+	'USER_TOOLTIP'			=> 'Format date in Tooltips',
+	'USER_TOOLTIP_EXPLAIN'	=> 'Yes = 00:01 to 00:00 - No = Your date format',
 ));
