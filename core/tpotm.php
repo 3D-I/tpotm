@@ -497,7 +497,7 @@ class tpotm
 
 		if ($this->user->data['user_tooltip'])
 		{
-			$time = $this->user->lang('TPOTM_EXPLAIN', ($this->get_month_data(00, 00, 00, true, true) -2), $this->user->format_date($this->get_month_data(22, 59, 59, false, false), $this->config['threedi_tpotm_utc']));
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false) - 7200), $this->user->format_date($this->get_month_data(23, 59, 59, false, false) - 3600));
 		}
 		else
 		{
