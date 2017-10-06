@@ -54,10 +54,8 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.user_setup'						=>	'load_language_on_setup',
 			'core.permissions'						=>	'permissions',
-
-			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_add',
-			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_update',
-
+			'core.ucp_prefs_personal_data'			=>	'ucp_prefs_add',
+			'core.ucp_prefs_personal_update_data'	=>	'ucp_prefs_update',
 			'core.page_header'						=>	'add_page_header_link',
 			'core.viewonline_overwrite_location'	=>	'viewonline_page',
 			'core.page_header_after'				=>	'tpotm_template_switch',
@@ -107,20 +105,6 @@ class listener implements EventSubscriberInterface
 	*/
 	public function ucp_prefs_add($event)
 	{
-		/*
-		if ($this->user->data['user_tooltip'])
-		{
-			$time = $this->config['threedi_tpotm_utc'];// UTC
-		}
-		else
-		{
-			$time = $this->user->data['user_dateformat'];
-		}
-	*/
-
-		//$user_time = $this->user->format_date($row['user_regdate'], $this->config['threedi_tpotm_utc']);
-		//$this->template->assign_vars(array('USER_TOOLTIP'	 => $this->user->format_date($row['time'], $time),));
-
 		$user_tooltip = $this->request->variable('user_tooltip', (bool) $this->user->data['user_tooltip']);
 		$event['data'] = array_merge($event['data'], array('user_tooltip'	=> $user_tooltip,));
 
