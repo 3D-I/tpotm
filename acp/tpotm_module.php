@@ -92,9 +92,8 @@ class tpotm_module
 
 				$config->set('threedi_tpotm_founders', $request->variable('threedi_tpotm_founders', (int) $config['threedi_tpotm_founders']));
 
-				/* Log the action. */
+				/* Log the action and return */
 				$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'TPOTM_LOG_CONFIG_SAVED');
-
 				trigger_error($user->lang('ACP_TPOTM_SETTING_SAVED') . adm_back_link($this->u_action));
 			}
 		}
@@ -113,7 +112,7 @@ class tpotm_module
 			'TPOTM_TTL'				=> (int) $config['threedi_tpotm_ttl'],
 			'TPOTM_MINIAVATAR'		=> ($config['threedi_tpotm_miniavatar']) ? true : false,
 			'TPOTM_MINIPROFILE'		=> ($config['threedi_tpotm_miniprofile']) ? true : false,
-			// Fouders, admin and mod
+			// Founders, admin and mods
 			'TPOTM_ADM_MODS'		=> ($config['threedi_tpotm_adm_mods']) ? true : false,
 			'TPOTM_FOUNDERS'		=> ($config['threedi_tpotm_founders']) ? true : false,
 		));
