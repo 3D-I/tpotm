@@ -20,6 +20,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
+	protected $request;
+	protected $config;
 	protected $helper;
 	protected $template;
 	protected $user;
@@ -36,8 +38,10 @@ class listener implements EventSubscriberInterface
 	 * @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
 	 * @access public
 	 */
-	public function __construct(\phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(\phpbb\request\request $request, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
+		$this->request = $request;
+		$this->config		= $config;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
@@ -50,6 +54,10 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.user_setup'						=>	'load_language_on_setup',
 			'core.permissions'						=>	'permissions',
+
+			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_add',
+			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_update',
+
 			'core.page_header'						=>	'add_page_header_link',
 			'core.viewonline_overwrite_location'	=>	'viewonline_page',
 			'core.page_header_after'				=>	'tpotm_template_switch',
@@ -88,6 +96,47 @@ class listener implements EventSubscriberInterface
 			),
 		);
 		$event['permissions'] = $permissions;
+	}
+
+	/**
+	* Add configuration to UCP
+	*
+	* @param object	$event The event object
+	* @return null
+	* @access public
+	*/
+	public function ucp_prefs_add($event)
+	{
+		/*
+		if ($this->user->data['user_tooltip'])
+		{
+			$time = $this->config['threedi_tpotm_utc'];// UTC
+		}
+		else
+		{
+			$time = $this->user->data['user_dateformat'];
+		}
+	*/
+
+		//$user_time = $this->user->format_date($row['user_regdate'], $this->config['threedi_tpotm_utc']);
+		//$this->template->assign_vars(array('USER_TOOLTIP'	 => $this->user->format_date($row['time'], $time),));
+
+		$user_tooltip = $this->request->variable('user_tooltip', (bool) $this->user->data['user_tooltip']);
+		$event['data'] = array_merge($event['data'], array('user_tooltip'	=> $user_tooltip,));
+
+		$this->template->assign_vars(array('S_USER_TOOLTIP'	=> $user_tooltip,));
+	}
+
+	/**
+	* Updates configuration in UCP
+	*
+	* @param object	$event The event object
+	* @return null
+	* @access public
+	*/
+	public function ucp_prefs_update($event)
+	{
+		$event['sql_ary'] = array_merge($event['sql_ary'], array('user_tooltip'	=> $event['data']['user_tooltip'],));
 	}
 
 	/**

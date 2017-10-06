@@ -299,6 +299,8 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
+
+			'S_INCLUDE_USER_TOOLTIP'	=> $this->user->data['user_tooltip'],
 		));
 	}
 
@@ -310,9 +312,7 @@ class tpotm
 	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
-
 		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
-
 		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
 
@@ -495,12 +495,21 @@ class tpotm
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
+		if ($this->user->data['user_tooltip'])
+		{
+			$time = $this->user->lang('TPOTM_EXPLAIN', ($this->get_month_data(00, 00, 00, true, true) -2), $this->user->format_date($this->get_month_data(22, 59, 59, false, false), $this->config['threedi_tpotm_utc']));
+		}
+		else
+		{
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true));
+		}
+
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
 			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
-			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
+			'L_TPOTM_EXPLAIN'	=> $time,
 		);
 
 		/* Prevents a potential Division by Zero below */

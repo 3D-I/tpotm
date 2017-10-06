@@ -18,6 +18,8 @@ services:
     threedi.tpotm.listener:
         class: threedi\tpotm\event\listener
         arguments:
+            - '@request'
+            - '@config'
             - '@controller.helper'
             - '@template'
             - '@user'

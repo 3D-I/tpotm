@@ -222,6 +222,8 @@ class main
 			$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
 			$data_end = $this->user->format_date((int) $end_last_month);
 
+			//$user_time = $this->user->format_date($row['user_regdate'], $this->config['threedi_tpotm_utc']);
+
 			$template_vars = array(
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_end),
 				'COUNT'					=> $this->user->lang('TPOTM_HALL_COUNT', (int) $total_users),

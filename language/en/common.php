@@ -80,4 +80,8 @@ $lang = array_merge($lang, array(
 
 	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
 	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
+
+	// UCP
+	'USER_TOOLTIP'			=> 'Tooltip',
+	'USER_TOOLTIP_EXPLAIN'	=> 'Yes = UTC - No = Your date format',
 ));
