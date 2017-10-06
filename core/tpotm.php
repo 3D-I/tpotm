@@ -347,6 +347,10 @@ class tpotm
 	}
 
 	/**
+	*
+	 * @param int	$month_start	UNIX TIMESTAMP
+	 * @param int	$month_end		UNIX TIMESTAMP
+	 *
 	 * Gets/store the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
@@ -382,12 +386,15 @@ class tpotm
 		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
 
-	/*
-	* There can be only ONE, the TPOTM.
-	* If same tot posts and same exact post time then the post ID rules
-	* Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-	* Performs a chache check-in prior to delivery the final results
-	*
+	/**
+	 * @param int	$month_start	UNIX TIMESTAMP
+	 * @param int	$month_end		UNIX TIMESTAMP
+	 *
+	 * There can be only ONE, the TPOTM.
+	 * If same tot posts and same exact post time then the post ID rules
+	 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
+	 * Performs a chache check-in prior to delivery the final results
+	 *
 	 * @return array $row		cached or not results
 	*/
 	public function perform_cache_on_main_db_query($month_start, $month_end)
@@ -423,7 +430,10 @@ class tpotm
 	/*
 	* tpotm_tot_posts
 	*
-	 * @param int	$user_id	the current TPOTM user_id
+	 * @param int	$month_start	UNIX TIMESTAMP
+	 * @param int	$month_end		UNIX TIMESTAMP
+	 * @param int	$user_id		the current TPOTM user_id
+	 *
 	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
 	*/
 	public function perform_cache_on_tpotm_tot_posts($month_start, $month_end, $user_id)
@@ -469,6 +479,7 @@ class tpotm
 
 		/* Syncro */
 		list($month_start, $month_end) = $this->month_timegap();
+
 		$row = $this->perform_cache_on_main_db_query((int) $month_start, (int) $month_end);
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $month_start, (int) $month_end, (int) $row['user_id']);
 		$total_month = $this->perform_cache_on_this_month_total_posts((int) $month_start, (int) $month_end);
@@ -519,7 +530,7 @@ class tpotm
 		);
 
 		/**
-		 * Don't run that code if the admin so wishes or there is not a TPOTM yet
+		 * Don't run this code if the admin so wishes or there is not a TPOTM yet
 		 */
 		if ($tpotm_tot_posts >= 1)
 		{
