@@ -21,7 +21,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class listener implements EventSubscriberInterface
 {
 	protected $request;
-	protected $config;
 	protected $helper;
 	protected $template;
 	protected $user;
@@ -30,18 +29,10 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Constructor
-	 *
-	 * @param \phpbb\controller\helper	$helper			Controller helper object
-	 * @param \phpbb\template\template	$template		Template object
-	 * @param \phpbb\user				$user			User Object
-	 * @var string phpEx				$phpExt
-	 * @param threedi\tpotm\core\tpotm	$tpotm			Methods to be used by Class
-	 * @access public
 	 */
-	public function __construct(\phpbb\request\request $request, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(\phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
 	{
-		$this->request = $request;
-		$this->config		= $config;
+		$this->request		= $request;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;

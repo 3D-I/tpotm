@@ -6,7 +6,6 @@ services:
             - '@dbal.conn'
             - '@config'
             - '@controller.helper'
-            - '@path_helper'
             - '@pagination'
             - '@request'
             - '@template'
@@ -19,7 +18,6 @@ services:
         class: threedi\tpotm\event\listener
         arguments:
             - '@request'
-            - '@config'
             - '@controller.helper'
             - '@template'
             - '@user'

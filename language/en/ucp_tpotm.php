@@ -20,6 +20,6 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'USER_TOOLTIP_HOVER'	=> '<em><< Mouse hover the icon</em>',
-	'USER_TOOLTIP'			=> 'Date format in Tooltips',
+	'USER_TOOLTIP'			=> 'Date format UTC+00:00 in Tooltips',
 	'USER_TOOLTIP_EXPLAIN'	=> 'Yes = <em>01 10 2017 00:01</em> to <em>01 11 2027 00:00</em><br>No = Your above date format',
 ));

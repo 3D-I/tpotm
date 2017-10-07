@@ -17,7 +17,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 		/**
 		 * If does exists go ahead
 		 */
-		return !phpbb_version_compare($this->config['threedi_tpotm'], '1.1.0-rc6', '>=');
+		return !phpbb_version_compare($this->config['threedi_tpotm'], '1.2.0-rc1', '>=');
 	}
 
 	static public function depends_on()
@@ -33,13 +33,13 @@ class m3_install_configs extends \phpbb\db\migration\migration
 			array('config.add', array('threedi_tpotm_miniavatar', 0)),
 			array('config.add', array('threedi_tpotm_miniprofile', 0)),
 			array('config.add', array('threedi_tpotm_hall', 0)),
-			array('config.add', array('threedi_tpotm_adm_mods', 1)), // excluding admin/mods increases queries
+			array('config.add', array('threedi_tpotm_adm_mods', 1)),
+			array('config.add', array('threedi_tpotm_founders', 0)),
 			array('config.add', array('threedi_tpotm_forums', 0)),
 			array('config.add', array('threedi_tpotm_index', 1)),
 			array('config.add', array('threedi_tpotm_ttl', 30)),
 			array('config.add', array('threedi_tpotm_badge_exists', 1)),
-			array('config.add', array('threedi_tpotm_users_page', 4)),
-			array('config.add', array('threedi_tpotm_founders', 0)),
+			array('config.add', array('threedi_tpotm_users_page', 12)),
 			array('config.add', array('threedi_tpotm_utc', 'd m Y')),
 		);
 	}

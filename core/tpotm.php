@@ -26,20 +26,8 @@ class tpotm
 	protected $template;
 
 	/**
-		* Constructor
-		*
-		* @param \phpbb\auth\auth					$auth			Authentication object
-		* @param \phpbb\cache\service				$cache
-		* @param \phpbb\config\config				$config			Config Object
-		* @param \phpbb\db\driver\driver_interface	$db				Database object
-		* @param \phpbb\user						$user			User object
-		* @param \phpbb\path_helper					$path_helper	Path helper object
-		* @var string phpBB root path				$root_path
-		* @var string phpEx							$phpExt
-		* @param \phpbb\template\template			$template		Template object
-		* @access public
-	*/
-
+	 * Constructor
+	 */
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
@@ -359,6 +347,7 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
+
 			return (int) $total_month;
 
 			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
@@ -441,6 +430,7 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
+
 			return (int) $tpotm_tot_posts;
 
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
