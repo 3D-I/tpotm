@@ -30,8 +30,8 @@ class m3_install_configs extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return array(
-			array('config.add', array('threedi_tpotm_miniavatar', 0)),
-			array('config.add', array('threedi_tpotm_miniprofile', 0)),
+			array('config.add', array('threedi_tpotm_miniavatar', 1)),
+			array('config.add', array('threedi_tpotm_miniprofile', 1)),
 			array('config.add', array('threedi_tpotm_hall', 0)),
 			array('config.add', array('threedi_tpotm_adm_mods', 1)),
 			array('config.add', array('threedi_tpotm_founders', 0)),
