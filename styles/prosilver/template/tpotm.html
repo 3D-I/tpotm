@@ -1,4 +1,5 @@
 {% if S_TPOTM %}
+
 	<h3>{{ lang('TPOTM_CAT') }}</h3>
 
 	<p>{{ lang('TPOTM_NOW') }}
@@ -11,5 +12,7 @@
 		{% else %}
 			&nbsp;<img class="icon icon-tpotm-stats" title="{{ lang('TPOTM_EXPLAIN') }}" ></img>
 		{% endif %}
-	{{ lang('TPOTM_CACHE') }}</p>
+		{{ lang('TPOTM_CACHE') }}
+	</p>
+
 {% endif %}

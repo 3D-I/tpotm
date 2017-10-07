@@ -222,8 +222,8 @@ class main
 			if ($this->user->data['user_tooltip'])
 			{
 				/* User prefs hard-coded since it is a fake any way */
-				$data_begin = $this->user->format_date((int) $this->config['board_startdate'], 'd m Y H:i');
-				$data_end = $this->user->format_date((int) $end_last_month, 'd m Y') . ' 00:00';
+				$data_begin = $this->user->format_date((int) $this->config['board_startdate'], $this->config['threedi_tpotm_utc'] . ' H:i');
+				$data_end = $this->user->format_date((int) $end_last_month, $this->config['threedi_tpotm_utc']) . ' 00:00';
 			}
 			else
 			{

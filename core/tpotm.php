@@ -299,8 +299,6 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
-
-			'S_INCLUDE_USER_TOOLTIP'	=> $this->user->data['user_tooltip'],
 		));
 	}
 
@@ -313,6 +311,7 @@ class tpotm
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
 		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
+
 		return $format ? $this->user->format_date((int) $data) : (int) $data;
 	}
 
@@ -396,7 +395,8 @@ class tpotm
 		{
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
-
+//(now TPOTM is the user with the latest posting :) not the one with the most posts in this month)
+// , COUNT(p.post_id) AS total_posts
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
@@ -408,6 +408,7 @@ class tpotm
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
 				ORDER BY p.post_time DESC, p.post_id DESC';
+// ORDER BY total_posts DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
@@ -495,11 +496,11 @@ class tpotm
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
-		/* Date range (tooltip) */
+		/* Date range (tooltip) UCP */
 		if ($this->user->data['user_tooltip'])
 		{
 			/* User prefs hard-coded since it is a fake any way */
-			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), 'd m Y') . ' 00:01', $this->user->format_date($this->get_month_data(23, 59, 59, false, false), 'd m Y')) . ' 00:00';
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), $this->config['threedi_tpotm_utc']) . ' 00:01', $this->user->format_date($this->get_month_data(23, 59, 59, false, false), $this->config['threedi_tpotm_utc'])) . ' 00:00';
 		}
 		else
 		{
