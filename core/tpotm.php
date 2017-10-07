@@ -324,21 +324,19 @@ class tpotm
 	}
 
 	/**
-	*
-	 * @param int	$month_start	UNIX TIMESTAMP
-	 * @param int	$month_end		UNIX TIMESTAMP
-	 *
-	 * Gets/store the total posts count for the current month till now
+	 * Gets the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
 	 */
-	public function perform_cache_on_this_month_total_posts($month_start, $month_end)
+	public function perform_cache_on_this_month_total_posts()
 	{
+		list($month_start, $month_end) = $this->month_timegap();
+
 		/**
 		 * Check cached data (cache it is used to keep things in syncro)
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($total_month = $this->cache->get('_tpotm_total') === false)
+		if (($total_month = $this->cache->get('_tpotm_total')) === false)
 		{
 			$sql = 'SELECT COUNT(post_id) AS post_count
 				FROM ' . POSTS_TABLE . '
@@ -348,10 +346,9 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
-			return (int) $total_month;
-
 			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
 		}
+		return (int) $total_month;
 	}
 
 	/**
@@ -365,9 +362,6 @@ class tpotm
 	}
 
 	/**
-	 * @param int	$month_start	UNIX TIMESTAMP
-	 * @param int	$month_end		UNIX TIMESTAMP
-	 *
 	 * There can be only ONE, the TPOTM.
 	 * If same tot posts and same exact post time then the post ID rules
 	 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
@@ -375,12 +369,14 @@ class tpotm
 	 *
 	 * @return array $row		cached or not results
 	*/
-	public function perform_cache_on_main_db_query($month_start, $month_end)
+	public function perform_cache_on_main_db_query()
 	{
+		list($month_start, $month_end) = $this->month_timegap();
+
 		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($row = $this->cache->get('_tpotm') === false)
+		if (($row = $this->cache->get('_tpotm')) === false)
 		{
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
@@ -400,28 +396,32 @@ class tpotm
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
-			return $row;
+			/* There is a TPOTM, let's update the DB then */
+			if ((int) $row['total_posts'] >= 1)
+			{
+				$this->perform_user_reset((int) $row['user_id']);
+			}
 
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
+		return $row;
 	}
 
 	/*
-	* tpotm_tot_posts
-	*
-	 * @param int	$month_start	UNIX TIMESTAMP
-	 * @param int	$month_end		UNIX TIMESTAMP
-	 * @param int	$user_id		the current TPOTM user_id
+	 * Gets the total TPOTM posts count for the current month till now
 	 *
+	 * @param int	$user_id		the current TPOTM user_id
 	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
 	*/
-	public function perform_cache_on_tpotm_tot_posts($month_start, $month_end, $user_id)
+	public function perform_cache_on_tpotm_tot_posts($user_id)
 	{
+		list($month_start, $month_end) = $this->month_timegap();
+
 		/**
 		 * Check cached data
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
-		if ($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts') === false)
+		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
 		{
 			$sql = 'SELECT COUNT(post_id) AS total_posts
 				FROM ' . POSTS_TABLE . '
@@ -431,10 +431,15 @@ class tpotm
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
 
-			return (int) $tpotm_tot_posts;
+			/* If no posts for the current elapsed time there is not a TPOTM */
+			if ($tpotm_tot_posts < 1)
+			{
+				$this->perform_user_db_clean();
+			}
 
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
+		return (int) $tpotm_tot_posts;
 	}
 
 	/*
@@ -457,24 +462,10 @@ class tpotm
 			$this->config->set('threedi_tpotm_badge_exists', 1);
 		}
 
-		/* Syncro */
-		list($month_start, $month_end) = $this->month_timegap();
-
-		$row = $this->perform_cache_on_main_db_query((int) $month_start, (int) $month_end);
-		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $month_start, (int) $month_end, (int) $row['user_id']);
-		$total_month = $this->perform_cache_on_this_month_total_posts((int) $month_start, (int) $month_end);
-
-		/* If no posts for the current elapsed time there is not a TPOTM */
-		if ($tpotm_tot_posts < 1)
-		{
-			$this->perform_user_db_clean();
-		}
-
-		/* There is a TPOTM, let's update the DB then */
-		if ((int) $tpotm_tot_posts >= 1)
-		{
-			$this->perform_user_reset((int) $row['user_id']);
-		}
+		/* Data's Syncro */
+		$row = $this->perform_cache_on_main_db_query();
+		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
+		$total_month = $this->perform_cache_on_this_month_total_posts();
 
 		/* Only auth'd users can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
