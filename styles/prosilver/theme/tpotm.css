@@ -16,6 +16,14 @@ i.fa-question-circle-o fa-fw {
 	cursor: pointer;
 }
 
+/* UCP */
+.tpotm-ucp-badge {
+	padding-left: 4px;
+	max-height: 14px;
+	vertical-align: text-bottom;
+	width: auto;
+}
+
 /***************************************
 * This section is for the hall of fame *
 ***************************************/

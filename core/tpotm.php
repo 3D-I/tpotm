@@ -26,20 +26,8 @@ class tpotm
 	protected $template;
 
 	/**
-		* Constructor
-		*
-		* @param \phpbb\auth\auth					$auth			Authentication object
-		* @param \phpbb\cache\service				$cache
-		* @param \phpbb\config\config				$config			Config Object
-		* @param \phpbb\db\driver\driver_interface	$db				Database object
-		* @param \phpbb\user						$user			User object
-		* @param \phpbb\path_helper					$path_helper	Path helper object
-		* @var string phpBB root path				$root_path
-		* @var string phpEx							$phpExt
-		* @param \phpbb\template\template			$template		Template object
-		* @access public
-	*/
-
+	 * Constructor
+	 */
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
 	{
 		$this->auth				=	$auth;
@@ -134,7 +122,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether the basic badge img is true (not corrupted)
+	 * Returns whether the basic badge img is true (has been not corrupted)
 	 *
 	 * @return	bool
 	 */
@@ -174,7 +162,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniprofile badge image file
+	 * Returns the style related URL to the miniprofile badge image file
 	 *
 	 * @param string	$user_tpotm		the miniprofile image filename with extension
 	 * @return string					URL
@@ -310,7 +298,6 @@ class tpotm
 	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
-
 		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
 
 		return $format ? $this->user->format_date((int) $data) : (int) $data;
@@ -360,6 +347,7 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
+
 			return (int) $total_month;
 
 			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
@@ -397,7 +385,7 @@ class tpotm
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
 
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
+			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
@@ -406,11 +394,12 @@ class tpotm
 					' . $and_founder . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
-				GROUP BY u.user_id, p.post_time, p.post_id
-				ORDER BY p.post_time DESC, p.post_id DESC';
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
+
 			return $row;
 
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
@@ -441,6 +430,7 @@ class tpotm
 			$result = $this->db->sql_query($sql);
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
+
 			return (int) $tpotm_tot_posts;
 
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
@@ -495,12 +485,24 @@ class tpotm
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
+		/* Date range (tooltip) UCP */
+		if ($this->user->data['user_tooltip'])
+		{
+			/* User prefs hard-coded since it is a fake any way */
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), $this->config['threedi_tpotm_utc']) . ' 00:01', $this->user->format_date($this->get_month_data(23, 59, 59, false, false), $this->config['threedi_tpotm_utc'])) . ' 00:00';
+		}
+		else
+		{
+			/* Classic data range based on UCP prefs native */
+			$time = $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true));
+		}
+
 		$template_vars = array(
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
 			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
-			'L_TPOTM_EXPLAIN'	=> $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true)),
+			'L_TPOTM_EXPLAIN'	=> $time,
 		);
 
 		/* Prevents a potential Division by Zero below */

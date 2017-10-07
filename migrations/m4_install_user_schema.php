@@ -33,6 +33,7 @@ class m4_install_user_schema extends \phpbb\db\migration\migration
 			'add_columns'	=> array(
 				$this->table_prefix . 'users'	=>	array(
 					'user_tpotm'	=> array('VCHAR:255', ''),
+					'user_tooltip'	=> array('BOOL', 0),
 				),
 			),
 		);
@@ -44,6 +45,7 @@ class m4_install_user_schema extends \phpbb\db\migration\migration
 			'drop_columns'	=> array(
 				$this->table_prefix . 'users'	=>	array(
 					'user_tpotm',
+					'user_tooltip',
 				),
 			),
 		);

@@ -27,9 +27,6 @@ class main
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
-	/* @var \phpbb\path_helper */
-	protected $path_helper;
-
 	/** @var \phpbb\pagination */
 	protected $pagination;
 
@@ -53,28 +50,13 @@ class main
 
 	/**
 	 * Constructor
-	 *
-	 * @param \phpbb\auth\auth					$auth			Authentication object
-	 * @param \phpbb\db\driver\driver_interface	$db				Database object
-	 * @param \phpbb\config\config				$config
-	 * @param \phpbb\controller\helper			$helper
-	 * @param \phpbb\path_helper				$path_helper
-	 * @param \phpbb\pagination					$pagination
-	 * @param \phpbb\request\request			$request		Request object
-	 * @param \phpbb\path_helper				$path_helper
-	 * @param \phpbb\template\template			$template
-	 * @param \phpbb\user						$user
-	 * @param threedi\tpotm\core\tpotm			$tpotm			Methods to be used by Class
-	 * @var string phpEx						$phpExt
-	 * @var string phpBB root path				$root_path
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\path_helper $path_helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
 	{
 		$this->auth			= $auth;
 		$this->db			= $db;
 		$this->config		= $config;
 		$this->helper		= $helper;
-		$this->path_helper	= $path_helper;
 		$this->pagination 	= $pagination;
 		$this->request 		= $request;
 		$this->template		= $template;
@@ -183,8 +165,6 @@ class main
 			 */
 			$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
 
-//var_dump($this->tpotm->style_badge_exists());
-
 			foreach ($rows as $row)
 			{
 				/* Map arguments for phpbb_get_avatar() */
@@ -218,9 +198,19 @@ class main
 				));
 			}
 
-			/* Data range */
-			$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
-			$data_end = $this->user->format_date((int) $end_last_month);
+			/* Date range (tooltip) */
+			if ($this->user->data['user_tooltip'])
+			{
+				/* User prefs hard-coded since it is a fake any way */
+				$data_begin = $this->user->format_date((int) $this->config['board_startdate'], $this->config['threedi_tpotm_utc'] . ' H:i');
+				$data_end = $this->user->format_date((int) $end_last_month, $this->config['threedi_tpotm_utc']) . ' 00:00';
+			}
+			else
+			{
+				/* Classic data range based on UCP prefs native */
+				$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
+				$data_end = $this->user->format_date((int) $end_last_month);
+			}
 
 			$template_vars = array(
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_end),

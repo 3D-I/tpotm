@@ -1,4 +1,7 @@
+{% if S_TPOTM and S_TPOTM_HALL %}
+
 {% include 'overall_header.html' %}
+
 <h2 class="tpotm-head-text">{{ TPOTM_MESSAGE }}</h2>
 
 <div class="panel bg1">
@@ -92,3 +95,5 @@
 {% include 'jumpbox.html' %}
 
 {% include 'overall_footer.html' %}
+
+{% endif %}
