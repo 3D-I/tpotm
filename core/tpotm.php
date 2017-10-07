@@ -134,7 +134,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether the basic badge img is true (not corrupted)
+	 * Returns whether the basic badge img is true (has been not corrupted)
 	 *
 	 * @return	bool
 	 */
@@ -174,7 +174,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniprofile badge image file
+	 * Returns the style related URL to the miniprofile badge image file
 	 *
 	 * @param string	$user_tpotm		the miniprofile image filename with extension
 	 * @return string					URL
@@ -395,8 +395,7 @@ class tpotm
 		{
 			/* If the Admin so wishes */
 			$and_founder = $this->wishes_founder();
-//(now TPOTM is the user with the latest posting :) not the one with the most posts in this month)
-// , COUNT(p.post_id) AS total_posts
+
 			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time)
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
@@ -408,10 +407,10 @@ class tpotm
 					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
 				GROUP BY u.user_id, p.post_time, p.post_id
 				ORDER BY p.post_time DESC, p.post_id DESC';
-// ORDER BY total_posts DESC';
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
+
 			return $row;
 
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());

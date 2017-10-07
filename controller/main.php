@@ -183,8 +183,6 @@ class main
 			 */
 			$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
 
-//var_dump($this->tpotm->style_badge_exists());
-
 			foreach ($rows as $row)
 			{
 				/* Map arguments for phpbb_get_avatar() */
