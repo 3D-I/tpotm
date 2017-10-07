@@ -29,7 +29,7 @@ class m1_install_perms extends \phpbb\db\migration\migration
 	{
 		return array(
 			/* First set a milestone */
-			array('config.add', array('threedi_tpotm', '2.0.0-rc1')),
+			array('config.add', array('threedi_tpotm', '2.0.0-rc2')),
 			/* Permissions now */
 			array('permission.add', array('u_allow_tpotm_view')),
 			array('permission.permission_set', array('REGISTERED', 'u_allow_tpotm_view', 'group')),
