@@ -14,29 +14,30 @@ class m2_install_acp_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
+		//
 	}
 
 	static public function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v31x\v3111');
+		return ['\phpbb\db\migration\data\v31x\v3111'];
 	}
 
 	public function update_data()
 	{
-		return array(
-			array('module.add', array(
+		return [
+			['module.add', [
 				'acp',
 				'ACP_CAT_DOT_MODS',
 				'ACP_TPOTM_TITLE'
-			)),
-			array('module.add', array(
+			]],
+			['module.add', [
 				'acp',
 				'ACP_TPOTM_TITLE',
-				array(
+				[
 					'module_basename'	=> '\threedi\tpotm\acp\tpotm_module',
-					'modes'				=> array('settings'),
-				),
-			)),
-		);
+					'modes'				=> ['settings'],
+				],
+			]],
+		];
 	}
 }

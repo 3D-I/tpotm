@@ -94,7 +94,8 @@ class main
 			$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message, $name));
 
 			/* Starting point in time */
-			$board_start = (int) $this->config['board_startdate'];
+			//$board_start = (int) $this->config['board_startdate'];
+			$board_start = (int) '0'; // Epoch time 1970-01-01 00:00
 
 			/**
 			 * if the current month is 01 (January) date() will decrement the year by one
@@ -199,16 +200,16 @@ class main
 			}
 
 			/* Date range (tooltip) */
-			if ($this->user->data['user_tooltip'])
+			if ($this->user->data['user_tt_tpotm'] && $this->user->data['user_tt_sel_tpotm'])
 			{
 				/* User prefs hard-coded since it is a fake any way */
-				$data_begin = $this->user->format_date((int) $this->config['board_startdate'], $this->config['threedi_tpotm_utc'] . ' H:i');
+				$data_begin = $this->user->format_date((int) $board_start, $this->config['threedi_tpotm_utc'] . ' H:i');
 				$data_end = $this->user->format_date((int) $end_last_month, $this->config['threedi_tpotm_utc']) . ' 00:00';
 			}
 			else
 			{
 				/* Classic data range based on UCP prefs native */
-				$data_begin = $this->user->format_date((int) $this->config['board_startdate']);
+				$data_begin = $this->user->format_date((int) $board_start);
 				$data_end = $this->user->format_date((int) $end_last_month);
 			}
 

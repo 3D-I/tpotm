@@ -8,17 +8,18 @@
 	{% endif %}
 	</h3>
 
-	<p>{{ lang('TPOTM_NOW') }}
+	<p>
+	{{ lang('TPOTM_NOW') }}
 		{% if S_TPOTM_AVATAR %}
 				<a href="{{ U_TPOTM_AVATAR_URL }}"><img class="header-avatar" height="16" width="auto" style="	margin-bottom:2px;" {{ TPOTM_AVATAR }}</a>
 		{% endif %}
 		<b>{{ TPOTM_NAME }}</b>{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}
 		{% if S_IS_RHEA %}
-			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" ></i>
+			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
 		{% else %}
-			&nbsp;<img class="icon icon-tpotm-stats" title="{{ lang('TPOTM_EXPLAIN') }}" ></img>
+			&nbsp;<img class="icon icon-tpotm-stats"{% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} >
 		{% endif %}
-		{{ lang('TPOTM_CACHE') }}
+	{{ lang('TPOTM_CACHE') }}
 	</p>
 
 {% endif %}

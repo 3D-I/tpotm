@@ -24,30 +24,32 @@ class m4_install_user_schema extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v31x\v3111');
+		return ['\phpbb\db\migration\data\v31x\v3111'];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'add_columns'	=> array(
-				$this->table_prefix . 'users'	=>	array(
-					'user_tpotm'	=> array('VCHAR:255', ''),
-					'user_tooltip'	=> array('BOOL', 0),
-				),
-			),
-		);
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'users'	=>	[
+					'user_tpotm'			=> ['VCHAR:255', ''],
+					'user_tt_tpotm'			=> ['BOOL', 0],
+					'user_tt_sel_tpotm'		=> ['BOOL', 1],
+				],
+			],
+		];
 	}
 
 	public function revert_schema()
 	{
-		return array(
-			'drop_columns'	=> array(
-				$this->table_prefix . 'users'	=>	array(
+		return [
+			'drop_columns'	=>[
+				$this->table_prefix . 'users'	=>	[
 					'user_tpotm',
-					'user_tooltip',
-				),
-			),
-		);
+					'user_tt_tpotm',
+					'user_tt_sel_tpotm',
+				],
+			],
+		];
 	}
 }

@@ -6,11 +6,12 @@
 	width: auto;
 }
 
-i.fa-trophy {
+/* viewtopic */
+i.fa-spinner {
 	cursor: pointer;
-	color: #105289; /* prosilver */
+	color: #2a6496;
 }
-
+*/
 /* index and hall */
 i.fa-question-circle-o fa-fw {
 	cursor: pointer;

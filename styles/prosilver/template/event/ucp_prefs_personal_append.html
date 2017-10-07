@@ -3,9 +3,9 @@
 	<h3>
 	{{ lang('TPOTM_CAT') }}
 	{% if S_IS_RHEA %}
-		<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" ></i>
+		<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
 	{% elseif S_IS_BADGE_IMG %}
-		<img src="{{ TPOTM_UCP_BADGE }}" class="tpotm-ucp-badge" title="{{ lang('TPOTM_EXPLAIN') }}" />
+		<img src="{{ TPOTM_UCP_BADGE }}" class="tpotm-ucp-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} />
 	{% else %}
 		{{ lang('TPOTM_BADGE') }}
 	{% endif %}
@@ -13,12 +13,20 @@
 	</h3>
 
 	<dl>
-		<dt><label for="user_tooltip1">{{ lang('USER_TOOLTIP') }}{{ lang('COLON') }}</label><br><span>{{ lang('USER_TOOLTIP_EXPLAIN') }}</span></dt>
+		<dt><label for="user_tt_tpotm1">{{ lang('USER_TOOLTIP') }}{{ lang('COLON') }}</label><br><span>{{ lang('USER_TOOLTIP_EXPLAIN') }}</span></dt>
 		<dd>
-			<label for="user_tooltip1"><input type="radio" name="user_tooltip" id="user_tooltip1" value="1" {% if S_USER_TOOLTIP %} checked="checked" {% endif %} /> {{ lang('YES') }}</label>
+			<label for="user_tt_tpotm1"><input type="radio" name="user_tt_tpotm" id="user_tt_tpotm1" value="1" {% if S_USER_TOOLTIP %} checked="checked" {% endif %} /> {{ lang('YES') }}</label>
 		
-			<label for="user_tooltip0"><input type="radio" name="user_tooltip" id="user_tooltip0" value="0" {% if not S_USER_TOOLTIP %} checked="checked" {% endif %} /> {{ lang('NO') }}</label>
+			<label for="user_tt_tpotm0"><input type="radio" name="user_tt_tpotm" id="user_tt_tpotm0" value="0" {% if not S_USER_TOOLTIP %} checked="checked" {% endif %} /> {{ lang('NO') }}</label>
 		</dd>
 	</dl>
 
+	<dl>
+		<dt><label for="user_tt_sel_tpotm1">{{ lang('USER_TOOLTIP_SEL') }}{{ lang('COLON') }}</label><br><span>{{ lang('USER_TOOLTIP_SEL_EXPLAIN') }}</span></dt>
+		<dd>
+			<label for="user_tt_sel_tpotm1"><input type="radio" name="user_tt_sel_tpotm" id="user_tt_sel_tpotm1" value="1" {% if S_USER_TOOLTIP_SEL %} checked="checked" {% endif %} /> {{ lang('YES') }}</label>
+		
+			<label for="user_tt_sel_tpotm0"><input type="radio" name="user_tt_sel_tpotm" id="user_tt_sel_tpotm0" value="0" {% if not S_USER_TOOLTIP_SEL %} checked="checked" {% endif %} /> {{ lang('NO') }}</label>
+		</dd>
+	</dl>
 {% endif %}
