@@ -341,7 +341,7 @@ class tpotm
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
-			//@unlink($filename)//$this->cache->destroy('_tpotm_total');
+			$this->cache->destroy('_tpotm_total');
 		}
 
 		/**
@@ -359,11 +359,10 @@ class tpotm
 			$this->db->sql_freeresult($result);
 
 			/* Only store data if cache is active */
-			//if (($this->config_time_cache_min()) >= 1)
-			//{
+			if ($this->config_time_cache_min() >= 1)
+			{
 				$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
-			//}
-			//$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			}
 		}
 		return (int) $total_month;
 	}
@@ -396,7 +395,7 @@ class tpotm
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
-			//@unlink($filename)//$this->cache->destroy('_tpotm');
+			$this->cache->destroy('_tpotm');
 		}
 
 		/**
@@ -429,11 +428,10 @@ class tpotm
 			}
 
 			/* Only store data if cache is active */
-			//if (($this->config_time_cache_min()) >= 1)
-			//{
+			if ($this->config_time_cache_min() >= 1)
+			{
 				$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
-			//}
-			//$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			}
 		}
 		return $row;
 	}
@@ -454,7 +452,7 @@ class tpotm
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
-			//@unlink($filename)//$this->cache->destroy('_tpotm_tot_posts');
+			$this->cache->destroy('_tpotm_tot_posts');
 		}
 
 		/**
@@ -478,11 +476,10 @@ class tpotm
 			}
 
 			/* Only store data if cache is active */
-			//if (($this->config_time_cache_min()) >= 1)
-			//{
+			if ($this->config_time_cache_min() >= 1)
+			{
 				$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
-			//}
-			//$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			}
 		}
 		return (int) $tpotm_tot_posts;
 	}
