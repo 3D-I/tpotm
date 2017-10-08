@@ -202,6 +202,7 @@ class tpotm
 			 */
 			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
 			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+
 			$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
 			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
 
@@ -287,6 +288,8 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
+			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
+
 		));
 	}
 
@@ -477,7 +480,7 @@ class tpotm
 		$tpotm_name = ((int) $tpotm_tot_posts < 1) ? $tpotm_un_nobody : $tpotm_un_string;
 
 		/* Date range (tooltip) UCP */
-		if ($this->user->data['user_tooltip'])
+		if ($this->user->data['user_tt_tpotm'] && $this->user->data['user_tt_sel_tpotm'])
 		{
 			/* User prefs hard-coded since it is a fake any way */
 			$time = $this->user->lang('TPOTM_EXPLAIN', $this->user->format_date($this->get_month_data(00, 00, 00, true, false), $this->config['threedi_tpotm_utc']) . ' 00:01', $this->user->format_date($this->get_month_data(23, 59, 59, false, false), $this->config['threedi_tpotm_utc'])) . ' 00:00';

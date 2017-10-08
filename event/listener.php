@@ -42,7 +42,7 @@ class listener implements EventSubscriberInterface
 
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			'core.user_setup'						=>	'load_language_on_setup',
 			'core.permissions'						=>	'permissions',
 			'core.ucp_prefs_personal_data'			=>	'tpotm_ucp_prefs_data',
@@ -53,16 +53,16 @@ class listener implements EventSubscriberInterface
 			'core.user_setup_after'					=>	'display_tpotm',
 			'core.viewtopic_cache_user_data'		=>	'viewtopic_tpotm_cache_user_data',
 			'core.viewtopic_modify_post_row'		=>	'viewtopic_tpotm',
-		);
+		];
 	}
 
 	public function load_language_on_setup($event)
 	{
 		$lang_set_ext = $event['lang_set_ext'];
-		$lang_set_ext[] = array(
+		$lang_set_ext[] = [
 			'ext_name' => 'threedi/tpotm',
 			'lang_set' => 'common',
-		);
+		];
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
@@ -74,16 +74,16 @@ class listener implements EventSubscriberInterface
 	public function permissions($event)
 	{
 		$permissions = $event['permissions'];
-		$permissions += array(
-			'u_allow_tpotm_view' => array(
+		$permissions += [
+			'u_allow_tpotm_view' => [
 				'lang'	=> 'ACL_U_ALLOW_TPOTM_VIEW',
 				'cat'	=> 'misc',
-			),
-			'a_tpotm_admin' => array(
+			],
+			'a_tpotm_admin' => [
 				'lang'	=> 'ACL_A_TPOTM_ADMIN',
 				'cat'	=> 'misc',
-			),
-		);
+			],
+		];
 		$event['permissions'] = $permissions;
 	}
 
@@ -101,15 +101,20 @@ class listener implements EventSubscriberInterface
 			$this->user->add_lang_ext('threedi/tpotm', 'ucp_tpotm');
 
 			/* Collects the user decision */
-			$user_tooltip = $this->request->variable('user_tooltip', (bool) $this->user->data['user_tooltip']);
+			$user_tooltip = $this->request->variable('user_tt_tpotm', (bool) $this->user->data['user_tt_tpotm']);
+			$user_tooltip_sel = $this->request->variable('user_tt_sel_tpotm', (bool) $this->user->data['user_tt_sel_tpotm']);
 
 			/* Merges that decision in the already existing array */
-			$event['data'] = array_merge($event['data'], array('user_tooltip'	=> $user_tooltip,));
+			$event['data'] = array_merge($event['data'], [
+				'user_tt_tpotm'		=> $user_tooltip,
+				'user_tt_sel_tpotm'	=> $user_tooltip_sel,
+			]);
 
-			$this->template->assign_vars(array(
-				'TPOTM_UCP_BADGE'	=> $this->tpotm->style_miniprofile_badge('tpotm_badge.png'),
-				'S_USER_TOOLTIP'	=> $user_tooltip,
-			));
+			$this->template->assign_vars([
+				'TPOTM_UCP_BADGE'		=> $this->tpotm->style_miniprofile_badge('tpotm_badge.png'),
+				'S_USER_TOOLTIP'		=> $user_tooltip,
+				'S_USER_TOOLTIP_SEL'	=> $user_tooltip_sel,
+			]);
 		}
 	}
 
@@ -123,9 +128,10 @@ class listener implements EventSubscriberInterface
 		 */
 		if ($this->tpotm->is_authed())
 		{
-			$event['sql_ary'] = array_merge($event['sql_ary'], array(
-				'user_tooltip'	=> $event['data']['user_tooltip'],
-			));
+			$event['sql_ary'] = array_merge($event['sql_ary'], [
+				'user_tt_tpotm'		=> $event['data']['user_tt_tpotm'],
+				'user_tt_sel_tpotm'	=> $event['data']['user_tt_sel_tpotm'],
+			]);
 		}
 	}
 
@@ -139,9 +145,9 @@ class listener implements EventSubscriberInterface
 		 */
 		if ($this->tpotm->is_authed() && $this->tpotm->is_hall())
 		{
-			$this->template->assign_vars(array(
-				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller', array('name' => $this->user->lang('TPOTM_ROUTE_NAME'))),
-			));
+			$this->template->assign_vars([
+				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller', ['name' => $this->user->lang('TPOTM_ROUTE_NAME')]),
+			]);
 		}
 	}
 
@@ -161,7 +167,7 @@ class listener implements EventSubscriberInterface
 			{
 				$event['location'] = $this->user->lang('VIEWING_TPOTM_HALL');
 
-				$event['location_url'] = $this->helper->route('threedi_tpotm_controller', array('name' => $this->user->lang('TPOTM_ROUTE_NAME')));
+				$event['location_url'] = $this->helper->route('threedi_tpotm_controller', ['name' => $this->user->lang('TPOTM_ROUTE_NAME')]);
 			}
 		}
 	}
@@ -215,7 +221,7 @@ class listener implements EventSubscriberInterface
 			 * Sat as default to be empty string for everyone
 			 * Only the TPOTM gets the badge's filename in it.
 			 */
-			$user_tpotm = array();
+			$user_tpotm = [];
 
 			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
 
@@ -238,7 +244,7 @@ class listener implements EventSubscriberInterface
 		{
 			$user_tpotm = (!empty($event['user_poster_data']['user_tpotm'])) ? $this->tpotm->style_miniprofile_badge($event['user_poster_data']['user_tpotm']) : '';
 
-			$event['post_row'] = array_merge($event['post_row'], array('TPOTM_BADGE' => $user_tpotm));
+			$event['post_row'] = array_merge($event['post_row'], ['TPOTM_BADGE' => $user_tpotm]);
 		}
 	}
 }

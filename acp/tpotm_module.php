@@ -78,6 +78,7 @@ class tpotm_module
 				$config->set('threedi_tpotm_forums', $request->variable('threedi_tpotm_forums', (int) $config['threedi_tpotm_forums']));
 				$config->set('threedi_tpotm_hall', $request->variable('threedi_tpotm_hall', (int) $config['threedi_tpotm_hall']));
 				$config->set('threedi_tpotm_users_page', $request->variable('threedi_tpotm_users_page', (int) $config['threedi_tpotm_users_page']));
+				$config->set('threedi_tpotm_since_epoch', $request->variable('threedi_tpotm_since_epoch', (int) $config['threedi_tpotm_since_epoch']));
 				$config->set('threedi_tpotm_ttl', $request->variable('threedi_tpotm_ttl', (int) $config['threedi_tpotm_ttl']));
 				$config->set('threedi_tpotm_miniavatar', $request->variable('threedi_tpotm_miniavatar', (int) $config['threedi_tpotm_miniavatar']));
 				$config->set('threedi_tpotm_miniprofile', $request->variable('threedi_tpotm_miniprofile', (int) $config['threedi_tpotm_miniprofile']));
@@ -100,6 +101,7 @@ class tpotm_module
 			// Hall of fame
 			'TPOTM_HALL'			=> ($config['threedi_tpotm_hall']) ? true : false,
 			'TPOTM_USERS_PAGE'		=> (int) $config['threedi_tpotm_users_page'],
+			'TPOTM_HALL_EPOCH'		=> ($config['threedi_tpotm_since_epoch']) ? true : false,
 			// General Settings
 			'TPOTM_TTL'				=> (int) $config['threedi_tpotm_ttl'],
 			'TPOTM_MINIAVATAR'		=> ($config['threedi_tpotm_miniavatar']) ? true : false,

@@ -3,9 +3,9 @@
 	<dd>
 		<strong>{{ lang('TPOTM_BADGE_MINIPROFILE') }}</strong>
 		{% if S_IS_RHEA %}
-			<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" title="{{ lang('TPOTM_EXPLAIN') }}" ></i>
+			<i class="icon fa fa-spinner fa-spin fa-fw icon-lg" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
 		{% elseif S_IS_BADGE_IMG %}
-			<img src="{{ postrow.TPOTM_BADGE }}" class="tpotm-miniprofile-badge" title="{{ lang('TPOTM_EXPLAIN') }}" />
+			<img src="{{ postrow.TPOTM_BADGE }}" class="tpotm-miniprofile-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% endif %} />
 		{% else %}
 			{{ lang('TPOTM_BADGE') }}
 		{% endif %}

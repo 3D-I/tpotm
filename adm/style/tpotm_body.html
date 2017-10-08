@@ -79,6 +79,17 @@
 						<input type="number" min="1" max="300" name="threedi_tpotm_users_page" id="threedi_tpotm_users_page" size="6" value="{{ TPOTM_USERS_PAGE }}" />
 					</dd>
 				</dl>
+
+				<div class="tpotm-acp-rules">{{ lang('ACP_TPOTM_HALL_EPOCH_EXPLAIN') }}</div>
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_since_epoch">{{ lang('TPOTM_HALL_EPOCH') }}{{ lang('COLON') }}</label>
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="1"{% if TPOTM_HALL_EPOCH %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="0"{% if not TPOTM_HALL_EPOCH %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
 			</fieldset>
 
 			<fieldset class="tpotm-acp-inner">

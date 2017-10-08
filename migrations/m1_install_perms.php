@@ -22,19 +22,19 @@ class m1_install_perms extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\phpbb\db\migration\data\v31x\v3111');
+		return ['\phpbb\db\migration\data\v31x\v3111'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			/* First set a milestone */
-			array('config.add', array('threedi_tpotm', '2.0.0-rc2')),
+			['config.add', ['threedi_tpotm', '2.0.1-rc']],
 			/* Permissions now */
-			array('permission.add', array('u_allow_tpotm_view')),
-			array('permission.permission_set', array('REGISTERED', 'u_allow_tpotm_view', 'group')),
-			array('permission.add', array('a_tpotm_admin')),
-			array('permission.permission_set', array('ADMINISTRATORS', 'a_tpotm_admin', 'group')),
-		);
+			['permission.add', ['u_allow_tpotm_view']],
+			['permission.permission_set', ['REGISTERED', 'u_allow_tpotm_view', 'group']],
+			['permission.add', ['a_tpotm_admin']],
+			['permission.permission_set', ['ADMINISTRATORS', 'a_tpotm_admin', 'group']],
+		];
 	}
 }
