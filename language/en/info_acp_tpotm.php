@@ -15,10 +15,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'ACP_TPOTM_TITLE'				=> 'Top Poster Of The Month',
 	'ACP_TPOTM_SETTINGS'			=> 'Settings',
 	'ACP_TPOTM_SETTING_SAVED'		=> 'Top Poster Of The Month Settings saved.',
@@ -26,4 +26,4 @@ $lang = array_merge($lang, array(
 	// Error log
 	'TPOTM_LOG_CONFIG_SAVED'		=> '<strong>TPOTM general configuration saved.</strong>',
 	'TPOTM_LOG_BADGE_IMG_INVALID'	=> '<strong>TPOTM - Badge IMG filename wrong or totally missing.</strong>',
-));
+]);
