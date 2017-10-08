@@ -336,6 +336,15 @@ class tpotm
 		list($month_start, $month_end) = $this->month_timegap();
 
 		/**
+		 * Admin wants the cache to be cleared asap
+		 * Check if the file exists first
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			//@unlink($filename)//$this->cache->destroy('_tpotm_total');
+		}
+
+		/**
 		 * Check cached data (cache it is used to keep things in syncro)
 		 * Run the whole stuff only when needed or cache is disabled in ACP
 		 */
@@ -349,7 +358,12 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
-			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			/* Only store data if cache is active */
+			//if (($this->config_time_cache_min()) >= 1)
+			//{
+				$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
+			//}
+			//$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
 		}
 		return (int) $total_month;
 	}
@@ -375,6 +389,15 @@ class tpotm
 	public function perform_cache_on_main_db_query()
 	{
 		list($month_start, $month_end) = $this->month_timegap();
+
+		/**
+		 * Admin wants the cache to be cleared asap
+		 * Check if the file exists first
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			//@unlink($filename)//$this->cache->destroy('_tpotm');
+		}
 
 		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -405,7 +428,12 @@ class tpotm
 				$this->perform_user_reset((int) $row['user_id']);
 			}
 
-			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			/* Only store data if cache is active */
+			//if (($this->config_time_cache_min()) >= 1)
+			//{
+				$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
+			//}
+			//$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
 		return $row;
 	}
@@ -419,6 +447,15 @@ class tpotm
 	public function perform_cache_on_tpotm_tot_posts($user_id)
 	{
 		list($month_start, $month_end) = $this->month_timegap();
+
+		/**
+		 * Admin wants the cache to be cleared asap
+		 * Check if the file exists first
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			//@unlink($filename)//$this->cache->destroy('_tpotm_tot_posts');
+		}
 
 		/**
 		 * Check cached data
@@ -440,7 +477,12 @@ class tpotm
 				$this->perform_user_db_clean();
 			}
 
-			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			/* Only store data if cache is active */
+			//if (($this->config_time_cache_min()) >= 1)
+			//{
+				$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
+			//}
+			//$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 		return (int) $tpotm_tot_posts;
 	}
