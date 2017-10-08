@@ -29,18 +29,19 @@ class m3_install_configs extends \phpbb\db\migration\migration
 
 	public function update_data()
 	{
-		return array(
-			array('config.add', array('threedi_tpotm_miniavatar', 1)),
-			array('config.add', array('threedi_tpotm_miniprofile', 1)),
-			array('config.add', array('threedi_tpotm_hall', 0)),
-			array('config.add', array('threedi_tpotm_adm_mods', 1)),
-			array('config.add', array('threedi_tpotm_founders', 0)),
-			array('config.add', array('threedi_tpotm_forums', 0)),
-			array('config.add', array('threedi_tpotm_index', 1)),
-			array('config.add', array('threedi_tpotm_ttl', 30)),
-			array('config.add', array('threedi_tpotm_badge_exists', 1)),
-			array('config.add', array('threedi_tpotm_users_page', 12)),
-			array('config.add', array('threedi_tpotm_utc', 'd m Y')),
-		);
+		return [
+			['config.add', ['threedi_tpotm_miniavatar', 1]],
+			['config.add', ['threedi_tpotm_miniprofile', 1]],
+			['config.add', ['threedi_tpotm_hall', 0]],
+			['config.add', ['threedi_tpotm_adm_mods', 1]],
+			['config.add', ['threedi_tpotm_founders', 0]],
+			['config.add', ['threedi_tpotm_forums', 0]],
+			['config.add', ['threedi_tpotm_index', 1]],
+			['config.add', ['threedi_tpotm_ttl', 5]],
+			['config.add', ['threedi_tpotm_badge_exists', 1]],
+			['config.add', ['threedi_tpotm_users_page', 12]],
+			['config.add', ['threedi_tpotm_utc', 'd m Y']],
+			['config.add', ['threedi_tpotm_since_epoch', 0]],
+		];
 	}
 }

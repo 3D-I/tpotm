@@ -94,8 +94,14 @@ class main
 			$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message, $name));
 
 			/* Starting point in time */
-			//$board_start = (int) $this->config['board_startdate'];
-			$board_start = (int) '0'; // Epoch time 1970-01-01 00:00
+			if (!$this->config['threedi_tpotm_since_epoch'])
+			{
+				$board_start = (int) $this->config['board_startdate'];
+			}
+			else
+			{
+				$board_start = (int) '0'; // Epoch time 1970-01-01 00:00
+			}
 
 			/**
 			 * if the current month is 01 (January) date() will decrement the year by one

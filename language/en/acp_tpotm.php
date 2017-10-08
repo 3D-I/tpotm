@@ -38,6 +38,8 @@ $lang = array_merge($lang, array(
 	'TPOTM_HALL_EXPLAIN'					=>	'Enable the page',
 	'TPOTM_USERS_PAGE'						=>	'Top posters',
 	'TPOTM_USERS_PAGE_EXPLAIN'				=>	'How many users to show per page',
+	'ACP_TPOTM_HALL_EPOCH_EXPLAIN'			=>	'Using <em>Epoch</em> the fetch starts since <em>Epoch time 1970-01-01 00:00</em> instead of the start date of the Board. To be used if you did reset at some point that date and some users are being excluded from the <em>Top posters ever</em> list, which is based also on the post time.',
+	'TPOTM_HALL_EPOCH'						=>	'Fetch users since <em>Epoch</em>',
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Various settings',
 	'TPOTM_TTL'								=>	'Time to live',

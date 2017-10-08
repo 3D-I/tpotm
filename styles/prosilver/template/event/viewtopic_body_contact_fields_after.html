@@ -7,7 +7,7 @@
 		{% elseif S_IS_BADGE_IMG %}
 			<img src="{{ postrow.TPOTM_BADGE }}" class="tpotm-miniprofile-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% endif %} />
 		{% else %}
-			{% if S_U_TOOLTIP_SEL %}{{ lang('TPOTM_BADGE') }}{% endif %}
+			{{ lang('TPOTM_BADGE') }}
 		{% endif %}
 	</dd>
 
