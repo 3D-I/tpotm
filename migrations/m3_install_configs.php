@@ -22,9 +22,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array(
-			'\threedi\tpotm\migrations\m2_install_acp_module',
-		);
+		return ['\threedi\tpotm\migrations\m2_install_acp_module'];
 	}
 
 	public function update_data()
