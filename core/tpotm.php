@@ -337,6 +337,36 @@ class tpotm
 	}
 
 	/**
+	 * Returns whether to include Admin and mods in the query and provides SQL string
+	 *
+	 * @return string
+	 */
+	public function wishes_admin_mods()
+	{
+		return ($this->config['threedi_tpotm_adm_mods']) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . ' ';
+	}
+
+	/**
+	 * Returns the SQL statement used in multiple zones to exclude banned users.
+	 *
+	 * @return string
+	 */
+	public function exclude_banneds()
+	{
+			return 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
+	}
+
+	/**
+	 * Returns the SQL main statement used in multiple zones.
+	 *
+	 * @return string
+	 */
+	public function tpotm_sql($and_admmods, $and_bans, $and_founder, $tpotm_start, $tpotm__end)
+	{
+		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p WHERE u.user_id <> ' . ANONYMOUS . ' AND u.user_id = p.poster_id ' . $and_admmods . ' ' . $and_bans . ' ' . $and_founder . ' AND p.post_visibility = ' . ITEM_APPROVED . ' AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . ' GROUP BY u.user_id ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+	}
+
+	/**
 	 * Gets the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
@@ -400,19 +430,11 @@ class tpotm
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
 			/* If the Admin so wishes */
+			$and_admmods = $this->wishes_admin_mods();
+			$and_bans = $this->exclude_banneds();
 			$and_founder = $this->wishes_founder();
-
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-				WHERE u.user_id <> ' . ANONYMOUS . '
-					AND u.user_id = p.poster_id
-					AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . '
-					AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . '
-					' . $and_founder . '
-					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . (int) $month_start . ' AND ' . (int) $month_end . '
-				GROUP BY u.user_id
-				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+			/* The main thang */
+			$sql = $this->tpotm_sql($and_admmods, $and_bans, $and_founder, (int) $month_start, (int) $month_end);
 			$result = $this->db->sql_query_limit($sql, 1);
 			$row = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
