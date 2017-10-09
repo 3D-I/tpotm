@@ -15,10 +15,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = []);
 }
 
-$lang = array_merge($lang, array(
-	'ACL_U_ALLOW_TPOTM_VIEW'	=> 'Allow to use the TPOTM extension',
-	'ACL_A_TPOTM_ADMIN'			=> 'Allow administering the TPOTM extension',
-));
+$lang = array_merge($lang, [
+	'ACL_U_ALLOW_TPOTM_VIEW'	=> 'Can use the TPOTM extension',
+	'ACL_A_TPOTM_ADMIN'			=> 'Can administer the TPOTM extension',
+]);

@@ -15,10 +15,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'TPOTM_GENERAL'							=>	'General Settings',
 	// Legend Tpl locations
 	'ACP_TPOTM_TEMPLATE_LOCATIONS'			=>	'Template locations',
@@ -55,4 +55,4 @@ $lang = array_merge($lang, array(
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors explaination',
 	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
-));
+]);

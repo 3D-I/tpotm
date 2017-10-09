@@ -17,16 +17,16 @@ class tpotm_info
 {
 	public function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\threedi\tpotm\acp\tpotm_module',
 			'title'		=> 'ACP_TPOTM_TITLE',
-			'modes'		=> array(
-				'settings'	=> array(
+			'modes'		=> [
+				'settings'	=> [
 					'title'	=> 'ACP_TPOTM_SETTINGS',
 					'auth'	=> 'ext_threedi/tpotm && acl_a_tpotm_admin',
-					'cat'	=> array('ACP_TPOTM_TITLE')
-				),
-			),
-		);
+					'cat'	=> ['ACP_TPOTM_TITLE']
+				],
+			],
+		];
 	}
 }

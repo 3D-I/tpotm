@@ -175,12 +175,12 @@ class main
 			foreach ($rows as $row)
 			{
 				/* Map arguments for phpbb_get_avatar() */
-				$row_avatar_hall = array(
+				$row_avatar_hall = [
 					'avatar'		 => $row['user_avatar'],
 					'avatar_type'	 => $row['user_avatar_type'],
 					'avatar_height'	 => $row['user_avatar_height'],
 					'avatar_width'	 => $row['user_avatar_width'],
-				);
+				];
 
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
@@ -197,12 +197,12 @@ class main
 					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
 				}
 
-				$this->template->assign_block_vars('tpotm_ever', array(
+				$this->template->assign_block_vars('tpotm_ever', [
 					'USER_AVATAR'	=> $user_avatar,
 					'USERNAME'		=> $username,
 					'TOTAL_POSTS'	=> (int) $row['total_posts'],
 					'POST_TIME'		=> $this->user->format_date((int) $row['MAX(p.post_time)'])
-				));
+				]);
 			}
 
 			/* Date range (tooltip) */
@@ -219,14 +219,14 @@ class main
 				$data_end = $this->user->format_date((int) $end_last_month);
 			}
 
-			$template_vars = array(
+			$template_vars = [
 				'L_TPOTM_EXPLAIN_HALL'	=> $this->user->lang('TPOTM_EXPLAIN', $data_begin, $data_end),
 				'COUNT'					=> $this->user->lang('TPOTM_HALL_COUNT', (int) $total_users),
-			);
+			];
 
 			$this->template->assign_vars($template_vars);
 
-			$url = $this->helper->route('threedi_tpotm_controller', array('name' => $name));
+			$url = $this->helper->route('threedi_tpotm_controller', ['name' => $name]);
 
 			$this->pagination->generate_template_pagination($url, 'pagination', 'start', $total_users, $limit, $start);
 

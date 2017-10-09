@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -33,7 +33,7 @@ if (empty($lang) || !is_array($lang))
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'TPOTM_CAT'						=> 'Top Poster of the Month',
 	'TPOTM_EVER_CAT'				=> 'Top Posters ever',
 	'TPOTM_NOW'						=> 'At the present time is ',
@@ -47,16 +47,16 @@ $lang = array_merge($lang, array(
 	'TPOTM_DATE'					=> 'Year and Month',
 	'TPOTM_LAST_POST_IN_MONTH'		=> 'Last on',
 
-	'TPOTM_CACHE'	=> array(
+	'TPOTM_CACHE'	=> [
 		0	=> ' <i>[updates at every page load]</i>',
 		1	=> ' <i>[updates every <strong>%d</strong> minute]</i>',
 		2	=> ' <i>[updates every <strong>%d</strong> minutes]</i>',
-	),
+	],
 
-	'TPOTM_POST'	=> array(
+	'TPOTM_POST'	=> [
 		1	=> ' with a total of <strong>%d</strong> post',
 		2	=> ' with a total of <strong>%d</strong> posts',
-	),
+	],
 
 	// Translators please do not change the following line, no need to translate it!
 	'TPOTM_CREDIT_LINE'		=>	' | <a href="https://github.com/3D-I/tpotm">Top Poster Of The Month</a> &copy; 2005, 2017 - 3Di',
@@ -69,17 +69,17 @@ $lang = array_merge($lang, array(
 	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_HALL_NO_EXPLAIN'			=> 'Since Epoch till the very end of the previous month',
 
-	'HALL_OF_FAME'	=> array(
+	'HALL_OF_FAME'	=> [
 		0	=> 'Hall of fame',
 		1	=> 'Hall of fame &bull; page %d',
 		2	=> 'Hall of fame &bull; page %d',
-	),
+	],
 
-	'TPOTM_HALL_COUNT'	=> array(
+	'TPOTM_HALL_COUNT'	=> [
 		1	=> ' Found a total of <strong>%d</strong> top poster',
 		2	=> ' Found a total of <strong>%d</strong> top posters',
-	),
+	],
 
 	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
 	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
-));
+]);

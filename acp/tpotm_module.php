@@ -11,7 +11,7 @@
 namespace threedi\tpotm\acp;
 
 /**
- * Default Avatar Extended ACP module.
+ * Top Poster Of The Month ACP module.
  */
 class tpotm_module
 {
@@ -26,8 +26,10 @@ class tpotm_module
 		$tpotm = $phpbb_container->get('threedi.tpotm.tpotm');
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
+
 		$this->tpl_name = 'tpotm_body';
 		$this->page_title = $user->lang('ACP_TPOTM_TITLE');
+
 		add_form_key('threedi/tpotm');
 
 		/**
@@ -37,7 +39,7 @@ class tpotm_module
 		$tpotm->check_point_badge_img();
 
 		/**
-		 * If Img Badge filename wrong then stop the party and go dormant.
+		 * If the Img Badge's filename is wrong then stop the party and go dormant.
 		 */
 		if (!$tpotm->style_badge_is_true())
 		{
@@ -48,7 +50,7 @@ class tpotm_module
 		}
 
 		/* Do this now and forget */
-		$errors = array();
+		$errors = [];
 
 		if ($request->is_set_post('submit'))
 		{
@@ -91,7 +93,7 @@ class tpotm_module
 			}
 		}
 
-		$template->assign_vars(array(
+		$template->assign_vars([
 			'S_ERRORS'				=> ($errors) ? true : false,
 			'ERRORS_MSG'			=> ($errors) ? implode('<br /><br />', $errors) : '',
 			'U_ACTION'				=> $this->u_action,
@@ -109,6 +111,6 @@ class tpotm_module
 			// Founders, admin and mods
 			'TPOTM_ADM_MODS'		=> ($config['threedi_tpotm_adm_mods']) ? true : false,
 			'TPOTM_FOUNDERS'		=> ($config['threedi_tpotm_founders']) ? true : false,
-		));
+		]);
 	}
 }

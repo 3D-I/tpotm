@@ -192,7 +192,7 @@ class tpotm
 	{
 		if ((bool) $this->config['threedi_tpotm_adm_mods'])
 		{
-			return array();
+			return [];
 		}
 		else
 		{
@@ -201,10 +201,10 @@ class tpotm
 			 * Grabs all admins and mods, it is a catch all.
 			 */
 			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
-			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : array();
+			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : [];
 
 			$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
-			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : array();
+			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : [];
 
 			/* Groups the above results */
 			return array_unique(array_merge($admin_ary, $mod_ary));
@@ -223,7 +223,7 @@ class tpotm
 			include($this->root_path . 'includes/functions_user.' . $this->php_ext);
 		}
 
-		return phpbb_get_banned_user_ids(array());
+		return phpbb_get_banned_user_ids([]);
 	}
 
 	/**
@@ -233,9 +233,9 @@ class tpotm
 	 */
 	public function perform_user_db_clean()
 	{
-		$tpotm_sql1 = array(
+		$tpotm_sql1 = [
 			'user_tpotm'		=> ''
-		);
+		];
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
 			WHERE user_id <> ' . ANONYMOUS;
@@ -250,9 +250,9 @@ class tpotm
 	 */
 	public function perform_user_db_update($tpotm_user_id)
 	{
-		$tpotm_sql2 = array(
+		$tpotm_sql2 = [
 			'user_tpotm'		=> 'tpotm_badge.png'
-		);
+		];
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
 			WHERE user_id = ' . (int) $tpotm_user_id;
@@ -278,7 +278,7 @@ class tpotm
 	 */
 	public function template_switches_over_all()
 	{
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
 			'S_IS_RHEA'				=> $this->is_rhea(),
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
@@ -290,7 +290,7 @@ class tpotm
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
 
-		));
+		]);
 	}
 
 	/**
@@ -327,6 +327,16 @@ class tpotm
 	}
 
 	/**
+	 * Returns whether to include Founders in the query and provides SQL string
+	 *
+	 * @return string
+	 */
+	public function wishes_founder()
+	{
+		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
+	}
+
+	/**
 	 * Gets the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
@@ -334,6 +344,15 @@ class tpotm
 	public function perform_cache_on_this_month_total_posts()
 	{
 		list($month_start, $month_end) = $this->month_timegap();
+
+		/**
+		 * Admin wants the cache to be cleared asap
+		 * Show changes immediately after having set it to 0
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm_total');
+		}
 
 		/**
 		 * Check cached data (cache it is used to keep things in syncro)
@@ -355,16 +374,6 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include Founders in the query and provides SQL string
-	 *
-	 * @return string
-	 */
-	public function wishes_founder()
-	{
-		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
-	}
-
-	/**
 	 * There can be only ONE, the TPOTM.
 	 * If same tot posts and same exact post time then the post ID rules
 	 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
@@ -375,6 +384,15 @@ class tpotm
 	public function perform_cache_on_main_db_query()
 	{
 		list($month_start, $month_end) = $this->month_timegap();
+
+		/**
+		 * Admin wants the cache to be cleared asap
+		 * Check if the file exists first
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm');
+		}
 
 		/**
 		 * Run the whole stuff only when needed or cache is disabled in ACP
@@ -419,6 +437,15 @@ class tpotm
 	public function perform_cache_on_tpotm_tot_posts($user_id)
 	{
 		list($month_start, $month_end) = $this->month_timegap();
+
+		/**
+		 * Admin wants the cache to be cleared asap
+		 * Check if the file exists first
+		 */
+		if ((int) $this->config_time_cache_min() < 1)
+		{
+			$this->cache->destroy('_tpotm_tot_posts');
+		}
 
 		/**
 		 * Check cached data
@@ -491,13 +518,13 @@ class tpotm
 			$time = $this->user->lang('TPOTM_EXPLAIN', $this->get_month_data(00, 00, 00, true, true), $this->get_month_data(23, 59, 59, false, true));
 		}
 
-		$template_vars = array(
+		$template_vars = [
 			'TPOTM_NAME'		=> $tpotm_name,
 			'L_TPOTM_POST'		=> $tpotm_post,
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
 			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $time,
-		);
+		];
 
 		/* Prevents a potential Division by Zero below */
 		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
@@ -510,23 +537,23 @@ class tpotm
 		$degrees = (360 * $percent) / 100;
 		$start = 90;
 
-		$template_vars += array(
+		$template_vars += [
 			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
 			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
-		);
+		];
 
 		/**
 		 * Don't run this code if the admin so wishes or there is not a TPOTM yet
 		 */
-		if ($tpotm_tot_posts >= 1)
+		if ((int) $tpotm_tot_posts >= 1)
 		{
 			/* Map arguments for  phpbb_get_avatar() */
-			$row_avatar = array(
+			$row_avatar = [
 				'avatar'		 => $row['user_avatar'],
 				'avatar_type'	 => $row['user_avatar_type'],
 				'avatar_height'	 => $row['user_avatar_height'],
 				'avatar_width'	 => $row['user_avatar_width'],
-			);
+			];
 
 			/* DAE (Default Avatar Extended) extension compatibility */
 			if ($this->is_dae())
@@ -542,9 +569,9 @@ class tpotm
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
 			}
 
-			$template_vars += array(
+			$template_vars += [
 				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
-			);
+			];
 
 			/**
 			 * Avatar as IMG or FA-icon depends on the phpBB version
@@ -564,10 +591,10 @@ class tpotm
 					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 				}
 
-				$template_vars += array(
+				$template_vars += [
 					'U_TPOTM_AVATAR_URL'	=> $tpotm_av_url,
 					'TPOTM_AVATAR'			=> $tpotm_av_3132,
-				);
+				];
 			}
 		}
 		/* You know.. template stuff */
