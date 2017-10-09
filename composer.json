@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": " Have a Top Poster of the Month and a Hall of Fame to show on your phpBB. The last poster with the max number of posts made into the current month's lapse of time will win.",
 	"homepage": "https://github.com/3D-I/tpotm",
-	"version": "2.0.1-RC",
+	"version": "2.0.2-RC",
 	"license": "GPL-2.0",
 	"authors": [
 		{

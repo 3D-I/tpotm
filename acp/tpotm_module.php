@@ -86,6 +86,7 @@ class tpotm_module
 				$config->set('threedi_tpotm_miniprofile', $request->variable('threedi_tpotm_miniprofile', (int) $config['threedi_tpotm_miniprofile']));
 				$config->set('threedi_tpotm_adm_mods', $request->variable('threedi_tpotm_adm_mods', (int) $config['threedi_tpotm_adm_mods']));
 				$config->set('threedi_tpotm_founders', $request->variable('threedi_tpotm_founders', (int) $config['threedi_tpotm_founders']));
+				$config->set('threedi_tpotm_banneds', $request->variable('threedi_tpotm_banneds', (int) $config['threedi_tpotm_banneds']));
 
 				/* Log the action and return */
 				$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'TPOTM_LOG_CONFIG_SAVED');
@@ -111,6 +112,7 @@ class tpotm_module
 			// Founders, admin and mods
 			'TPOTM_ADM_MODS'		=> ($config['threedi_tpotm_adm_mods']) ? true : false,
 			'TPOTM_FOUNDERS'		=> ($config['threedi_tpotm_founders']) ? true : false,
+			'TPOTM_BANNEDS'			=> ($config['threedi_tpotm_banneds']) ? true : false,
 		]);
 	}
 }

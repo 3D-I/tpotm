@@ -142,26 +142,6 @@ class tpotm
 	}
 
 	/**
-	 * Badge IMG check-point
-	 *
-	 * @return void
-	 */
-	public function check_point_badge_img()
-	{
-		/* If Img badge filename mistmach error, state is false and return */
-		if (!$this->style_badge_exists())
-		{
-			$this->config->set('threedi_tpotm_badge_exists', 0);
-			return;
-		}
-		else
-		{
-			/* Check passed, let's set it back to true. */
-			$this->config->set('threedi_tpotm_badge_exists', 1);
-		}
-	}
-
-	/**
 	 * Returns the style related URL to the miniprofile badge image file
 	 *
 	 * @param string	$user_tpotm		the miniprofile image filename with extension
@@ -183,47 +163,23 @@ class tpotm
 	}
 
 	/**
-	 * Don't run the code if the admin so wishes.
-	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
+	 * Badge IMG check-point for ACP
 	 *
-	 * @return array	empty array otherwise
+	 * @return void
 	 */
-	public function auth_admin_mody_ary()
+	public function check_point_badge_img()
 	{
-		if ((bool) $this->config['threedi_tpotm_adm_mods'])
+		/* If Img badge filename mistmach error, state is false and return */
+		if (!$this->style_badge_exists())
 		{
-			return [];
+			$this->config->set('threedi_tpotm_badge_exists', 0);
+			return;
 		}
 		else
 		{
-			/**
-			 * Inspiration taken from Top Five ext
-			 * Grabs all admins and mods, it is a catch all.
-			 */
-			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
-			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : [];
-
-			$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
-			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : [];
-
-			/* Groups the above results */
-			return array_unique(array_merge($admin_ary, $mod_ary));
+			/* Check passed, let's set it back to true. */
+			$this->config->set('threedi_tpotm_badge_exists', 1);
 		}
-	}
-
-	/**
-	 * Gets the complete list of banned users' ids.
-	 *
-	 * @return array	Array of banned users' ids if any, empty array otherwise
-	 */
-	public function banned_users_ids()
-	{
-		if (!function_exists('phpbb_get_banned_user_ids'))
-		{
-			include($this->root_path . 'includes/functions_user.' . $this->php_ext);
-		}
-
-		return phpbb_get_banned_user_ids([]);
 	}
 
 	/**
@@ -231,7 +187,7 @@ class tpotm
 	 *
 	 * @return void
 	 */
-	public function perform_user_db_clean()
+	protected function perform_user_db_clean()
 	{
 		$tpotm_sql1 = [
 			'user_tpotm'		=> ''
@@ -248,7 +204,7 @@ class tpotm
 	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void
 	 */
-	public function perform_user_db_update($tpotm_user_id)
+	protected function perform_user_db_update($tpotm_user_id)
 	{
 		$tpotm_sql2 = [
 			'user_tpotm'		=> 'tpotm_badge.png'
@@ -265,7 +221,7 @@ class tpotm
 	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void
 	 */
-	public function perform_user_reset($tpotm_user_id)
+	protected function perform_user_reset($tpotm_user_id)
 	{
 		$this->perform_user_db_clean();
 		$this->perform_user_db_update($tpotm_user_id);
@@ -298,7 +254,7 @@ class tpotm
 	 *
 	 * @return string		user formatted data range (Thx Steve)
 	 */
-	public function get_month_data($hr, $min, $sec, $start = true, $format = false)
+	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
 		list($year, $month, $day) = explode('-', gmdate("y-m-d", time()));
 		$data = gmmktime($hr, $min, $sec, $month, $start ? 1 : date("t"), $year);
@@ -311,7 +267,7 @@ class tpotm
 	 *
 	 * @return array	($month_start, $month_end) Unix Timestamp
 	 */
-	public function month_timegap()
+	protected function month_timegap()
 	{
 			$now = time();
 			$date_today = gmdate("Y-m-d", $now);
@@ -337,6 +293,35 @@ class tpotm
 	}
 
 	/**
+	 * Don't run the code if the admin so wishes.
+	 * Returns an array of users with admin/mod auths (thx Steve for the idea)
+	 *
+	 * @return array	empty array otherwise
+	 */
+	public function auth_admin_mody_ary()
+	{
+		if ((bool) $this->config['threedi_tpotm_adm_mods'])
+		{
+			return [];
+		}
+		else
+		{
+			/**
+			 * Inspiration taken from Top Five ext
+			 * Grabs all admins and mods, it is a catch all.
+			 */
+			$admin_ary = $this->auth->acl_get_list(false, 'a_', false);
+			$admin_ary = (!empty($admin_ary[0]['a_'])) ? $admin_ary[0]['a_'] : [];
+
+			$mod_ary = $this->auth->acl_get_list(false, 'm_', false);
+			$mod_ary = (!empty($mod_ary[0]['m_'])) ? $mod_ary[0]['m_'] : [];
+
+			/* Groups the above results */
+			return array_unique(array_merge($admin_ary, $mod_ary));
+		}
+	}
+
+	/**
 	 * Returns whether to include Admin and mods in the query and provides SQL statement
 	 *
 	 * @return string
@@ -347,36 +332,72 @@ class tpotm
 	}
 
 	/**
-	 * Returns the SQL statement used in multiple zones to exclude banned users.
+	 * Gets the complete list of banned users' ids.
+	 *
+	 * @return array	Array of banned users' ids if any, empty array otherwise
+	 */
+	public function banned_users_ids()
+	{
+		$ban_ids = [];
+
+		$sql = 'SELECT ban_userid
+			FROM ' . BANLIST_TABLE;
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$ban_ids[] = (int) $row['ban_userid'];
+		}
+		$this->db->sql_freeresult($result);
+
+		/* Returns an empty array if no bans */
+		if (!count($ban_ids))
+		{
+			/* last parameter of sql_in_set has been set to true */
+			$ban_ids = [];
+		}
+		return $ban_ids;
+	}
+
+	/**
+	 * Returns whether to include Admin and mods in the query and provides SQL statement
 	 *
 	 * @return string
 	 */
-	public function exclude_banneds()
+	public function wishes_banneds()
 	{
-		return 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
+		return ($this->config['threedi_tpotm_banneds']) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
 	}
 
 	/**
 	 * Returns the SQL main SELECT statement used in various places.
 	 *
-	 * @param var	$and_admmods	the DBAL AND statement to use
-	 * @param var	$and_bans		the DBAL AND statement to use
-	 * @param var	$and_founder	the DBAL AND statement to use
+	 * @param var	$and_admmods	the DBal AND statement to use
+	 * @param var	$and_bans		the DBal AND statement to use
+	 * @param var	$and_founder	the DBal AND statement to use
 	 * @param int	$tpotm_start	UNIX timestamp of a starting point
 	 * @param int	$tpotm__end		UNIX timestamp of an ending point
-	 * @return	string	DBAL SELECT statement
+	 * @return	string	DBal SELECT statement
 	 */
 	public function tpotm_sql($and_admmods, $and_bans, $and_founder, $tpotm_start, $tpotm__end)
 	{
-		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p WHERE u.user_id <> ' . ANONYMOUS . ' AND u.user_id = p.poster_id ' . $and_admmods . ' ' . $and_bans . ' ' . $and_founder . ' AND p.post_visibility = ' . ITEM_APPROVED . ' AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . ' GROUP BY u.user_id ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+			WHERE u.user_id <> ' . ANONYMOUS . '
+				AND u.user_id = p.poster_id
+				' . $and_admmods . '
+				' . $and_bans . '
+				' . $and_founder . '
+				AND p.post_visibility = ' . ITEM_APPROVED . '
+				AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
+			GROUP BY u.user_id
+			ORDER BY total_posts DESC, MAX(p.post_time) DESC';
 	}
-
 	/**
 	 * Gets the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
 	 */
-	public function perform_cache_on_this_month_total_posts()
+	protected function perform_cache_on_this_month_total_posts()
 	{
 		list($month_start, $month_end) = $this->month_timegap();
 
@@ -416,7 +437,7 @@ class tpotm
 	 *
 	 * @return array $row		cached or not results
 	*/
-	public function perform_cache_on_main_db_query()
+	protected function perform_cache_on_main_db_query()
 	{
 		list($month_start, $month_end) = $this->month_timegap();
 
@@ -435,7 +456,7 @@ class tpotm
 		{
 			/* If the Admin so wishes */
 			$and_admmods = $this->wishes_admin_mods();
-			$and_bans = $this->exclude_banneds();
+			$and_bans = $this->wishes_banneds();
 			$and_founder = $this->wishes_founder();
 
 			/* The main thang */
@@ -461,7 +482,7 @@ class tpotm
 	 * @param int	$user_id		the current TPOTM user_id
 	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
 	*/
-	public function perform_cache_on_tpotm_tot_posts($user_id)
+	protected function perform_cache_on_tpotm_tot_posts($user_id)
 	{
 		list($month_start, $month_end) = $this->month_timegap();
 
@@ -487,12 +508,6 @@ class tpotm
 			$tpotm_tot_posts = (int) $this->db->sql_fetchfield('total_posts');
 			$this->db->sql_freeresult($result);
 
-			/* If no posts for the current elapsed time there is not a TPOTM */
-			if ($tpotm_tot_posts < 1)
-			{
-				$this->perform_user_db_clean();
-			}
-
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 		return (int) $tpotm_tot_posts;
@@ -506,7 +521,7 @@ class tpotm
 	public function show_the_winner()
 	{
 		/**
-		 * If Img Badge filename error state it is false and go on.
+		 * If the Img Badge filename is wrong, state it is false and go ahead.
 		 */
 		if (!$this->style_badge_exists())
 		{

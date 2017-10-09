@@ -124,7 +124,7 @@ class main
 
 			/* If the Admin so wishes */
 			$and_admmods = $this->tpotm->wishes_admin_mods();
-			$and_bans = $this->tpotm->exclude_banneds();
+			$and_bans = $this->tpotm->wishes_banneds();
 			$and_founder = $this->tpotm->wishes_founder();
 
 			/*
