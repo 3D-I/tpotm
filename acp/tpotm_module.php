@@ -26,8 +26,10 @@ class tpotm_module
 		$tpotm = $phpbb_container->get('threedi.tpotm.tpotm');
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
+
 		$this->tpl_name = 'tpotm_body';
 		$this->page_title = $user->lang('ACP_TPOTM_TITLE');
+
 		add_form_key('threedi/tpotm');
 
 		/**
@@ -37,7 +39,7 @@ class tpotm_module
 		$tpotm->check_point_badge_img();
 
 		/**
-		 * If Img Badge filename wrong then stop the party and go dormant.
+		 * If the Img Badge's filename is wrong then stop the party and go dormant.
 		 */
 		if (!$tpotm->style_badge_is_true())
 		{

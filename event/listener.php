@@ -97,19 +97,20 @@ class listener implements EventSubscriberInterface
 		 */
 		if ($this->tpotm->is_authed())
 		{
-			/* Include specified language only in UCP */
+			/* Includes specified language only in UCP */
 			$this->user->add_lang_ext('threedi/tpotm', 'ucp_tpotm');
 
 			/* Collects the user decision */
 			$user_tooltip = $this->request->variable('user_tt_tpotm', (bool) $this->user->data['user_tt_tpotm']);
 			$user_tooltip_sel = $this->request->variable('user_tt_sel_tpotm', (bool) $this->user->data['user_tt_sel_tpotm']);
 
-			/* Merges that decision in the already existing array */
+			/* Merges the above decision into the already existing array */
 			$event['data'] = array_merge($event['data'], [
 				'user_tt_tpotm'		=> $user_tooltip,
 				'user_tt_sel_tpotm'	=> $user_tooltip_sel,
 			]);
 
+			/* Send to template */
 			$this->template->assign_vars([
 				'TPOTM_UCP_BADGE'		=> $this->tpotm->style_miniprofile_badge('tpotm_badge.png'),
 				'S_USER_TOOLTIP'		=> $user_tooltip,

@@ -327,6 +327,16 @@ class tpotm
 	}
 
 	/**
+	 * Returns whether to include Founders in the query and provides SQL string
+	 *
+	 * @return string
+	 */
+	public function wishes_founder()
+	{
+		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
+	}
+
+	/**
 	 * Gets the total posts count for the current month till now
 	 *
 	 * @return int	$total_month
@@ -337,7 +347,7 @@ class tpotm
 
 		/**
 		 * Admin wants the cache to be cleared asap
-		 * Check if the file exists first
+		 * Show changes immediately after having set it to 0
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
@@ -358,23 +368,9 @@ class tpotm
 			$total_month = (int) $this->db->sql_fetchfield('post_count');
 			$this->db->sql_freeresult($result);
 
-			/* Only store data if cache is active */
-			if ($this->config_time_cache_min() >= 1)
-			{
-				$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
-			}
+			$this->cache->put('_tpotm_total', (int) $total_month, (int) $this->config_time_cache());
 		}
 		return (int) $total_month;
-	}
-
-	/**
-	 * Returns whether to include Founders in the query and provides SQL string
-	 *
-	 * @return string
-	 */
-	public function wishes_founder()
-	{
-		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
 
 	/**
@@ -427,11 +423,7 @@ class tpotm
 				$this->perform_user_reset((int) $row['user_id']);
 			}
 
-			/* Only store data if cache is active */
-			if ($this->config_time_cache_min() >= 1)
-			{
-				$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
-			}
+			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
 		return $row;
 	}
@@ -475,11 +467,7 @@ class tpotm
 				$this->perform_user_db_clean();
 			}
 
-			/* Only store data if cache is active */
-			if ($this->config_time_cache_min() >= 1)
-			{
-				$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
-			}
+			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
 		return (int) $tpotm_tot_posts;
 	}
@@ -557,7 +545,7 @@ class tpotm
 		/**
 		 * Don't run this code if the admin so wishes or there is not a TPOTM yet
 		 */
-		if ($tpotm_tot_posts >= 1)
+		if ((int) $tpotm_tot_posts >= 1)
 		{
 			/* Map arguments for  phpbb_get_avatar() */
 			$row_avatar = [
