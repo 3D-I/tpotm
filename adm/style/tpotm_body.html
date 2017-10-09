@@ -146,6 +146,16 @@
 						<input type="radio" class="radio" name="threedi_tpotm_founders" value="0"{% if not TPOTM_FOUNDERS %} checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
+
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_banneds">{{ lang('TPOTM_BANNEDS') }}{{ lang('COLON') }}</label><br />{{ lang('TPOTM_BANNEDS_EXPLAIN') }}
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="1"{% if TPOTM_BANNEDS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="0"{% if not TPOTM_BANNEDS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
 			</fieldset>
 		</fieldset>
 	</fieldset>

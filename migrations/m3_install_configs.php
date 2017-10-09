@@ -17,7 +17,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 		/**
 		 * If does exists go ahead
 		 */
-		return !phpbb_version_compare($this->config['threedi_tpotm'], '2.0.1-rc', '>=');
+		return !phpbb_version_compare($this->config['threedi_tpotm'], '2.0.2-rc', '>=');
 	}
 
 	static public function depends_on()
@@ -33,6 +33,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 			['config.add', ['threedi_tpotm_hall', 0]],
 			['config.add', ['threedi_tpotm_adm_mods', 1]],
 			['config.add', ['threedi_tpotm_founders', 0]],
+			['config.add', ['threedi_tpotm_banneds', 0]],
 			['config.add', ['threedi_tpotm_forums', 0]],
 			['config.add', ['threedi_tpotm_index', 1]],
 			['config.add', ['threedi_tpotm_ttl', 5]],
