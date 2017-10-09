@@ -368,7 +368,17 @@ class tpotm
 	 */
 	public function tpotm_sql($and_admmods, $and_bans, $and_founder, $tpotm_start, $tpotm__end)
 	{
-		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p WHERE u.user_id <> ' . ANONYMOUS . ' AND u.user_id = p.poster_id ' . $and_admmods . ' ' . $and_bans . ' ' . $and_founder . ' AND p.post_visibility = ' . ITEM_APPROVED . ' AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . ' GROUP BY u.user_id ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+		FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+		WHERE u.user_id <> ' . ANONYMOUS . '
+			AND u.user_id = p.poster_id
+			' . $and_admmods . '
+			' . $and_bans . '
+			' . $and_founder . '
+			AND p.post_visibility = ' . ITEM_APPROVED . '
+			AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
+		GROUP BY u.user_id
+		ORDER BY total_posts DESC, MAX(p.post_time) DESC';
 	}
 
 	/**
