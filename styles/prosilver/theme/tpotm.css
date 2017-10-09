@@ -32,7 +32,7 @@ i.fa-question-circle-o fa-fw {
 	font-size: 2.2em;
 	text-decoration: bold;
 	text-align: center;
-	color: blue;
+	color: #105289;
 }
 
 .tpotm-div-1 {
@@ -45,7 +45,7 @@ i.fa-question-circle-o fa-fw {
 	margin: 10px;
 	box-shadow: 1px 2px 3px grey;
 	font-size: 14px;
-	color: blue;
+	color: #105289;
 }
 
 .tpotm-div-1, .text1 {
@@ -72,7 +72,6 @@ i.fa-question-circle-o fa-fw {
 	height: 120px;
 	border-radius: 100%;
 	background-color: #80BF00;
-	/* background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%) */
 }
 
 .tpotm-div-4 {

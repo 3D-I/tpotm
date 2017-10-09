@@ -506,7 +506,7 @@ class tpotm
 	public function show_the_winner()
 	{
 		/**
-		 * If Img Badge filename error state it is false and go on.
+		 * If the Img Badge filename is wrong, state it is false and go ahead.
 		 */
 		if (!$this->style_badge_exists())
 		{
