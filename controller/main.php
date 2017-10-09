@@ -123,6 +123,8 @@ class main
 			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
 			/* If the Admin so wishes */
+			$and_admmods = $this->tpotm->wishes_admin_mods();
+			$and_bans = $this->tpotm->exclude_banneds();
 			$and_founder = $this->tpotm->wishes_founder();
 
 			/*
@@ -131,34 +133,15 @@ class main
 			 * If same tot posts and same exact post time then the post ID rules
 			 * SQL errors for empty arrays skipped by setting the fourth parm as true within "sql_in_set"
 			*/
-			$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-				WHERE u.user_id <> ' . ANONYMOUS . '
-					AND u.user_id = p.poster_id
-					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
-					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-					' . $and_founder . '
-					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
-				GROUP BY u.user_id
-				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+			$sql = $this->tpotm->tpotm_sql($and_admmods, $and_bans, $and_founder, (int) $board_start, (int) $end_last_month);
+
+			/* Rowset array for the viewport */
 			$result = $this->db->sql_query_limit($sql, $limit , $start, (int) $this->tpotm->config_time_cache());
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
 			/* Total users count for pagination */
-			$sql2 = 'SELECT u.user_id, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-				WHERE u.user_id <> ' . ANONYMOUS . '
-					AND u.user_id = p.poster_id
-					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->auth_admin_mody_ary(), true, true) . '
-					AND ' . $this->db->sql_in_set('u.user_id', $this->tpotm->banned_users_ids(), true, true) . '
-					' . $and_founder . '
-					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . (int) $board_start . ' AND ' . (int) $end_last_month . '
-				GROUP BY u.user_id
-				ORDER BY total_posts DESC';
-			$result2 = $this->db->sql_query($sql2, (int) $this->tpotm->config_time_cache());
+			$result2 = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
 			$row2 = $this->db->sql_fetchrowset($result2);
 			$total_users = (int) count($row2);
 			$this->db->sql_freeresult($result2);
