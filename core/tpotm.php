@@ -327,7 +327,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include Founders in the query and provides SQL string
+	 * Returns whether to include Founders in the query and provides SQL statement
 	 *
 	 * @return string
 	 */
@@ -337,7 +337,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include Admin and mods in the query and provides SQL string
+	 * Returns whether to include Admin and mods in the query and provides SQL statement
 	 *
 	 * @return string
 	 */
@@ -353,13 +353,18 @@ class tpotm
 	 */
 	public function exclude_banneds()
 	{
-			return 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
+		return 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
 	}
 
 	/**
-	 * Returns the SQL main statement used in multiple zones.
+	 * Returns the SQL main SELECT statement used in various places.
 	 *
-	 * @return string
+	 * @param var	$and_admmods	the DBAL AND statement to use
+	 * @param var	$and_bans		the DBAL AND statement to use
+	 * @param var	$and_founder	the DBAL AND statement to use
+	 * @param int	$tpotm_start	UNIX timestamp of a starting point
+	 * @param int	$tpotm__end		UNIX timestamp of an ending point
+	 * @return	string	DBAL SELECT statement
 	 */
 	public function tpotm_sql($and_admmods, $and_bans, $and_founder, $tpotm_start, $tpotm__end)
 	{
@@ -377,7 +382,7 @@ class tpotm
 
 		/**
 		 * Admin wants the cache to be cleared asap
-		 * Show changes immediately after having set it to 0
+		 * Show changes immediately after.
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
@@ -385,8 +390,8 @@ class tpotm
 		}
 
 		/**
-		 * Check cached data (cache it is used to keep things in syncro)
-		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 * Check cached data
+		 * Run the whole stuff only when needed
 		 */
 		if (($total_month = $this->cache->get('_tpotm_total')) === false)
 		{
@@ -417,7 +422,6 @@ class tpotm
 
 		/**
 		 * Admin wants the cache to be cleared asap
-		 * Check if the file exists first
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
@@ -425,7 +429,7 @@ class tpotm
 		}
 
 		/**
-		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 * Run the whole stuff only when needed
 		 */
 		if (($row = $this->cache->get('_tpotm')) === false)
 		{
@@ -433,6 +437,7 @@ class tpotm
 			$and_admmods = $this->wishes_admin_mods();
 			$and_bans = $this->exclude_banneds();
 			$and_founder = $this->wishes_founder();
+
 			/* The main thang */
 			$sql = $this->tpotm_sql($and_admmods, $and_bans, $and_founder, (int) $month_start, (int) $month_end);
 			$result = $this->db->sql_query_limit($sql, 1);
@@ -462,7 +467,6 @@ class tpotm
 
 		/**
 		 * Admin wants the cache to be cleared asap
-		 * Check if the file exists first
 		 */
 		if ((int) $this->config_time_cache_min() < 1)
 		{
@@ -471,7 +475,7 @@ class tpotm
 
 		/**
 		 * Check cached data
-		 * Run the whole stuff only when needed or cache is disabled in ACP
+		 * Run the whole stuff only when needed
 		 */
 		if (($tpotm_tot_posts = $this->cache->get('_tpotm_tot_posts')) === false)
 		{
@@ -565,7 +569,7 @@ class tpotm
 		];
 
 		/**
-		 * Don't run this code if the admin so wishes or there is not a TPOTM yet
+		 * Don't run this code if there is not a TPOTM yet
 		 */
 		if ((int) $tpotm_tot_posts >= 1)
 		{
@@ -598,6 +602,7 @@ class tpotm
 			/**
 			 * Avatar as IMG or FA-icon depends on the phpBB version
 			 * Here we do care about the UCP prefs -> view avatars
+			 * Code runs if the admin so wishes.
 			 */
 			if ($this->enable_miniavatar())
 			{
