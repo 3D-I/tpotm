@@ -16,13 +16,20 @@
 			<div class="tpotm-div-3" style="background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
 				<div class="tpotm-div-4">
 					<span class="tpotm-span-1">
-						{{ PERCENT }}&#37;
+						{% if not S_TPOTM_AVAILABLE %}
+							0&#37;
+						{% else %}
+							{{ PERCENT }}&#37;
+						{% endif %}
 					</span>
 				</div>
 			</div>
 			<br>
 			<div class="tpotm-div-5">
-				{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}{{ lang('TPOTM_CACHE') }}
+				{% if S_TPOTM_AVAILABLE %}
+					{{ lang('TPOTM_POST') }}{{ lang('TOTAL_MONTH') }}
+				{% endif %}
+				{{ lang('TPOTM_CACHE') }}
 				{% if S_IS_RHEA %}
 						&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 				{% else %}

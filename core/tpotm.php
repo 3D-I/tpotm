@@ -565,6 +565,7 @@ class tpotm
 			'L_TPOTM_CACHE'		=> $tpotm_cache,
 			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'	=> $time,
+			'S_TPOTM_AVAILABLE'	=> ((int) $tpotm_tot_posts < 1) ? false : true,
 		];
 
 		/* Prevents a potential Division by Zero below */
