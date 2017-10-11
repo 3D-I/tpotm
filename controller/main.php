@@ -157,7 +157,6 @@ class main
 
 			/* Loop into the data */
 			foreach ($rows as $row)
-
 			{
 				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar_hall = [
