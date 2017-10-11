@@ -389,7 +389,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include banned users in the query
+	 * Returns whether to include also banned users in the query
 	 *
 	 * @return string	SQL statement, empty string otherwise
 	 */

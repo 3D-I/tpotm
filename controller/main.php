@@ -124,7 +124,7 @@ class main
 			$start			= $this->request->variable('start', 0);
 			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
-			/* If the Admin so wishes */
+			/* Admin choices */
 			$and_admmods = $this->tpotm->wishes_admin_mods();
 			$and_bans = $this->tpotm->wishes_banneds();
 			$and_founder = $this->tpotm->wishes_founder();
