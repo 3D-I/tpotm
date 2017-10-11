@@ -20,11 +20,22 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
+	/* @var \phpbb\request\request */
 	protected $request;
+
+	/* @var \phpbb\controller\helper */
 	protected $helper;
+
+	/* @var \phpbb\template\template */
 	protected $template;
+
+	/* @var \phpbb\user */
 	protected $user;
+
+	/* @var string phpEx */
 	protected $php_ext;
+
+	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
 	/**

@@ -15,14 +15,31 @@ namespace threedi\tpotm\core;
  */
 class tpotm
 {
+	/* @var \phpbb\auth\auth */
 	protected $auth;
+
+
 	protected $cache;
+
+	/* @var \phpbb\config\config */
 	protected $config;
+
+	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
+	/* @var \phpbb\user */
 	protected $user;
+
+	/* @var \phpbb\controller\helper */
 	protected $path_helper;
+
+	/* @var string phpBB root path */
 	protected $root_path;
+
+	/* @var string phpEx */
 	protected $php_ext;
+
+	/* @var \phpbb\template\template */
 	protected $template;
 
 	/**
