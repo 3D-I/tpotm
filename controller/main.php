@@ -113,7 +113,7 @@ class main
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
 
-			/* Top posters_ever (minus the present month - Thx Steve) */
+			/* Top posters_ever (minus the present month) - Thx Steve */
 			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
 			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
 
@@ -153,9 +153,11 @@ class main
 			 * Gives the user an avatar as default if missing, for the sake of the layout.
 			 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 			 */
-			$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE');
+			$no_avatar =  (empty($row['user_avatar'])) ? (($this->tpotm->style_badge_is_true()) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE')) : $this->user->lang('TPOTM_BADGE');
 
+			/* Loop into the data */
 			foreach ($rows as $row)
+
 			{
 				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar_hall = [
