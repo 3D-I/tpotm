@@ -312,6 +312,7 @@ class tpotm
 	public function wishes_founder()
 	{
 		$tpotm_founder = (int) $this->config['threedi_tpotm_founders'];
+
 		return ($tpotm_founder) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
 
@@ -352,6 +353,7 @@ class tpotm
 	public function wishes_admin_mods()
 	{
 		$tpotm_admin_mods = (int) $this->config['threedi_tpotm_adm_mods'];
+
 		return ($tpotm_admin_mods) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . ' ';
 	}
 
@@ -394,6 +396,7 @@ class tpotm
 	public function wishes_banneds()
 	{
 		$tpotm_bans = (int) $this->config['threedi_tpotm_banneds'];
+
 		return ($tpotm_bans) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
 	}
 
