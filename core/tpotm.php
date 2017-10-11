@@ -213,7 +213,7 @@ class tpotm
 	protected function perform_user_db_clean()
 	{
 		$tpotm_sql1 = [
-			'user_tpotm'		=> ''
+			'user_tpotm'	=> ''
 		];
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
@@ -230,7 +230,7 @@ class tpotm
 	protected function perform_user_db_update($tpotm_user_id)
 	{
 		$tpotm_sql2 = [
-			'user_tpotm'		=> 'tpotm_badge.png'
+			'user_tpotm'	=> 'tpotm_badge.png'
 		];
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
@@ -247,7 +247,7 @@ class tpotm
 	protected function perform_user_reset($tpotm_user_id)
 	{
 		$this->perform_user_db_clean();
-		$this->perform_user_db_update($tpotm_user_id);
+		$this->perform_user_db_update((int) $tpotm_user_id);
 	}
 
 	/**
@@ -268,14 +268,13 @@ class tpotm
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
-
 		]);
 	}
 
 	/**
 	 * Performs a date range costruction of the current month
 	 *
-	 * @return string		user formatted data range (Thx Steve)
+	 * @return	string	user formatted data range (Thx Steve)
 	 */
 	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
@@ -562,16 +561,19 @@ class tpotm
 		}
 
 		/**
-		 * Data's Syncronization
+		 * Data Syncronization
 		 */
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
 		$total_month = $this->perform_cache_on_this_month_total_posts();
 
-		/* Only auth'd users can view the profile */
+		/* Only authed can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-		/* Fresh install or if a new Month has began results to zero posts */
+		/**
+		 * Fresh install (1 starting post by founder)
+		 * or if a new Month has began results zero posts
+		 */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 		$tpotm_post = ((int) $tpotm_tot_posts >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
