@@ -104,12 +104,14 @@ class main
 			}
 
 			/**
-			 * if the current month is 01 (January) date() will decrement the year by one
-			 * and wrap the month back round to 12
+			 * if the current date is 01 (January) then date() will decrement the year
+			 *  by one and wrap the month back round to 12
 			 */
 			$now = time();
 			$date_today = gmdate("Y-m", $now);
+
 			list($year_cur, $month_cur) = explode('-', $date_today);
+
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
 
