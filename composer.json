@@ -1,7 +1,7 @@
 {
 	"name": "threedi/tpotm",
 	"type": "phpbb-extension",
-	"description": " Have a Top Poster of the Month and a Hall of Fame to show on your phpBB. The last poster with the max number of posts made into the current month's lapse of time will win.",
+	"description": " Have a Top Poster of the Month and a Hall of Fame to show on your phpBB. The last poster with the max number of posts made into the current month's lapse of time will win. Provided is a customizable Hall of fame and a bunch of options in ACP and UCP",
 	"homepage": "https://github.com/3D-I/tpotm",
 	"version": "2.0.3-RC",
 	"license": "GPL-2.0",
