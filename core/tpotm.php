@@ -356,7 +356,7 @@ class tpotm
 		$this->db->sql_freeresult($result);
 
 		/* Returns an empty array if no bans found */
-		if (!count($ban_ids))
+		if (empty($ban_ids))
 		{
 			/**
 			 * The last parameter of sql_in_set has been set to true
