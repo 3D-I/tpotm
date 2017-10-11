@@ -157,7 +157,7 @@ class tpotm
 	{
 		/**
 		 * Right or wrong we need to find the correct
-		 * path to use on a per server basis
+		 * path to use on a per location basis
 		 */
 		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $this->root_path;
 
@@ -176,7 +176,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniavatar image file
+	 * Returns the style related URL and HTML markup to the miniavatar image file
 	 *
 	 * @return string	Formatted URL
 	 */
@@ -631,16 +631,18 @@ class tpotm
 				'avatar_width'	 => $row['user_avatar_width'],
 			];
 
-			/* DAE (Default Avatar Extended) extension compatibility */
+			/**
+			 * DAE (Default Avatar Extended) extension compatibility
+			 * Here we do not care about the UCP prefs -> view avatars
+			 */
 			if ($this->is_dae())
 			{
-				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
+				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, '');
 			}
 			else
 			{
 				/**
-				 * Hall's avatar must be TPOTM's IMG for both versions
-				 * The Hall of fame doesn't care about the UCP prefs view avatars
+				 * Hall of fame's default avatar must be TPOTM's IMG for both versions
 				 */
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 			}
