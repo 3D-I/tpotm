@@ -493,7 +493,7 @@ class tpotm
 			$this->db->sql_freeresult($result);
 
 			/* There is a TPOTM, let's update the DB then */
-			if ((int) $row['total_posts'] >= 1)
+			if (((int) $row['total_posts'] >= 1) && empty($row['user_tpotm']))
 			{
 				$this->perform_user_reset((int) $row['user_id']);
 			}
