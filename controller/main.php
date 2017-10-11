@@ -171,15 +171,16 @@ class main
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* DAE (Default Avatar Extended) extension compatibility */
+				/**
+				 * DAE (Default Avatar Extended) extension compatibility
+				 * Here we do not care about the UCP prefs -> view avatars
+				 */
 				if ($this->tpotm->is_dae())
 				{
-					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
 				}
 				else
 				{
-					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
 				}
 

@@ -642,7 +642,7 @@ class tpotm
 			else
 			{
 				/**
-				 * Hall of fame's default avatar must be TPOTM's IMG for both versions
+				 * Hall of fame's "default avatar" must be TPOTM's badge IMG for both versions
 				 */
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 			}
