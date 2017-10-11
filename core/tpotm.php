@@ -409,9 +409,9 @@ class tpotm
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
-					' . $and_admmods . '
-					' . $and_bans . '
-					' . $and_founder . '
+					' . "{$and_admmods}" . '
+					' . "{$and_bans}" . '
+					' . "{$and_founder}" . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
 					AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
 				GROUP BY u.user_id
