@@ -375,16 +375,9 @@ class tpotm
 		}
 		$this->db->sql_freeresult($result);
 
-		/* Returns an empty array if no bans found */
-		if (empty($ban_ids))
-		{
-			/**
-			 * The last parameter of sql_in_set has been set to true
-			 * so we don't really need this but hey.. it doesn't harm at all.
-			 */
-			$ban_ids = [];
-		}
-
+		/* SQL errors for empty arrays will be
+		 * skipped by the fourth parm as true within "sql_in_set"
+		 */
 		return $ban_ids;
 	}
 
@@ -426,6 +419,7 @@ class tpotm
 
 		return $sql;
 	}
+
 	/**
 	 * Gets the total posts count for the current month till now
 	 *
