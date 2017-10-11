@@ -15,14 +15,31 @@ namespace threedi\tpotm\core;
  */
 class tpotm
 {
+	/* @var \phpbb\auth\auth */
 	protected $auth;
+
+
 	protected $cache;
+
+	/* @var \phpbb\config\config */
 	protected $config;
+
+	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
+
+	/* @var \phpbb\user */
 	protected $user;
+
+	/* @var \phpbb\controller\helper */
 	protected $path_helper;
+
+	/* @var string phpBB root path */
 	protected $root_path;
+
+	/* @var string phpEx */
 	protected $php_ext;
+
+	/* @var \phpbb\template\template */
 	protected $template;
 
 	/**
@@ -138,7 +155,13 @@ class tpotm
 	 */
 	public function style_badge_exists()
 	{
-		return file_exists($this->path_helper->get_web_root_path() . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
+		/**
+		 * Right or wron we need to find the correct
+		 * path to use on a per server basis
+		 */
+		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $this->root_path;
+
+		return file_exists($rootpath . 'ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/tpotm_badge.png');
 	}
 
 	/**
@@ -177,8 +200,8 @@ class tpotm
 		}
 		else
 		{
-			/* Check passed, let's set it back to true. */
-			$this->config->set('threedi_tpotm_badge_exists', 1);
+			/* Check passed, let's set it back to true. if already sat to 0 do nothing */
+			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
 		}
 	}
 
@@ -283,9 +306,9 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include Founders in the query and provides SQL statement
+	 * Returns whether to include Founders in the query
 	 *
-	 * @return string
+	 * @return string	SQL statement, empty string otherwise
 	 */
 	public function wishes_founder()
 	{
@@ -322,9 +345,9 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether to include Admin and mods in the query and provides SQL statement
+	 * Returns whether to include Admin and mods in the query
 	 *
-	 * @return string
+	 * @return string	SQL statement, empty string otherwise
 	 */
 	public function wishes_admin_mods()
 	{
@@ -349,19 +372,23 @@ class tpotm
 		}
 		$this->db->sql_freeresult($result);
 
-		/* Returns an empty array if no bans */
-		if (!count($ban_ids))
+		/* Returns an empty array if no bans found */
+		if (empty($ban_ids))
 		{
-			/* last parameter of sql_in_set has been set to true */
+			/**
+			 * The last parameter of sql_in_set has been set to true
+			 * so we don't really need this but hey.. it doesn't harm at all.
+			 */
 			$ban_ids = [];
 		}
+
 		return $ban_ids;
 	}
 
 	/**
-	 * Returns whether to include Admin and mods in the query and provides SQL statement
+	 * Returns whether to include banned users in the query
 	 *
-	 * @return string
+	 * @return string	SQL statement, empty string otherwise
 	 */
 	public function wishes_banneds()
 	{
@@ -521,19 +548,22 @@ class tpotm
 	public function show_the_winner()
 	{
 		/**
-		 * If the Img Badge filename is wrong, state it is false and go ahead.
+		 * Image check-in
 		 */
 		if (!$this->style_badge_exists())
 		{
+			/* If the Img Badge filename is wrong, state it is false and go ahead */
 			$this->config->set('threedi_tpotm_badge_exists', 0);
 		}
 		else
 		{
-			/* Check passed, let's set it back to true. */
-			$this->config->set('threedi_tpotm_badge_exists', 1);
+			/* Check-in passed, let's set it back to true if false. */
+			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
 		}
 
-		/* Data's Syncro */
+		/**
+		 * Data's Syncronization
+		 */
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
 		$total_month = $this->perform_cache_on_this_month_total_posts();
@@ -608,12 +638,10 @@ class tpotm
 				 * Hall's avatar must be TPOTM's IMG for both versions
 				 * The Hall of fame doesn't care about the UCP prefs view avatars
 				 */
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->style_mini_badge();
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 			}
 
-			$template_vars += [
-				'TPOTM_AVATAR_HALL'		=> $tpotm_av_3132_hall,
-			];
+			$template_vars += ['TPOTM_AVATAR_HALL'	=> $tpotm_av_3132_hall,];
 
 			/**
 			 * Avatar as IMG or FA-icon depends on the phpBB version
@@ -631,7 +659,7 @@ class tpotm
 				}
 				else
 				{
-					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars') ? phpbb_get_avatar($row_avatar, '') : '')) : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 				}
 
 				$template_vars += [
