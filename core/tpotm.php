@@ -18,7 +18,7 @@ class tpotm
 	/* @var \phpbb\auth\auth */
 	protected $auth;
 
-
+	/* @var \phpbb\cache\service */
 	protected $cache;
 
 	/* @var \phpbb\config\config */
@@ -156,7 +156,7 @@ class tpotm
 	public function style_badge_exists()
 	{
 		/**
-		 * Right or wron we need to find the correct
+		 * Right or wrong we need to find the correct
 		 * path to use on a per server basis
 		 */
 		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $this->root_path;
