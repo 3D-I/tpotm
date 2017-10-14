@@ -104,8 +104,8 @@ class main
 			}
 
 			/**
-			 * if the current month is 01 (January) date() will decrement the year by one
-			 * and wrap the month back round to 12
+			 * if the current date is 01 (January) then date() will decrement the year
+			 *  by one and wrap the month back round to 12
 			 */
 			$now = time();
 			$date_today = gmdate("Y-m", $now);
@@ -113,8 +113,8 @@ class main
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
 
-			/* Top posters_ever (minus the present month) - Thx Steve */
-			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
+			/* Top posters_ever (minus the present month) UTC - Thx Steve */
+			$max_days =  date( 't', gmmktime(23, 59, 59, $month, 1, $year) );
 			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
 
 			/* These are for pagination */
@@ -122,7 +122,7 @@ class main
 			$start			= $this->request->variable('start', 0);
 			$limit			= (int) $this->config['threedi_tpotm_users_page'];
 
-			/* If the Admin so wishes */
+			/* Admin choices */
 			$and_admmods = $this->tpotm->wishes_admin_mods();
 			$and_bans = $this->tpotm->wishes_banneds();
 			$and_founder = $this->tpotm->wishes_founder();
@@ -160,24 +160,25 @@ class main
 			{
 				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar_hall = [
-					'avatar'		 => $row['user_avatar'],
-					'avatar_type'	 => $row['user_avatar_type'],
-					'avatar_height'	 => $row['user_avatar_height'],
-					'avatar_width'	 => $row['user_avatar_width'],
+					'avatar'		=> $row['user_avatar'],
+					'avatar_type'	=> $row['user_avatar_type'],
+					'avatar_height'	=> $row['user_avatar_height'],
+					'avatar_width'	=> $row['user_avatar_width'],
 				];
 
 				/* Giv'em an username, if any */
 				$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-				/* DAE (Default Avatar Extended) extension compatibility */
+				/**
+				 * DAE (Default Avatar Extended) extension compatibility
+				 * Here we do not care about the UCP prefs -> view avatars
+				 */
 				if ($this->tpotm->is_dae())
 				{
-					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = phpbb_get_avatar($row_avatar_hall, '');
 				}
 				else
 				{
-					/* We don't care here about the UCP prefs -> view avatars */
 					$user_avatar = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar_hall, '') : $no_avatar;
 				}
 

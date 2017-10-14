@@ -18,7 +18,7 @@ class tpotm
 	/* @var \phpbb\auth\auth */
 	protected $auth;
 
-
+	/* @var \phpbb\cache\service */
 	protected $cache;
 
 	/* @var \phpbb\config\config */
@@ -156,8 +156,8 @@ class tpotm
 	public function style_badge_exists()
 	{
 		/**
-		 * Right or wron we need to find the correct
-		 * path to use on a per server basis
+		 * Right or wrong we need to find the correct
+		 * path to use on a per location basis
 		 */
 		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $this->root_path;
 
@@ -176,7 +176,7 @@ class tpotm
 	}
 
 	/**
-	 * Returns the style related URL and HTML to the miniavatar image file
+	 * Returns the style related URL and HTML markup to the miniavatar image file
 	 *
 	 * @return string	Formatted URL
 	 */
@@ -213,7 +213,7 @@ class tpotm
 	protected function perform_user_db_clean()
 	{
 		$tpotm_sql1 = [
-			'user_tpotm'		=> ''
+			'user_tpotm'	=> ''
 		];
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
@@ -230,7 +230,7 @@ class tpotm
 	protected function perform_user_db_update($tpotm_user_id)
 	{
 		$tpotm_sql2 = [
-			'user_tpotm'		=> 'tpotm_badge.png'
+			'user_tpotm'	=> 'tpotm_badge.png'
 		];
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
@@ -246,8 +246,12 @@ class tpotm
 	 */
 	protected function perform_user_reset($tpotm_user_id)
 	{
+		$this->db->sql_transaction('begin');
+
 		$this->perform_user_db_clean();
-		$this->perform_user_db_update($tpotm_user_id);
+		$this->perform_user_db_update((int) $tpotm_user_id);
+
+		$this->db->sql_transaction('commit');
 	}
 
 	/**
@@ -268,14 +272,13 @@ class tpotm
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
-
 		]);
 	}
 
 	/**
 	 * Performs a date range costruction of the current month
 	 *
-	 * @return string		user formatted data range (Thx Steve)
+	 * @return	string	user formatted data range (Thx Steve)
 	 */
 	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
@@ -312,7 +315,9 @@ class tpotm
 	 */
 	public function wishes_founder()
 	{
-		return ($this->config['threedi_tpotm_founders']) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
+		$tpotm_founder = (bool) $this->config['threedi_tpotm_founders'];
+
+		return ($tpotm_founder) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
 
 	/**
@@ -323,7 +328,7 @@ class tpotm
 	 */
 	public function auth_admin_mody_ary()
 	{
-		if ((bool) $this->config['threedi_tpotm_adm_mods'])
+		if ($this->config['threedi_tpotm_adm_mods'])
 		{
 			return [];
 		}
@@ -351,7 +356,9 @@ class tpotm
 	 */
 	public function wishes_admin_mods()
 	{
-		return ($this->config['threedi_tpotm_adm_mods']) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . ' ';
+		$tpotm_admin_mods = (bool) $this->config['threedi_tpotm_adm_mods'];
+
+		return ($tpotm_admin_mods) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . ' ';
 	}
 
 	/**
@@ -372,27 +379,22 @@ class tpotm
 		}
 		$this->db->sql_freeresult($result);
 
-		/* Returns an empty array if no bans found */
-		if (empty($ban_ids))
-		{
-			/**
-			 * The last parameter of sql_in_set has been set to true
-			 * so we don't really need this but hey.. it doesn't harm at all.
-			 */
-			$ban_ids = [];
-		}
-
+		/* SQL errors for empty arrays will be
+		 * skipped by the fourth parm as true within "sql_in_set"
+		 */
 		return $ban_ids;
 	}
 
 	/**
-	 * Returns whether to include banned users in the query
+	 * Returns whether to include also banned users in the query
 	 *
 	 * @return string	SQL statement, empty string otherwise
 	 */
 	public function wishes_banneds()
 	{
-		return ($this->config['threedi_tpotm_banneds']) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
+		$tpotm_bans = (bool) $this->config['threedi_tpotm_banneds'];
+
+		return ($tpotm_bans) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
 	}
 
 	/**
@@ -407,18 +409,21 @@ class tpotm
 	 */
 	public function tpotm_sql($and_admmods, $and_bans, $and_founder, $tpotm_start, $tpotm__end)
 	{
-		return 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
-			FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
-			WHERE u.user_id <> ' . ANONYMOUS . '
-				AND u.user_id = p.poster_id
-				' . $and_admmods . '
-				' . $and_bans . '
-				' . $and_founder . '
-				AND p.post_visibility = ' . ITEM_APPROVED . '
-				AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
-			GROUP BY u.user_id
-			ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+		$sql = 'SELECT u.username, u.user_id, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height, user_tpotm, MAX(u.user_type), p.poster_id, MAX(p.post_time), COUNT(p.post_id) AS total_posts
+				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
+				WHERE u.user_id <> ' . ANONYMOUS . '
+					AND u.user_id = p.poster_id
+					' . $and_admmods . '
+					' . $and_bans . '
+					' . $and_founder . '
+					AND p.post_visibility = ' . ITEM_APPROVED . '
+					AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
+				GROUP BY u.user_id
+				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
+
+		return $sql;
 	}
+
 	/**
 	 * Gets the total posts count for the current month till now
 	 *
@@ -493,7 +498,7 @@ class tpotm
 			$this->db->sql_freeresult($result);
 
 			/* There is a TPOTM, let's update the DB then */
-			if ((int) $row['total_posts'] >= 1)
+			if (((int) $row['total_posts'] >= 1) && empty($row['user_tpotm']))
 			{
 				$this->perform_user_reset((int) $row['user_id']);
 			}
@@ -562,16 +567,19 @@ class tpotm
 		}
 
 		/**
-		 * Data's Syncronization
+		 * Data Syncronization
 		 */
 		$row = $this->perform_cache_on_main_db_query();
 		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
 		$total_month = $this->perform_cache_on_this_month_total_posts();
 
-		/* Only auth'd users can view the profile */
+		/* Only authed can view the profile */
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
-		/* Fresh install or if a new Month has began results to zero posts */
+		/**
+		 * Fresh install (1 starting post by founder)
+		 * or if a new Month has began results zero posts
+		 */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 		$tpotm_post = ((int) $tpotm_tot_posts >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
 		$tpotm_cache = $this->user->lang('TPOTM_CACHE', (int) $this->config_time_cache_min());
@@ -627,16 +635,18 @@ class tpotm
 				'avatar_width'	 => $row['user_avatar_width'],
 			];
 
-			/* DAE (Default Avatar Extended) extension compatibility */
+			/**
+			 * DAE (Default Avatar Extended) extension compatibility
+			 * Here we do not care about the UCP prefs -> view avatars
+			 */
 			if ($this->is_dae())
 			{
-				$tpotm_av_3132_hall = ($this->user->optionget('viewavatars')) ? phpbb_get_avatar($row_avatar, '') : '';
+				$tpotm_av_3132_hall = phpbb_get_avatar($row_avatar, '');
 			}
 			else
 			{
 				/**
-				 * Hall's avatar must be TPOTM's IMG for both versions
-				 * The Hall of fame doesn't care about the UCP prefs view avatars
+				 * Hall of fame's "default avatar" must be TPOTM's badge IMG for both versions
 				 */
 				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
 			}
