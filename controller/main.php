@@ -109,14 +109,12 @@ class main
 			 */
 			$now = time();
 			$date_today = gmdate("Y-m", $now);
-
 			list($year_cur, $month_cur) = explode('-', $date_today);
-
 			$month = (int) $month_cur -1;
 			$year = (int) $year_cur;
 
-			/* Top posters_ever (minus the present month) - Thx Steve */
-			$max_days =  date('t', gmmktime(23, 59, 59, $month, 1, $year));
+			/* Top posters_ever (minus the present month) UTC - Thx Steve */
+			$max_days =  date( 't', gmmktime(23, 59, 59, $month, 1, $year) );
 			$end_last_month = gmmktime(23, 59, 59, $month, $max_days, $year);
 
 			/* These are for pagination */
@@ -162,10 +160,10 @@ class main
 			{
 				/* Map arguments for phpbb_get_avatar() */
 				$row_avatar_hall = [
-					'avatar'		 => $row['user_avatar'],
-					'avatar_type'	 => $row['user_avatar_type'],
-					'avatar_height'	 => $row['user_avatar_height'],
-					'avatar_width'	 => $row['user_avatar_width'],
+					'avatar'		=> $row['user_avatar'],
+					'avatar_type'	=> $row['user_avatar_type'],
+					'avatar_height'	=> $row['user_avatar_height'],
+					'avatar_width'	=> $row['user_avatar_width'],
 				];
 
 				/* Giv'em an username, if any */
