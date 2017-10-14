@@ -1,4 +1,4 @@
-/* miniprofile next to posts */
+/* miniprofile next to posts (for 3.1) */
 .tpotm-miniprofile-badge {
 	padding-left: 4px;
 	max-height: 14px;
@@ -6,18 +6,18 @@
 	width: auto;
 }
 
-/* viewtopic */
+/* miniprofile next to posts (for 3.2) */
 i.fa-spinner {
 	cursor: pointer;
 	color: #2a6496;
 }
-*/
-/* index and hall */
+
+/* index and hall (for 3.2) */
 i.fa-question-circle-o fa-fw {
 	cursor: pointer;
 }
 
-/* UCP */
+/* UCP (for 3.1) */
 .tpotm-ucp-badge {
 	padding-left: 4px;
 	max-height: 14px;
@@ -63,7 +63,6 @@ i.fa-question-circle-o fa-fw {
 	font-size: 1.5em;
 	text-decoration: none;
 }
-
 
 .tpotm-div-3 {
 	margin: 2px auto;
@@ -135,7 +134,6 @@ a.hall-avatar-tpotm img {
 	overflow: auto;
 	max-height: 304px; /* 76 x 4 "((66+3+3+2+2) x 4)" tpotm-flex-cell height */
 	justify-content: space-around;
-
 }
 
 /* Each element within the viewport container */
