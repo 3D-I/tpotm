@@ -315,7 +315,7 @@ class tpotm
 	 */
 	public function wishes_founder()
 	{
-		$tpotm_founder = $this->config['threedi_tpotm_founders'];
+		$tpotm_founder = (bool) $this->config['threedi_tpotm_founders'];
 
 		return ($tpotm_founder) ? '' : 'AND (u.user_type <> ' . USER_FOUNDER . ') ';
 	}
@@ -328,7 +328,7 @@ class tpotm
 	 */
 	public function auth_admin_mody_ary()
 	{
-		if ((bool) $this->config['threedi_tpotm_adm_mods'])
+		if ($this->config['threedi_tpotm_adm_mods'])
 		{
 			return [];
 		}
@@ -356,7 +356,7 @@ class tpotm
 	 */
 	public function wishes_admin_mods()
 	{
-		$tpotm_admin_mods = $this->config['threedi_tpotm_adm_mods'];
+		$tpotm_admin_mods = (bool) $this->config['threedi_tpotm_adm_mods'];
 
 		return ($tpotm_admin_mods) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->auth_admin_mody_ary(), true, true) . ' ';
 	}
@@ -392,7 +392,7 @@ class tpotm
 	 */
 	public function wishes_banneds()
 	{
-		$tpotm_bans = $this->config['threedi_tpotm_banneds'];
+		$tpotm_bans = (bool) $this->config['threedi_tpotm_banneds'];
 
 		return ($tpotm_bans) ? '' : 'AND ' . $this->db->sql_in_set('u.user_id', $this->banned_users_ids(), true, true) . ' ';
 	}
@@ -413,9 +413,11 @@ class tpotm
 				FROM ' . USERS_TABLE . ' u, ' . POSTS_TABLE . ' p
 				WHERE u.user_id <> ' . ANONYMOUS . '
 					AND u.user_id = p.poster_id
-					' . " {$and_admmods} {$and_bans} {$and_founder} " . '
+					' . $and_admmods . '
+					' . $and_bans . '
+					' . $and_founder . '
 					AND p.post_visibility = ' . ITEM_APPROVED . '
-					AND p.post_time BETWEEN ' . (int) "{$tpotm_start}" . ' AND ' . (int) "{$tpotm__end}" . '
+					AND p.post_time BETWEEN ' . (int) $tpotm_start . ' AND ' . (int) $tpotm__end . '
 				GROUP BY u.user_id
 				ORDER BY total_posts DESC, MAX(p.post_time) DESC';
 
