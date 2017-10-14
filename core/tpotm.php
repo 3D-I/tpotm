@@ -362,7 +362,7 @@ class tpotm
 	}
 
 	/**
-	 * Gets the complete list of banned users' ids.
+	 * Gets the complete list of banned users.
 	 *
 	 * @return array	Array of banned users' ids if any, empty array otherwise
 	 */
@@ -370,8 +370,10 @@ class tpotm
 	{
 		$ban_ids = [];
 
+		/* No Email bans or IP ones */
 		$sql = 'SELECT ban_userid
-			FROM ' . BANLIST_TABLE;
+			FROM ' . BANLIST_TABLE . '
+			WHERE ban_userid IS NOT NULL';
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
 		{
