@@ -4,8 +4,8 @@
 	background: transparent;
 	width: auto;
 	padding: 5px;
-	font-size: 1em;
-	line-height: 1;
+	font-size: inherit;
+	line-height: inherit;
 	border: 0;
 	border-radius: 0;
 	height: 32px;
