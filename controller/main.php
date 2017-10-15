@@ -136,12 +136,12 @@ class main
 			$sql = $this->tpotm->tpotm_sql($and_admmods, $and_bans, $and_founder, (int) $board_start, (int) $end_last_month);
 
 			/* Rowset array for the viewport */
-			$result = $this->db->sql_query_limit($sql, $limit , $start, (int) $this->tpotm->config_time_cache());
+			$result = $this->db->sql_query_limit($sql, $limit , $start, (int) $this->config['threedi_tpotm_ttl_tpe']);
 			$rows = $this->db->sql_fetchrowset($result);
 			$this->db->sql_freeresult($result);
 
 			/* Total users count for pagination */
-			$result2 = $this->db->sql_query($sql, (int) $this->tpotm->config_time_cache());
+			$result2 = $this->db->sql_query($sql, (int) $this->config['threedi_tpotm_ttl_tpe']);
 			$row2 = $this->db->sql_fetchrowset($result2);
 			$total_users = (int) count($row2);
 			$this->db->sql_freeresult($result2);
