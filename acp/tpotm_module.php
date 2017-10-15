@@ -64,7 +64,7 @@ class tpotm_module
 
 		$selected = $time_row_options = '';
 
-		foreach ( $time_modes as $val => $time_mode )
+		foreach ($time_modes as $val => $time_mode)
 		{
 			$time_row_options .= '<option value="' . $val . '"' . (($val == $time_mode) ? ' selected="selected"' : '') . '>';
 			$time_row_options .= $user->lang('TPOTM_ACP_' . strtoupper($time_mode));
