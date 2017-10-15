@@ -82,13 +82,15 @@
 
 				<dl>
 					<dt>
-						<label for="threedi_tpotm_ttl_tpe">{{ lang('TPOTM_TTL_TPE') }}{L_COLON}</label><br>{{ lang('TPOTM_TTL_TPE_EXPLAIN') }}
+						<label for="threedi_tpotm_ttl_tpe">{{ lang('TPOTM_TTL_TPE') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_TTL_TPE_EXPLAIN') }}
 					</dt>
-					<dd>
-						<input type="text" name="threedi_tpotm_ttl_tpe" size="10" id="threedi_tpotm_ttl_tpe" value="{{ TPOTM_TTL_TPE }}" />
+					<div class="tpotm-select">
+						<dd>
+							<input type="text" name="threedi_tpotm_ttl_tpe" size="10" id="threedi_tpotm_ttl_tpe" value="{{ TPOTM_TTL_TPE }}" />
 
-						<select name="threedi_tpotm_ttl_tpe" id="threedi_tpotm_ttl_tpe" title="{{ lang('TPOTM_TTL_TPE') }}">{{ S_TPOTM_TPE_TTL }}</select>
-					</dd>
+							<select name="threedi_tpotm_ttl_tpe" id="threedi_tpotm_ttl_tpe" title="{{ lang('TPOTM_TTL_TPE') }}">{{ S_TPOTM_TPE_TTL }}</select>
+						</dd>
+					</div>
 				</dl>
 
 				<div class="tpotm-acp-rules">{{ lang('ACP_TPOTM_HALL_EPOCH_EXPLAIN') }}</div>
