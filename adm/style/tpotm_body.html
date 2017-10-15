@@ -80,6 +80,16 @@
 					</dd>
 				</dl>
 
+				<div class="tpotm-acp-rules">{{ lang('ACP_TPOTM_TTL_MODE') }}</div>
+				<dl>
+					<dt>
+						<label for="threedi_tpotm_ttl_mode">{{ lang('TPOTM_TTL_MODE') }}{{ lang('COLON') }}</label>
+					</dt>
+					<dd>
+						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="1"{% if TPOTM_TTL_MODE %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="0"{% if not TPOTM_TTL_MODE %} checked="checked"{% endif %} /> {{ lang('NO') }}
+					</dd>
+				</dl>
 				<dl>
 					<dt>
 						<label for="threedi_tpotm_ttl_tpe">{{ lang('TPOTM_TTL_TPE') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_TTL_TPE_EXPLAIN') }}
