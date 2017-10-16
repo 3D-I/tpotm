@@ -1,5 +1,17 @@
 /* CSS Document */
 
+.tpotm-select select {
+	background: transparent;
+	width: auto;
+	padding: 5px;
+	font-size: inherit;
+	line-height: inherit;
+	border: 0;
+	border-radius: 0;
+	height: 32px;
+	webkit-appearance: none;
+}
+
 .tpotm-acp-inner {
 }
 

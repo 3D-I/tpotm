@@ -27,7 +27,7 @@ $lang = array_merge($lang, [
 	'ACP_TPOTM_HALL'						=>	'Hall of fame settings',
 	// Legend Board Management
 	'ACP_TPOTM_MANAGEMENT'					=>	'Board Administration',
-	'ACP_TPOTM_MANAGEMENT_EXPLAIN'			=>	'Please note: the Founders option works together with the Admin/mods one. Means if you exclude Admin/mods keeping the Founders ON, the Founders will be not included anyway.',
+	'ACP_TPOTM_MANAGEMENT_EXPLAIN'			=>	'<strong>These setting apply to both results.</strong><br><em>Please note:</em> the Founders option works together with the Admin/mods one. Means if you exclude Admin/mods keeping the Founders ON, the Founders will be not included anyway.',
 	// Tpl locations
 	'TPOTM_INDEX'							=>	'Index page',
 	'TPOTM_BOTTOM'							=>	'Bottom',
@@ -38,8 +38,19 @@ $lang = array_merge($lang, [
 	'TPOTM_HALL_EXPLAIN'					=>	'Enable the page',
 	'TPOTM_USERS_PAGE'						=>	'Top posters',
 	'TPOTM_USERS_PAGE_EXPLAIN'				=>	'How many users to show per page',
+	'ACP_TPOTM_TTL_MODE'					=>	'<em>The dynamic automatic cache</em>: takes care of the Leap years and automatically renews at the very begin of each month.<br>When this option is ON the selection in the drop down box is not being considered any more.<br>If you want to disable both cache modes select NO.<br>To enable one of the cache modes select an option (again).',
+	'TPOTM_TTL_MODE'						=>	'TPE Dynamic cache',
+	'TPOTM_TTL_TPE'							=>	'TPE Time to live',
+	'TPOTM_TTL_TPE_REAL'					=>	'Already stored',
+	'TPOTM_ACP_NO_CACHE'					=>	'no cache',
+	'TPOTM_ACP_ONE_DAY'						=>	'one day',
+	'TPOTM_ACP_ONE_WEEK'					=>	'one week',
+	'TPOTM_ACP_TWO_WEEKS'					=>	'two weeks',
+	'TPOTM_ACP_ONE_MONTH'					=>	'one month',
 	'ACP_TPOTM_HALL_EPOCH_EXPLAIN'			=>	'Using <em>Epoch</em> the fetch starts since <em>Epoch time 1970-01-01 00:00</em> instead of the start date of the Board. To be used if you did reset at some point that date and some users are being excluded from the <em>Top posters ever</em> list, which is based also on the post time.',
-	'TPOTM_HALL_EPOCH'						=>	'Fetch users since <em>Epoch</em>',
+	'TPOTM_HALL_EPOCH'						=>	'Fetch users since',
+	'TPOTM_EPOCH'							=>	'Epoch',
+	'TPOTM_BOARD_S_DATE'					=>	'Date of when the Board started',
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Various settings',
 	'TPOTM_TTL'								=>	'Time to live',
@@ -55,6 +66,6 @@ $lang = array_merge($lang, [
 	'TPOTM_BANNEDS'							=>	'Include banned users',
 	'TPOTM_BANNEDS_EXPLAIN'					=>	'Yes = improves performance<br><em></em>',
 	// Errors
-	'ACP_TPOTM_ERRORS'						=>	'Errors explaination',
+	'ACP_TPOTM_ERRORS'						=>	'Errors',
 	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
 ]);

@@ -16,6 +16,13 @@ namespace threedi\tpotm;
 
 class ext extends \phpbb\extension\base
 {
+	/* Define constants */
+	const NO_CACHE	= '0';
+	const ONE_DAY	= '86400';
+	const ONE_WEEK	= '604800';
+	const TWO_WEEKS	= '1209600';
+	const ONE_MONTH	= '2419200';
+
 	/**
 	 * Check whether the extension can be enabled.
 	 * Provides meaningful(s) error message(s) and the back-link on failure.
