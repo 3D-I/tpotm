@@ -41,7 +41,6 @@ $lang = array_merge($lang, [
 	'ACP_TPOTM_TTL_MODE'					=>	'<em>The dynamic automatic cache</em>: takes care of the Leap years and automatically renews at the very begin of each month.<br>When this option is ON the selection in the drop down box is not being considered any more.<br>If you want to disable both cache modes select NO.<br>To enable one of the cache modes select an option (again).',
 	'TPOTM_TTL_MODE'						=>	'TPE Dynamic cache',
 	'TPOTM_TTL_TPE'							=>	'TPE Time to live',
-	'TPOTM_TTL_TPE_EXPLAIN'					=>	'Suggested 2 weeks',
 	'TPOTM_TTL_TPE_REAL'					=>	'Already stored',
 	'TPOTM_ACP_NO_CACHE'					=>	'no cache',
 	'TPOTM_ACP_ONE_DAY'						=>	'one day',
