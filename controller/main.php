@@ -124,11 +124,11 @@ class main
 			/* Top posters ever's dynamic cache TTL admin choice*/
 			if ($this->config['threedi_tpotm_ttl_mode'])
 			{
-				$ttl_diff = ( (int) ($end_this_month - $now) );
+				$ttl_diff = (int) ($end_this_month - $now);
 			}
 			else
 			{
-				$ttl_diff = $this->config['threedi_tpotm_ttl_tpe'];
+				$ttl_diff = (int) $this->config['threedi_tpotm_ttl_tpe'];
 			}
 
 			/* These are for pagination */

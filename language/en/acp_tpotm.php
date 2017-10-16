@@ -38,9 +38,9 @@ $lang = array_merge($lang, [
 	'TPOTM_HALL_EXPLAIN'					=>	'Enable the page',
 	'TPOTM_USERS_PAGE'						=>	'Top posters',
 	'TPOTM_USERS_PAGE_EXPLAIN'				=>	'How many users to show per page',
-	'ACP_TPOTM_TTL_MODE'					=>	'The dynamic automatic cache: when this option is ON the selection in the drop down box is not being considered any more. Dynamic cache takes care of the Leap years and automatically re starts at the very begin of each month. If you want to disable the cache select NO and NO CACHE in the dropdown as well.',
-	'TPOTM_TTL_MODE'						=>	'Dynamic cache',
-	'TPOTM_TTL_TPE'							=>	'Time to live',
+	'ACP_TPOTM_TTL_MODE'					=>	'<em>The dynamic automatic cache</em>: when this option is ON the selection in the drop down box is not being considered any more.<br>Dynamic cache takes care of the Leap years and automatically renews at the very begin of each month.<br>If you want to disable the cache select NO (and NO CACHE in the dropdown, if necessary, as well.<br>Only those options preset are usable, in case of mistake (like you attempted to digit a your own timestamp) select an option again.)',
+	'TPOTM_TTL_MODE'						=>	'TPE Dynamic cache',
+	'TPOTM_TTL_TPE'							=>	'TPE Time to live',
 	'TPOTM_TTL_TPE_EXPLAIN'					=>	'Suggested 2 weeks',
 	'TPOTM_ACP_NO_CACHE'					=>	'no cache',
 	'TPOTM_ACP_ONE_DAY'						=>	'one day',
@@ -50,7 +50,7 @@ $lang = array_merge($lang, [
 	'ACP_TPOTM_HALL_EPOCH_EXPLAIN'			=>	'Using <em>Epoch</em> the fetch starts since <em>Epoch time 1970-01-01 00:00</em> instead of the start date of the Board. To be used if you did reset at some point that date and some users are being excluded from the <em>Top posters ever</em> list, which is based also on the post time.',
 	'TPOTM_HALL_EPOCH'						=>	'Fetch users since',
 	'TPOTM_EPOCH'							=>	'Epoch',
-	'TPOTM_BOARD_S_DATE'					=>	'Starting date of the Board',
+	'TPOTM_BOARD_S_DATE'					=>	'Date of when the Board started',
 	// Variouses
 	'ACP_TPOTM_VARIOUSES'					=>	'Various settings',
 	'TPOTM_TTL'								=>	'Time to live',
@@ -66,6 +66,7 @@ $lang = array_merge($lang, [
 	'TPOTM_BANNEDS'							=>	'Include banned users',
 	'TPOTM_BANNEDS_EXPLAIN'					=>	'Yes = improves performance<br><em></em>',
 	// Errors
-	'ACP_TPOTM_ERRORS'						=>	'Errors explaination',
+	'ACP_TPOTM_ERRORS'						=>	'Errors',
 	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
+	'TPOTM_TTL_MODE_INVALID'				=>	'<em><strong>TPE Time to live</strong></em> accepts only values from the dropdown box.<br>Try selecting one of them again and submit.',
 ]);

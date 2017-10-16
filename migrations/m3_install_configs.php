@@ -35,7 +35,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 			['config.add', ['threedi_tpotm_founders', 1]],
 			['config.add', ['threedi_tpotm_banneds', 1]],
 			['config.add', ['threedi_tpotm_forums', 1]],
-			['config.add', ['threedi_tpotm_index', 1]],
+			['config.add', ['threedi_tpotm_index', 0]],
 			['config.add', ['threedi_tpotm_ttl', 30]],
 			['config.add', ['threedi_tpotm_badge_exists', 1]],
 			['config.add', ['threedi_tpotm_users_page', 12]],

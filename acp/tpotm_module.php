@@ -95,6 +95,12 @@ class tpotm_module
 				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
 			}
 
+			/* You changed input type in the box? No party! */
+			if (in_array($request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']) , $time_modes))
+			{
+				$errors[] = $user->lang('TPOTM_TTL_MODE_INVALID');
+			}
+
 			/* No errors? Great, let's go. */
 			if (!count($errors))
 			{
@@ -103,8 +109,11 @@ class tpotm_module
 				$config->set('threedi_tpotm_hall', $request->variable('threedi_tpotm_hall', (int) $config['threedi_tpotm_hall']));
 				$config->set('threedi_tpotm_users_page', $request->variable('threedi_tpotm_users_page', (int) $config['threedi_tpotm_users_page']));
 				$config->set('threedi_tpotm_ttl_mode', $request->variable('threedi_tpotm_ttl_mode', (int) $config['threedi_tpotm_ttl_mode']));
-				/* Top posters ever's dynamic cache TTL admin choice*/
-				if ( ! $config['threedi_tpotm_ttl_mode'] )
+				/**
+				 * Top posters ever's dynamic cache TTL admin choice
+				 * Do not change the stored config if not necessary.
+				 */
+				if (!$config['threedi_tpotm_ttl_mode'])
 				{
 					$config->set('threedi_tpotm_ttl_tpe', $request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']));
 				}
