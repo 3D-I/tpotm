@@ -95,14 +95,6 @@ class tpotm_module
 				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
 			}
 
-			/* You changed input type in the box? No party! */
-			if (in_array($request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']) , $time_modes))
-			{
-				$errors[] = $user->lang('TPOTM_TTL_MODE_INVALID');
-				/* Log the error. */
-				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_TTL_MODE_INVALID');
-			}
-
 			/* No errors? Great, let's go. */
 			if (!count($errors))
 			{
@@ -111,14 +103,7 @@ class tpotm_module
 				$config->set('threedi_tpotm_hall', $request->variable('threedi_tpotm_hall', (int) $config['threedi_tpotm_hall']));
 				$config->set('threedi_tpotm_users_page', $request->variable('threedi_tpotm_users_page', (int) $config['threedi_tpotm_users_page']));
 				$config->set('threedi_tpotm_ttl_mode', $request->variable('threedi_tpotm_ttl_mode', (int) $config['threedi_tpotm_ttl_mode']));
-				/**
-				 * Top posters ever's dynamic cache TTL admin choice
-				 * Do not change the stored config if not necessary.
-				 */
-				if (!$config['threedi_tpotm_ttl_mode'])
-				{
-					$config->set('threedi_tpotm_ttl_tpe', $request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']));
-				}
+				$config->set('threedi_tpotm_ttl_tpe', $request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']));
 				$config->set('threedi_tpotm_since_epoch', $request->variable('threedi_tpotm_since_epoch', (int) $config['threedi_tpotm_since_epoch']));
 				$config->set('threedi_tpotm_ttl', $request->variable('threedi_tpotm_ttl', (int) $config['threedi_tpotm_ttl']));
 				$config->set('threedi_tpotm_miniavatar', $request->variable('threedi_tpotm_miniavatar', (int) $config['threedi_tpotm_miniavatar']));
@@ -137,21 +122,18 @@ class tpotm_module
 			'S_ERRORS'				=> ($errors) ? true : false,
 			'ERRORS_MSG'			=> ($errors) ? implode('<br /><br />', $errors) : '',
 			'U_ACTION'				=> $this->u_action,
-			// Template locations
+
 			'TPOTM_INDEX'			=> ($config['threedi_tpotm_index']) ? true : false,
 			'TPOTM_FORUMS'			=> ($config['threedi_tpotm_forums']) ? true : false,
-			// Hall of fame
 			'TPOTM_HALL'			=> ($config['threedi_tpotm_hall']) ? true : false,
 			'TPOTM_USERS_PAGE'		=> (int) $config['threedi_tpotm_users_page'],
-			'TPOTM_TTL_MODE'		=>	(int) $config['threedi_tpotm_ttl_mode'] ? true : false,
-			'S_TPOTM_TPE_TTL'		=> $time_row_options,
-			'TPOTM_TTL_TPE'			=>	(int) $config['threedi_tpotm_ttl_tpe'],
+			'TPOTM_TTL_MODE'		=> $config['threedi_tpotm_ttl_mode'] ? true : false,
+			'S_TPOTM_TTL_TPE'		=> $time_row_options,
+			'TPOTM_TTL_TPE'			=> (int) $config['threedi_tpotm_ttl_tpe'],
 			'TPOTM_HALL_EPOCH'		=> ($config['threedi_tpotm_since_epoch']) ? true : false,
-			// General Settings
 			'TPOTM_TTL'				=> (int) $config['threedi_tpotm_ttl'],
 			'TPOTM_MINIAVATAR'		=> ($config['threedi_tpotm_miniavatar']) ? true : false,
 			'TPOTM_MINIPROFILE'		=> ($config['threedi_tpotm_miniprofile']) ? true : false,
-			// Founders, admin and mods
 			'TPOTM_ADM_MODS'		=> ($config['threedi_tpotm_adm_mods']) ? true : false,
 			'TPOTM_FOUNDERS'		=> ($config['threedi_tpotm_founders']) ? true : false,
 			'TPOTM_BANNEDS'			=> ($config['threedi_tpotm_banneds']) ? true : false,
