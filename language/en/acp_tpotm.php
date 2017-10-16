@@ -27,7 +27,7 @@ $lang = array_merge($lang, [
 	'ACP_TPOTM_HALL'						=>	'Hall of fame settings',
 	// Legend Board Management
 	'ACP_TPOTM_MANAGEMENT'					=>	'Board Administration',
-	'ACP_TPOTM_MANAGEMENT_EXPLAIN'			=>	'Please note: the Founders option works together with the Admin/mods one. Means if you exclude Admin/mods keeping the Founders ON, the Founders will be not included anyway.',
+	'ACP_TPOTM_MANAGEMENT_EXPLAIN'			=>	'<strong>These setting apply to both results.</strong><br><em>Please note:</em> the Founders option works together with the Admin/mods one. Means if you exclude Admin/mods keeping the Founders ON, the Founders will be not included anyway.',
 	// Tpl locations
 	'TPOTM_INDEX'							=>	'Index page',
 	'TPOTM_BOTTOM'							=>	'Bottom',
