@@ -25,5 +25,6 @@ $lang = array_merge($lang, [
 
 	// Error log
 	'TPOTM_LOG_CONFIG_SAVED'		=> '<strong>TPOTM general configuration saved.</strong>',
-	'TPOTM_LOG_BADGE_IMG_INVALID'	=> '<strong>TPOTM - Badge IMG filename wrong or totally missing.</strong>',
+	'TPOTM_LOG_BADGE_IMG_INVALID'	=> '<strong>TPOTM - <em>Badge IMG filename</em> wrong or totally missing.</strong>',
+	'TPOTM_LOG_TTL_MODE_INVALID'	=> '<strong>TPOTM - Prohibited timestamp setting for the <em>TPE Time to live</em> option</strong>',
 ]);

@@ -99,6 +99,8 @@ class tpotm_module
 			if (in_array($request->variable('threedi_tpotm_ttl_tpe', (int) $config['threedi_tpotm_ttl_tpe']) , $time_modes))
 			{
 				$errors[] = $user->lang('TPOTM_TTL_MODE_INVALID');
+				/* Log the error. */
+				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_TTL_MODE_INVALID');
 			}
 
 			/* No errors? Great, let's go. */
