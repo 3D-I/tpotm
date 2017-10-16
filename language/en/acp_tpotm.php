@@ -68,5 +68,4 @@ $lang = array_merge($lang, [
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors',
 	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
-	'TPOTM_TTL_MODE_INVALID'				=>	'<em><strong>TPE Time to live</strong></em> accepts only values from the dropdown box.<br>Try selecting one of them again and submit.',
 ]);
