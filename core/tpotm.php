@@ -186,22 +186,26 @@ class tpotm
 	}
 
 	/**
-	 * Badge IMG check-point for ACP
+	 * Badge IMG check-point
 	 *
 	 * @return void
 	 */
 	public function check_point_badge_img()
 	{
-		/* If Img badge filename mistmach error, state is false and return */
-		if (!$this->style_badge_exists())
+		/**
+		 * If Img badge's filename mismatch error
+		 * and the config is TRUE then state is FALSE
+		 */
+		if (!$this->style_badge_exists() && $this->config['threedi_tpotm_badge_exists'])
 		{
 			$this->config->set('threedi_tpotm_badge_exists', 0);
-			return;
 		}
-		else
+		/**
+		 * Check passed, let's set the config to TRUE if FALSE.
+		 */
+		if ($this->style_badge_exists() && !$this->config['threedi_tpotm_badge_exists'])
 		{
-			/* Check passed, let's set it back to true. if already sat to 0 do nothing */
-			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
+			$this->config->set('threedi_tpotm_badge_exists', 1);
 		}
 	}
 
@@ -557,16 +561,7 @@ class tpotm
 		/**
 		 * Image check-in
 		 */
-		if (!$this->style_badge_exists())
-		{
-			/* If the Img Badge filename is wrong, state it is false and go ahead */
-			$this->config->set('threedi_tpotm_badge_exists', 0);
-		}
-		else
-		{
-			/* Check-in passed, let's set it back to true if false. */
-			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
-		}
+		$this->check_point_badge_img();
 
 		/**
 		 * Data Syncronization

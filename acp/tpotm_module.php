@@ -35,23 +35,6 @@ class tpotm_module
 		add_form_key('threedi/tpotm');
 
 		/**
-		 * If Img Badge filename error..
-		 * state is false and return, else go on..
-		 */
-		$tpotm->check_point_badge_img();
-
-		/**
-		 * If the Img Badge's filename is wrong then stop the party and go dormant.
-		 */
-		if (!$tpotm->style_badge_is_true())
-		{
-			/* Log the error. */
-			$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
-
-			trigger_error($user->lang('TPOTM_BADGE_IMG_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
-		}
-
-		/**
 		 * Drop down construct inspired by MChat.
 		 */
 		$time_modes = [
@@ -62,7 +45,7 @@ class tpotm_module
 			ext::ONE_MONTH	=> 'one_month',
 		];
 
-		$selected = $time_row_options = '';
+		$time_row_options = '';
 
 		foreach ($time_modes as $val => $time_mode)
 		{
@@ -120,7 +103,7 @@ class tpotm_module
 
 		$template->assign_vars([
 			'S_ERRORS'				=> ($errors) ? true : false,
-			'ERRORS_MSG'			=> ($errors) ? implode('<br /><br />', $errors) : '',
+			'ERRORS_MSG'			=> implode('<br /><br />', $errors),
 			'U_ACTION'				=> $this->u_action,
 
 			'TPOTM_INDEX'			=> ($config['threedi_tpotm_index']) ? true : false,

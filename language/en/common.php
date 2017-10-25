@@ -65,7 +65,6 @@ $lang = array_merge($lang, [
 	'VIEWING_TPOTM_HALL'			=> 'Viewing TPOTM Hall of fame',
 	'TPOTM_PAGE'					=> 'Hall of fame',
 	'TPOTM_HELLO'					=> 'Top Poster Of The Month - Hall Of Fame',
-	'TPOTM_ROUTE_NAME'				=> 'hall_of_fame',
 	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_HALL_NO_EXPLAIN'			=> 'Since Epoch till the very end of the previous month',
 
