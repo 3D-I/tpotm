@@ -42,10 +42,13 @@ class tpotm
 	/* @var \phpbb\template\template */
 	protected $template;
 
+	/** @var \phpbb\extension\manager */
+	protected $ext_manager;
+
 	/**
 	 * Constructor
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
@@ -56,16 +59,19 @@ class tpotm
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
+		$this->ext_manager		=	$ext_manager;
+		$this->is_dae_enabled	=	$this->ext_manager->is_enabled('threedi/dae');
+
 	}
 
 	/**
-	 * Returns whether the DAE is enabled
+	 * Returns whether the DAE is enabled and follows some conditions
 	 *
 	 * @return bool
 	 */
 	public function is_dae()
 	{
-		return ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
+		return ($this->is_dae_enabled && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
 	}
 
 	/**
@@ -186,22 +192,26 @@ class tpotm
 	}
 
 	/**
-	 * Badge IMG check-point for ACP
+	 * Badge IMG check-point
 	 *
 	 * @return void
 	 */
 	public function check_point_badge_img()
 	{
-		/* If Img badge filename mistmach error, state is false and return */
-		if (!$this->style_badge_exists())
+		/**
+		 * If Img badge's filename mismatch error
+		 * and the config is TRUE then state is FALSE
+		 */
+		if (!$this->style_badge_exists() && $this->config['threedi_tpotm_badge_exists'])
 		{
 			$this->config->set('threedi_tpotm_badge_exists', 0);
-			return;
 		}
-		else
+		/**
+		 * Second pass, if no error let's set the config to TRUE if FALSE.
+		 */
+		if ($this->style_badge_exists() && !$this->config['threedi_tpotm_badge_exists'])
 		{
-			/* Check passed, let's set it back to true. if already sat to 0 do nothing */
-			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
+			$this->config->set('threedi_tpotm_badge_exists', 1);
 		}
 	}
 
@@ -548,25 +558,16 @@ class tpotm
 	}
 
 	/*
-	* There can be only ONE... show the TPOTM.
-	*
+	 * There can be only ONE... show the TPOTM.
+	 *
 	 * @return void
-	*/
+	 */
 	public function show_the_winner()
 	{
 		/**
 		 * Image check-in
 		 */
-		if (!$this->style_badge_exists())
-		{
-			/* If the Img Badge filename is wrong, state it is false and go ahead */
-			$this->config->set('threedi_tpotm_badge_exists', 0);
-		}
-		else
-		{
-			/* Check-in passed, let's set it back to true if false. */
-			(!$this->config['threedi_tpotm_badge_exists']) ? $this->config->set('threedi_tpotm_badge_exists', 1) : '';
-		}
+		$this->check_point_badge_img();
 
 		/**
 		 * Data Syncronization

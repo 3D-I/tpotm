@@ -38,10 +38,9 @@ $lang = array_merge($lang, [
 	'TPOTM_HALL_EXPLAIN'					=>	'Enable the page',
 	'TPOTM_USERS_PAGE'						=>	'Top posters',
 	'TPOTM_USERS_PAGE_EXPLAIN'				=>	'How many users to show per page',
-	'ACP_TPOTM_TTL_MODE'					=>	'<em>The dynamic automatic cache</em>: takes care of the Leap years and automatically renews at the very begin of each month.<br>When this option is ON the selection in the drop down box is not being considered any more.<br>If you want to disable both cache modes select NO.<br>To enable one of the cache modes select an option (again).',
+	'ACP_TPOTM_TTL_MODE'					=>	'<em>The dynamic automatic cache</em> takes care of the Leap years and automatically renews at the very begin of each month.<br>When this option is ON the selection in the drop down box is not being considered any more.<br>Selecting NO disables both caches. To enable one of the cache modes select an option (again).',
 	'TPOTM_TTL_MODE'						=>	'TPE Dynamic cache',
 	'TPOTM_TTL_TPE'							=>	'TPE Time to live',
-	'TPOTM_TTL_TPE_REAL'					=>	'Already stored',
 	'TPOTM_ACP_NO_CACHE'					=>	'no cache',
 	'TPOTM_ACP_ONE_DAY'						=>	'one day',
 	'TPOTM_ACP_ONE_WEEK'					=>	'one week',
@@ -64,8 +63,8 @@ $lang = array_merge($lang, [
 	'TPOTM_FOUNDERS'						=>	'Include Founders',
 	'TPOTM_FOUNDERS_EXPLAIN'				=>	'Yes = improves performance<br><em>Use this in combo with the above option.</em>',
 	'TPOTM_BANNEDS'							=>	'Include banned users',
-	'TPOTM_BANNEDS_EXPLAIN'					=>	'Yes = improves performance<br><em></em>',
+	'TPOTM_BANNEDS_EXPLAIN'					=>	'Yes = improves performance<br>',
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors',
-	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>Extension ACP it is now in a dormant status.<br>Fix the issue and it will automatically wake-up at runtime.',
+	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename is wrong or totally missing. Check your relative extension/style <strong>Images</strong> folder.<br>Badge filename must be: <strong>tpotm_badge.png</strong>.<br>The ACP of the extension is now in a dormant status. Fix the issue and it will automatically wake-up.',
 ]);

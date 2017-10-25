@@ -17,7 +17,7 @@ class m3_install_configs extends \phpbb\db\migration\migration
 		/**
 		 * If does exists go ahead
 		 */
-		return !phpbb_version_compare($this->config['threedi_tpotm'], '2.0.5-rc', '>=');
+		return !phpbb_version_compare($this->config['threedi_tpotm'], '2.0.6', '>=');
 	}
 
 	static public function depends_on()
