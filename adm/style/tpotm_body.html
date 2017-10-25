@@ -42,8 +42,8 @@
 						<label for="threedi_tpotm_hall">{{ lang('TPOTM_HALL') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_HALL_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_hall" value="1"{% if TPOTM_HALL %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_hall" value="0"{% if not TPOTM_HALL %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_hall" value="1"{% if TPOTM_HALL %} id="threedi_tpotm_hall" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_hall" value="0"{% if not TPOTM_HALL %} id="threedi_tpotm_hall" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 
@@ -62,8 +62,8 @@
 						<label for="threedi_tpotm_ttl_mode">{{ lang('TPOTM_TTL_MODE') }}{{ lang('COLON') }}</label>
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="1"{% if TPOTM_TTL_MODE %} checked="checked"{% endif %}/> {{ lang('YES') }}&nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="0"{% if not TPOTM_TTL_MODE %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="1"{% if TPOTM_TTL_MODE %} id="threedi_tpotm_ttl_mode" checked="checked"{% endif %}/> {{ lang('YES') }}&nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_ttl_mode" value="0"{% if not TPOTM_TTL_MODE %} id="threedi_tpotm_ttl_mode" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 				<dl>
@@ -84,8 +84,8 @@
 						<label for="threedi_tpotm_since_epoch">{{ lang('TPOTM_HALL_EPOCH') }}{{ lang('COLON') }}</label>
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="1"{% if TPOTM_HALL_EPOCH %} checked="checked"{% endif %}/> {{ lang('TPOTM_EPOCH') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="0"{% if not TPOTM_HALL_EPOCH %} checked="checked"{% endif %} /> {{ lang('TPOTM_BOARD_S_DATE') }}
+						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="1"{% if TPOTM_HALL_EPOCH %} id="threedi_tpotm_since_epoch" checked="checked"{% endif %}/> {{ lang('TPOTM_EPOCH') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_since_epoch" value="0"{% if not TPOTM_HALL_EPOCH %} id="threedi_tpotm_since_epoch" checked="checked"{% endif %} /> {{ lang('TPOTM_BOARD_S_DATE') }}
 					</dd>
 				</dl>
 			</fieldset>
@@ -98,8 +98,8 @@
 						<label for="threedi_tpotm_adm_mods">{{ lang('TPOTM_ADM_MODS') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_ADM_MODS_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="1"{% if TPOTM_ADM_MODS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="0"{% if not TPOTM_ADM_MODS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="1"{% if TPOTM_ADM_MODS %} id="threedi_tpotm_adm_mods" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_adm_mods" value="0"{% if not TPOTM_ADM_MODS %} id="threedi_tpotm_adm_mods" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 
@@ -108,8 +108,8 @@
 						<label for="threedi_tpotm_founders">{{ lang('TPOTM_FOUNDERS') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_FOUNDERS_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_founders" value="1"{% if TPOTM_FOUNDERS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_founders" value="0"{% if not TPOTM_FOUNDERS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_founders" value="1"{% if TPOTM_FOUNDERS %} id="threedi_tpotm_founders" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_founders" value="0"{% if not TPOTM_FOUNDERS %} id="threedi_tpotm_founders" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 
@@ -118,8 +118,8 @@
 						<label for="threedi_tpotm_banneds">{{ lang('TPOTM_BANNEDS') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_BANNEDS_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="1"{% if TPOTM_BANNEDS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="0"{% if not TPOTM_BANNEDS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="1"{% if TPOTM_BANNEDS %} id="threedi_tpotm_banneds" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_banneds" value="0"{% if not TPOTM_BANNEDS %} id="threedi_tpotm_banneds" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 			</fieldset>
@@ -132,8 +132,8 @@
 						<label for="threedi_tpotm_index">{{ lang('TPOTM_INDEX') }}{{ lang('COLON') }}</label><br>
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_index" value="1"{% if TPOTM_INDEX %} checked="checked"{% endif %}/> {{ lang('TPOTM_BOTTOM') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_index" value="0"{% if not TPOTM_INDEX %} checked="checked"{% endif %} /> {{ lang('TPOTM_TOP') }}
+						<input type="radio" class="radio" name="threedi_tpotm_index" value="1"{% if TPOTM_INDEX %} id="threedi_tpotm_index" checked="checked"{% endif %}/> {{ lang('TPOTM_BOTTOM') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_index" value="0"{% if not TPOTM_INDEX %} id="threedi_tpotm_index" checked="checked"{% endif %} /> {{ lang('TPOTM_TOP') }}
 					</dd>
 				</dl>
 
@@ -142,8 +142,8 @@
 						<label for="threedi_tpotm_forums">{{ lang('TPOTM_FORUMS') }}{{ lang('COLON') }}</label><br>
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_forums" value="1"{% if TPOTM_FORUMS %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_forums" value="0"{% if not TPOTM_FORUMS %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_forums" value="1"{% if TPOTM_FORUMS %} id="threedi_tpotm_forums" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_forums" value="0"{% if not TPOTM_FORUMS %} id="threedi_tpotm_forums" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 			</fieldset>
@@ -164,8 +164,8 @@
 						<label for="threedi_tpotm_miniavatar">{{ lang('TPOTM_AVATAR') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_AVATAR_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="1"{% if TPOTM_MINIAVATAR %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="0"{% if not TPOTM_MINIAVATAR %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="1"{% if TPOTM_MINIAVATAR %} id="threedi_tpotm_miniavatar" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_miniavatar" value="0"{% if not TPOTM_MINIAVATAR %} id="threedi_tpotm_miniavatar" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 
@@ -174,8 +174,8 @@
 						<label for="threedi_tpotm_miniprofile">{{ lang('TPOTM_MINIPROFILE') }}{{ lang('COLON') }}</label><br>{{ lang('TPOTM_MINIPROFILE_EXPLAIN') }}
 					</dt>
 					<dd>
-						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="1"{% if TPOTM_MINIPROFILE %} checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
-						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="0"{% if not TPOTM_MINIPROFILE %} checked="checked"{% endif %} /> {{ lang('NO') }}
+						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="1"{% if TPOTM_MINIPROFILE %} id="threedi_tpotm_miniprofile" checked="checked"{% endif %}/> {{ lang('YES') }} &nbsp;
+						<input type="radio" class="radio" name="threedi_tpotm_miniprofile" value="0"{% if not TPOTM_MINIPROFILE %} id="threedi_tpotm_miniprofile" checked="checked"{% endif %} /> {{ lang('NO') }}
 					</dd>
 				</dl>
 			</fieldset>
