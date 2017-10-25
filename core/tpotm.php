@@ -42,10 +42,13 @@ class tpotm
 	/* @var \phpbb\template\template */
 	protected $template;
 
+	/** @var \phpbb\extension\manager */
+	protected $ext_manager;
+
 	/**
 	 * Constructor
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
@@ -56,16 +59,19 @@ class tpotm
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
+		$this->ext_manager		=	$ext_manager;
+		$this->is_dae_enabled	=	$this->ext_manager->is_enabled('threedi/dae');
+
 	}
 
 	/**
-	 * Returns whether the DAE is enabled
+	 * Returns whether the DAE is enabled and follows some conditions
 	 *
 	 * @return bool
 	 */
 	public function is_dae()
 	{
-		return ($this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
+		return ($this->is_dae_enabled && $this->config['threedi_default_avatar_extended'] && $this->config['threedi_default_avatar_exists']);
 	}
 
 	/**
