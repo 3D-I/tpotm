@@ -201,7 +201,7 @@ class tpotm
 			$this->config->set('threedi_tpotm_badge_exists', 0);
 		}
 		/**
-		 * Check passed, let's set the config to TRUE if FALSE.
+		 * Second pass, if no error let's set the config to TRUE if FALSE.
 		 */
 		if ($this->style_badge_exists() && !$this->config['threedi_tpotm_badge_exists'])
 		{
@@ -552,10 +552,10 @@ class tpotm
 	}
 
 	/*
-	* There can be only ONE... show the TPOTM.
-	*
+	 * There can be only ONE... show the TPOTM.
+	 *
 	 * @return void
-	*/
+	 */
 	public function show_the_winner()
 	{
 		/**
