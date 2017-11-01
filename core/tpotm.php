@@ -601,12 +601,13 @@ class tpotm
 		}
 
 		$template_vars = [
-			'TPOTM_NAME'		=> $tpotm_name,
-			'L_TPOTM_POST'		=> $tpotm_post,
-			'L_TPOTM_CACHE'		=> $tpotm_cache,
-			'L_TOTAL_MONTH'		=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
-			'L_TPOTM_EXPLAIN'	=> $time,
-			'S_TPOTM_AVAILABLE'	=> ((int) $tpotm_tot_posts < 1) ? false : true,
+			'TPOTM_NAME'			=> $tpotm_name,
+			'L_TPOTM_POST'			=> $tpotm_post,
+			'L_TPOTM_CACHE'			=> $tpotm_cache,
+			'L_TOTAL_MONTH'			=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
+			'L_TPOTM_EXPLAIN'		=> $time,
+			'S_TPOTM_AVAILABLE'		=> ((int) $tpotm_tot_posts < 1) ? false : true,
+			'TPOTM_POSTS_IS_TRUE'	=> ((int) $tpotm_tot_posts >= 1) ? true : false,
 		];
 
 		/* Prevents a potential Division by Zero below */
