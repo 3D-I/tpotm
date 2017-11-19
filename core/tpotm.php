@@ -78,7 +78,7 @@ class tpotm
 	 */
 	public function is_dae()
 	{
-		return ($this->is_dae_enabled && $this->config['threedi_default_avatar_extended']);
+		return (bool) (($this->is_dae_enabled) && $this->config['threedi_default_avatar_extended']);
 	}
 
 	/**
