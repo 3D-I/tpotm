@@ -568,11 +568,6 @@ class tpotm
 	public function show_the_winner()
 	{
 		/**
-		 * Image check-in
-		 */
-		//$this->check_point_badge_img();
-
-		/**
 		 * Data Syncronization
 		 */
 		$row = $this->perform_cache_on_main_db_query();
