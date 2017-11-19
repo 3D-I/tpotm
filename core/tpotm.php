@@ -276,7 +276,7 @@ class tpotm
 	public function template_switches_over_all()
 	{
 		$this->template->assign_vars([
-			'S_TPOTM'				=> ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')) ? true : false,
+			'S_TPOTM'				=> $this->is_authed(),
 			'S_IS_RHEA'				=> $this->is_rhea(),
 			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
 			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
@@ -308,17 +308,17 @@ class tpotm
 	 */
 	protected function month_timegap()
 	{
-			$now = time();
-			$date_today = gmdate("Y-m-d", $now);
-			list($year_cur, $month_cur, $day1) = explode('-', $date_today);
+		$now = time();
+		$date_today = gmdate("Y-m-d", $now);
+		list($year_cur, $month_cur, $day1) = explode('-', $date_today);
 
-			$month_start_cur = gmmktime (0,0,0, $month_cur, 1, $year_cur);
-			/* Start timestamp for current month */
-			$month_start = $month_start_cur;
-			/* End timestamp for current month */
-			$month_end = $now;
+		$month_start_cur = gmmktime (0,0,0, $month_cur, 1, $year_cur);
+		/* Start timestamp for current month */
+		$month_start = $month_start_cur;
+		/* End timestamp for current month */
+		$month_end = $now;
 
-			return [(int) $month_start, (int) $month_end];
+		return [(int) $month_start, (int) $month_end];
 	}
 
 	/**
