@@ -201,7 +201,7 @@ class tpotm
 	/**
 	 * Badge IMG check-point
 	 *
-	 * @return void
+	 * @return string	Formatted URL, language string otherwise.
 	 */
 	public function check_point_badge_img()
 	{
@@ -220,7 +220,7 @@ class tpotm
 	}
 
 	/**
-	 * Update the user_tpotm to be empty for everyone
+	 * Updates the user_tpotm to be empty for everyone
 	 *
 	 * @return void
 	 */
@@ -236,7 +236,7 @@ class tpotm
 	}
 
 	/**
-	 * Update the user_tpotm with the badge filename for the present winner
+	 * Updates the user_tpotm with the badge filename for the present winner
 	 *
 	 * @param int	$tpotm_user_id	the current TPOTM user_id
 	 * @return void
@@ -311,8 +311,8 @@ class tpotm
 		$now = time();
 		$date_today = gmdate("Y-m-d", $now);
 		list($year_cur, $month_cur, $day1) = explode('-', $date_today);
-
 		$month_start_cur = gmmktime (0,0,0, $month_cur, 1, $year_cur);
+
 		/* Start timestamp for current month */
 		$month_start = $month_start_cur;
 		/* End timestamp for current month */
@@ -388,14 +388,15 @@ class tpotm
 			FROM ' . BANLIST_TABLE . '
 			WHERE ban_userid IS NOT NULL';
 		$result = $this->db->sql_query($sql);
+
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$ban_ids[] = (int) $row['ban_userid'];
 		}
 		$this->db->sql_freeresult($result);
 
-		/* SQL errors for empty arrays will be
-		 * skipped by the fourth parm as true within "sql_in_set"
+		/* SQL errors for empty arrays will be skipped
+		 * by the fourth parm as true within "sql_in_set"
 		 */
 		return $ban_ids;
 	}
@@ -578,8 +579,8 @@ class tpotm
 		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 		/**
-		 * Fresh install (1 starting post by founder)
-		 * or if a new Month has began results zero posts
+		 * Fresh install (one starting post by founder)
+		 * or if a new Month has began results in zero posts
 		 */
 		$tpotm_un_nobody = $this->user->lang['TPOTM_NOBODY'];
 		$tpotm_post = ((int) $tpotm_tot_posts >= 1) ? $this->user->lang('TPOTM_POST', (int) $tpotm_tot_posts) : false;
