@@ -158,7 +158,7 @@ class listener implements EventSubscriberInterface
 		if ($this->tpotm->is_authed() && $this->tpotm->is_hall())
 		{
 			$this->template->assign_vars([
-				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller', ['name' => 'hall_of_fame']),
+				'U_TPOTM_HALL'	=> $this->helper->route('threedi_tpotm_controller'),
 			]);
 		}
 	}
@@ -179,7 +179,7 @@ class listener implements EventSubscriberInterface
 			{
 				$event['location'] = $this->user->lang('VIEWING_TPOTM_HALL');
 
-				$event['location_url'] = $this->helper->route('threedi_tpotm_controller', ['name' => 'hall_of_fame']);
+				$event['location_url'] = $this->helper->route('threedi_tpotm_controller');
 			}
 		}
 	}

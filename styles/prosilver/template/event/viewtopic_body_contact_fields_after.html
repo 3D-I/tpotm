@@ -1,10 +1,10 @@
-{% if S_TPOTM_MINIPROFILE and not postrow.S_POST_HIDDEN and S_TPOTM and postrow.TPOTM_BADGE and TPOTM_POSTS_IS_TRUE %}
+{% if S_TPOTM_MINIPROFILE and not postrow.S_POST_HIDDEN and S_TPOTM and postrow.TPOTM_BADGE and S_TPOTM_AVAILABLE %}
 
 	<dd>
 		<strong>{{ lang('TPOTM_BADGE_MINIPROFILE') }}</strong>
 		{% if S_IS_RHEA %}
 			<i class="icon fa fa-spinner fa-spin fa-fw icon-lg" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
-		{% elseif S_IS_BADGE_IMG %}
+		{% elseif not S_IS_RHEA %}
 			<img src="{{ postrow.TPOTM_BADGE }}" class="tpotm-miniprofile-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% endif %} />
 		{% else %}
 			{{ lang('TPOTM_BADGE') }}

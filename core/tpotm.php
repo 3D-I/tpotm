@@ -46,6 +46,11 @@ class tpotm
 	protected $ext_manager;
 
 	/**
+	 * @var bool Depending on whether or not the extension is enabled
+	 */
+	protected $is_dae_enabled;
+
+	/**
 	 * Constructor
 	 */
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
@@ -60,7 +65,9 @@ class tpotm
 		$this->php_ext			=	$phpExt;
 		$this->template			=	$template;
 		$this->ext_manager		=	$ext_manager;
-		$this->is_dae_enabled	=	$this->ext_manager->is_enabled('threedi/dae');
+
+		$is_dae_enabled			=	$this->ext_manager->is_enabled('threedi/dae');
+		$this->is_dae_enabled	=	$is_dae_enabled;
 
 	}
 
@@ -145,16 +152,6 @@ class tpotm
 	}
 
 	/**
-	 * Returns whether the basic badge img is true (has been not corrupted)
-	 *
-	 * @return	bool
-	 */
-	public function style_badge_is_true()
-	{
-		return ($this->config['threedi_tpotm_badge_exists']) ? true : false;
-	}
-
-	/**
 	 * Returns whether the basic badge img exists
 	 *
 	 * @return	bool
@@ -192,26 +189,33 @@ class tpotm
 	}
 
 	/**
+	 * Returns the style related URL and HTML markup to the miniavatar image file for prosilver
+	 *
+	 * @return string	Formatted URL
+	 */
+	public function style_mini_badge_prosilver()
+	{
+		return '<img src="' . generate_board_url() . '/ext/threedi/tpotm/styles/prosilver/theme/images/tpotm_badge.png" />';
+	}
+
+	/**
 	 * Badge IMG check-point
 	 *
 	 * @return void
 	 */
 	public function check_point_badge_img()
 	{
-		/**
-		 * If Img badge's filename mismatch error
-		 * and the config is TRUE then state is FALSE
-		 */
-		if (!$this->style_badge_exists() && $this->config['threedi_tpotm_badge_exists'])
+		if ( ($this->user->style['style_path'] != 'prosilver') && $this->style_badge_exists() )
 		{
-			$this->config->set('threedi_tpotm_badge_exists', 0);
+			return $this->style_mini_badge();
 		}
-		/**
-		 * Second pass, if no error let's set the config to TRUE if FALSE.
-		 */
-		if ($this->style_badge_exists() && !$this->config['threedi_tpotm_badge_exists'])
+		else if ( ($this->user->style['style_path'] != 'prosilver') && !$this->style_badge_exists() )
 		{
-			$this->config->set('threedi_tpotm_badge_exists', 1);
+			return $this->style_mini_badge_prosilver();
+		}
+		else
+		{
+			return $this->user->lang('TPOTM_BADGE');
 		}
 	}
 
@@ -280,7 +284,6 @@ class tpotm
 			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
-			'S_IS_BADGE_IMG'		=> $this->style_badge_is_true(),
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
 		]);
 	}
@@ -567,7 +570,7 @@ class tpotm
 		/**
 		 * Image check-in
 		 */
-		$this->check_point_badge_img();
+		//$this->check_point_badge_img();
 
 		/**
 		 * Data Syncronization
@@ -607,7 +610,6 @@ class tpotm
 			'L_TOTAL_MONTH'			=> ((int) $total_month >= 1) ? $this->user->lang('TOTAL_MONTH', (int) $total_month, round(((int) $tpotm_tot_posts / (int) $total_month) * 100)) : false,
 			'L_TPOTM_EXPLAIN'		=> $time,
 			'S_TPOTM_AVAILABLE'		=> ((int) $tpotm_tot_posts < 1) ? false : true,
-			'TPOTM_POSTS_IS_TRUE'	=> ((int) $tpotm_tot_posts >= 1) ? true : false,
 		];
 
 		/* Prevents a potential Division by Zero below */
@@ -652,7 +654,7 @@ class tpotm
 				/**
 				 * Hall of fame's "default avatar" must be TPOTM's badge IMG for both versions
 				 */
-				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+				$tpotm_av_3132_hall = (!empty($row['user_avatar'])) ? phpbb_get_avatar($row_avatar, '') : $this->check_point_badge_img();
 			}
 
 			$template_vars += ['TPOTM_AVATAR_HALL'	=> $tpotm_av_3132_hall,];
@@ -673,7 +675,7 @@ class tpotm
 				}
 				else
 				{
-					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars') ? phpbb_get_avatar($row_avatar, '') : '')) : (($this->style_badge_is_true()) ? $this->style_mini_badge() : $this->user->lang('TPOTM_BADGE'));
+					$tpotm_av_3132 = (!empty($row['user_avatar'])) ? (($this->user->optionget('viewavatars') ? phpbb_get_avatar($row_avatar, '') : '')) : $this->check_point_badge_img();
 				}
 
 				$template_vars += [

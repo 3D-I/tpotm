@@ -67,13 +67,11 @@ class main
 	}
 
 	/**
-	 * Controller for route /tpotm/{name}
-	 *
-	 * @param string $name
+	 * Controller for route /tpotm/hall_of_fame
 	 *
 	 * @return \Symfony\Component\HttpFoundation\Response A Symfony Response object
 	 */
-	public function handle($name)
+	public function handle()
 	{
 		if (!$this->tpotm->is_authed())
 		{
@@ -86,7 +84,7 @@ class main
 		}
 
 		$message = $this->user->lang('TPOTM_HELLO');
-		$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message, $name));
+		$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message));
 
 		/* Starting point in time */
 		if (!$this->config['threedi_tpotm_since_epoch'])
@@ -161,7 +159,9 @@ class main
 		 * Gives the user an avatar as default if missing, for the sake of the layout.
 		 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 		 */
-		$no_avatar =  (empty($row['user_avatar'])) ? (($this->tpotm->style_badge_is_true()) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE')) : $this->user->lang('TPOTM_BADGE');
+		//$no_avatar =  (empty($row['user_avatar'])) ? (($this->tpotm->style_badge_is_true()) ? $this->tpotm->style_mini_badge() : $this->user->lang('TPOTM_BADGE')) : $this->user->lang('TPOTM_BADGE');
+
+		$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->check_point_badge_img() : $this->user->lang('TPOTM_BADGE');
 
 		/* Loop into the data */
 		foreach ($rows as $row)
@@ -219,7 +219,7 @@ class main
 
 		$this->template->assign_vars($template_vars);
 
-		$url = $this->helper->route('threedi_tpotm_controller', ['name' => $name]);
+		$url = $this->helper->route('threedi_tpotm_controller');
 
 		$this->pagination->generate_template_pagination($url, 'pagination', 'start', $total_users, $limit, $start);
 

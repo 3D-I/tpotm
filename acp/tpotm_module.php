@@ -23,9 +23,11 @@ class tpotm_module
 
 	public function main($id, $mode)
 	{
-		global $config, $request, $template, $user, $phpbb_log, $phpbb_container;
+		global $config, $request, $template, $user, $phpbb_log, $phpbb_container, $db, $phpbb_root_path;
 
 		$tpotm = $phpbb_container->get('threedi.tpotm.tpotm');
+
+		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $phpbb_root_path;
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
 
@@ -64,18 +66,30 @@ class tpotm_module
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
 
-			/**
-			 * If Img Badge filename error..
-			 * state is false and return, else go on..
-			 */
-			$tpotm->check_point_badge_img();
+			/* Check for all installed styles first */
+			$sql = 'SELECT style_path
+				FROM ' . STYLES_TABLE;
+			$result = $db->sql_query($sql);
 
-			/* You changed filenames? No party! */
-			if (!$config['threedi_tpotm_badge_exists'])
+			while ($rows = $db->sql_fetchrow($result))
 			{
-				$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID');
-				/* Log the error. */
-				$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
+				$styles_installed[] = $rows['style_path'];
+			}
+			$db->sql_freeresult($result);
+
+			/**
+			 * Check for the correct existance of the TPOTM badge
+			 * in all of the installed styles, reports a detailed list on failure.
+			 */
+			foreach ($styles_installed as $style_installed)
+			{
+				if (!file_exists($rootpath . 'ext/threedi/tpotm/styles/' . $style_installed . '/theme/images/tpotm_badge.png'))
+				{
+					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID', $style_installed);
+					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID_EXPLAIN');
+
+					$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
+				}
 			}
 
 			/* No errors? Great, let's go. */
