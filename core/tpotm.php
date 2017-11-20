@@ -46,11 +46,6 @@ class tpotm
 	protected $ext_manager;
 
 	/**
-	 * @var bool Depending on whether or not the extension is enabled
-	 */
-	protected $is_dae_enabled;
-
-	/**
 	 * Constructor
 	 */
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
