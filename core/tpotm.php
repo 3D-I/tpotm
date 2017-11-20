@@ -656,7 +656,6 @@ class tpotm
 			$template_vars += ['TPOTM_AVATAR_HALL'	=> $tpotm_av_3132_hall,];
 
 			/**
-			 * Avatar as IMG or FA-icon depends on the phpBB version
 			 * Here we do care about the UCP prefs -> view avatars
 			 * Code runs if the admin so wishes.
 			 */
