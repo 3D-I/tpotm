@@ -66,6 +66,5 @@ $lang = array_merge($lang, [
 	'TPOTM_BANNEDS_EXPLAIN'					=>	'Yes = improves performance<br>',
 	// Errors
 	'ACP_TPOTM_ERRORS'						=>	'Errors',
-	'TPOTM_BADGE_IMG_INVALID'				=>	'The Badge filename for the installed style <strong>"%1s"</strong> is wrong or the relative style folder for the extension is totally missing. Check the relative style and images folders for this extension.<br>The badge filename must be: <em><strong>tpotm_badge.png</strong></em>.',
-	'TPOTM_BADGE_IMG_INVALID_EXPLAIN'		=>	'<em>The ACP of the extension is now in a dormant status and the current settings cannot be modified till the issue has been fixed.</em>',
+	'TPOTM_BADGE_IMG_INVALID'				=>	'The filename of the IMG Badge for the installed style <strong><em>"%1s"</em></strong> is wrong or the relative style folder for the extension is totally missing. Check the relative style and images folders for this extension.<br>The badge filename must be: <em><strong>tpotm_badge.png</strong></em>.<br><em>The ACP of the extension is now in a dormant status and the current settings cannot be modified till the issue has been fixed.</em>',
 ]);

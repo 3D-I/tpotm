@@ -78,15 +78,14 @@ class tpotm_module
 			$db->sql_freeresult($result);
 
 			/**
-			 * Check for the correct existance of the TPOTM badge
-			 * in all of the installed styles, reports a detailed list on failure.
+			 * Now check for the correct existance of the TPOTM's image badge into
+			 * each of the effectively installed styles and report a detailed list on failure.
 			 */
 			foreach ($styles_installed as $style_installed)
 			{
 				if (!file_exists($rootpath . 'ext/threedi/tpotm/styles/' . $style_installed . '/theme/images/tpotm_badge.png'))
 				{
 					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID', $style_installed);
-					$errors[] = $user->lang('TPOTM_BADGE_IMG_INVALID_EXPLAIN');
 
 					$phpbb_log->add('critical', $user->data['user_id'], $user->ip, 'TPOTM_LOG_BADGE_IMG_INVALID');
 				}

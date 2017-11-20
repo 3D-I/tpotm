@@ -205,17 +205,13 @@ class tpotm
 	 */
 	public function check_point_badge_img()
 	{
-		if ( ($this->user->style['style_path'] != 'prosilver') && $this->style_badge_exists() )
+		if ( ($this->user->style['style_path'] !== 'prosilver') && $this->style_badge_exists() )
 		{
 			return $this->style_mini_badge();
 		}
-		else if ( ($this->user->style['style_path'] != 'prosilver') && !$this->style_badge_exists() )
-		{
-			return $this->style_mini_badge_prosilver();
-		}
 		else
 		{
-			return $this->user->lang('TPOTM_BADGE');
+			return $this->style_mini_badge_prosilver();
 		}
 	}
 
