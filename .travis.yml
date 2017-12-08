@@ -42,7 +42,7 @@ env:
     - EXTNAME="3D-I/tpotm" # CHANGE name of the extension HERE
     - SNIFF="1"        # Should we run code sniffer on your code?
     - IMAGE_ICC="1"    # Should we run icc profile sniffer on your images?
-    - EPV="0"          # Should we run EPV (Extension Pre Validator) on your code?
+    - EPV="1"          # Should we run EPV (Extension Pre Validator) on your code?
     - PHPBB_BRANCH="3.2.x"
 
 branches:
@@ -51,6 +51,9 @@ branches:
     - develop
     - /^develop-.*$/
     - /^\d+(\.\d+)?\.x$/
+
+before_install:
+- composer self-update 1.5.2 --rollback
 
 install:
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
