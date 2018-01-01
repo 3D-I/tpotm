@@ -83,9 +83,6 @@ class main
 			throw new \phpbb\exception\http_exception(404, 'TPOTM__HALL_DISABLED');
 		}
 
-		$message = $this->user->lang('TPOTM_HELLO');
-		$this->template->assign_var('TPOTM_MESSAGE', $this->user->lang($message));
-
 		/* Starting point in time */
 		if (!$this->config['threedi_tpotm_since_epoch'])
 		{
