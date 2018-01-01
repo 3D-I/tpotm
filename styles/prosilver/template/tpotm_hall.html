@@ -31,9 +31,9 @@
 				{% endif %}
 				{{ lang('TPOTM_CACHE') }}
 				{% if S_IS_RHEA %}
-						&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
+					&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 				{% else %}
-						&nbsp;<img class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;">
+					&nbsp;<img class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;">
 				{% endif %}
 			</div>
 		</div>
@@ -43,9 +43,9 @@
 {# start Hall of fame #}
 <h3>{{ lang('TPOTM_EVER_CAT') }}
 	{% if S_IS_RHEA %}
-			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
+		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 	{% else %}
-			&nbsp;<img class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;">
+		&nbsp;<img class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;">
 	{% endif %}
 </h3>
 
