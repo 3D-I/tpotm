@@ -104,7 +104,7 @@ a.hall-avatar-tpotm img {
 	background-color: transparent;
 }
 
-/* for 3.1 */
+/* for 3.1 navigation prepend icon */
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
