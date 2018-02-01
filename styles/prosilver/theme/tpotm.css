@@ -104,7 +104,7 @@ a.hall-avatar-tpotm img {
 	background-color: transparent;
 }
 
-/* for 3.1 */
+/* for 3.1 navigation prepend icon */
 .icon-tpotm-hall {
 	background-image: url("./images/icon-tpotm-hall.png");
 	background-repeat: no-repeat;
@@ -112,9 +112,6 @@ a.hall-avatar-tpotm img {
 
 /* for 3.1 */
 .icon-tpotm-stats {
-	background-image: url("./images/icon-tpotm-hall.png");
-	background-repeat: no-repeat;
-	padding-left: 16px;
 	max-height: 16px;
 	vertical-align: middle;
 	width: auto;

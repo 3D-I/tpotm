@@ -147,6 +147,16 @@ class tpotm
 	}
 
 	/**
+	 * Returns the style related URL to the icon mini stats image file for 3.1.x
+	 *
+	 * @return string	URL
+	 */
+	public function icon_tpotm_stats_url()
+	{
+		return generate_board_url() . '/ext/threedi/tpotm/styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/icon-tpotm-hall.png';
+	}
+
+	/**
 	 * Returns whether the basic badge img exists
 	 *
 	 * @return	bool
@@ -276,6 +286,7 @@ class tpotm
 			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
 			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
+			'TPOTM_ICON_STATS'		=> (string) $this->icon_tpotm_stats_url(),
 		]);
 	}
 
