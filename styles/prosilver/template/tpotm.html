@@ -23,7 +23,7 @@
 		{% if S_IS_RHEA %}
 			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
 		{% else %}
-			&nbsp;<img class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} >
+			&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} >
 		{% endif %}
 	{{ lang('TPOTM_CACHE') }}
 	</p>
