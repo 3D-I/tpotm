@@ -25,8 +25,6 @@ class tpotm_module
 	{
 		global $config, $request, $template, $user, $phpbb_log, $phpbb_container, $db, $phpbb_root_path;
 
-		$tpotm = $phpbb_container->get('threedi.tpotm.tpotm');
-
 		$rootpath = (defined('PHPBB_USE_BOARD_URL_PATH') && PHPBB_USE_BOARD_URL_PATH) ? generate_board_url() . '/' : $phpbb_root_path;
 
 		$user->add_lang_ext('threedi/tpotm', 'acp_tpotm');
