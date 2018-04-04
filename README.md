@@ -1,3 +1,5 @@
+# Proudly powered by [![Jetbrains](https://user-images.githubusercontent.com/480857/38287180-982983fc-37c9-11e8-9634-02e1ea1632c8.png)](https://www.jetbrains.com/)
+
 # tpotm
 [![Build Status](https://travis-ci.org/3D-I/tpotm.svg)](https://travis-ci.org/3D-I/tpotm)
 
