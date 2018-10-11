@@ -79,6 +79,6 @@ $lang = array_merge($lang, [
 		2	=> ' Found a total of <strong>%d</strong> top posters',
 	],
 
-	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
-	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
+	'NOT_AUTHORISED_TPOTM_HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
+	'TPOTM_HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
 ]);

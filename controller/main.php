@@ -51,7 +51,7 @@ class main
 	/**
 	 * Constructor
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
+	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $php_ext, $root_path)
 	{
 		$this->auth			= $auth;
 		$this->db			= $db;
@@ -62,7 +62,7 @@ class main
 		$this->template		= $template;
 		$this->user			= $user;
 		$this->tpotm		= $tpotm;
-		$this->php_ext		= $phpExt;
+		$this->php_ext		= $php_ext;
 		$this->root_path	= $root_path;
 	}
 
@@ -75,12 +75,12 @@ class main
 	{
 		if (!$this->tpotm->is_authed())
 		{
-			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM__HALL');
+			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM_HALL');
 		}
 
 		if (!$this->tpotm->is_hall())
 		{
-			throw new \phpbb\exception\http_exception(404, 'TPOTM__HALL_DISABLED');
+			throw new \phpbb\exception\http_exception(404, 'TPOTM_HALL_DISABLED');
 		}
 
 		/* Starting point in time */
