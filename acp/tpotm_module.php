@@ -129,7 +129,7 @@ class tpotm_module
 			'TPOTM_TTL_MODE'		=> (bool) $config['threedi_tpotm_ttl_mode'],
 			'S_TPOTM_TTL_TPE'		=> $time_row_options,
 			'TPOTM_TTL_TPE'			=> (int) $config['threedi_tpotm_ttl_tpe'],
-			'TPOTM_HALL_EPOCH'		=> (bool) $config['threedi_tpotm_since_epoch']e,
+			'TPOTM_HALL_EPOCH'		=> (bool) $config['threedi_tpotm_since_epoch'],
 			'TPOTM_TTL'				=> (int) $config['threedi_tpotm_ttl'],
 			'TPOTM_MINIAVATAR'		=> (bool) $config['threedi_tpotm_miniavatar'],
 			'TPOTM_MINIPROFILE'		=> (bool) $config['threedi_tpotm_miniprofile'],

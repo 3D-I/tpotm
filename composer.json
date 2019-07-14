@@ -4,34 +4,22 @@
 	"description": " Have a Top Poster of the Month and a Hall of Fame to show on your phpBB. The last poster with the max number of posts made into the current month's lapse of time will win. Provided are a customizable - Hall of fame - and a bunch of options in ACP and UCP. The extension requires PHP => 5.4",
 	"homepage": "https://github.com/3D-I/tpotm",
 	"version": "2.1.0",
-	"time": "2018-10-11",
+	"time": "2019-07-15",
 	"license": "GPL-2.0",
 	"authors": [
 		{
 			"name": "3Di",
-			"email": "three3di@hotmail.it",
-			"homepage": "https://github.com/3D-I/tpotm",
+			"email": "eataly3d@gmail.com",
+			"homepage": "https://www.phpbbstudio.com",
 			"role": "Lead Developer"
-		},
-		{
-			"name": "Dicky (Richard Foote)",
-			"email": "dicky@phpbb.com",
-			"homepage": "https://www.phpbb.com/community/memberlist.php?mode=viewprofile&u=163542",
-			"role": "Past Contributor for the phpBB 2.0.x MOD"
-		},
-		{
-			"name": "RMcGirr83",
-			"email": "rmcgirr83@gmail.com",
-			"homepage": "https://github.com/rmcgirr83",
-			"role": "Past Contributor for the phpBB 3.0.x MOD-X"
 		}
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"phpbb/phpbb": ">=3.1.11,<3.3.0@dev"
+		"composer/installers": "~1.0"
 	},
 	"extra": {
-		"display-name": "Top Poster Of The Month",
+		"display-name": "3Di - Top Poster Of The Month",
 		"soft-require": {
 			"phpbb/phpbb": ">=3.1.11,<3.3.0@dev"
 		},

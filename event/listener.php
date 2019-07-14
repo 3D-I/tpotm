@@ -41,13 +41,20 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Constructor
 	 */
-	public function __construct(\phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(
+		\phpbb\request\request $request,
+		\phpbb\controller\helper $helper,
+		\phpbb\template\template $template,
+		\phpbb\user $user,
+		$php_ext,
+		\threedi\tpotm\core\tpotm $tpotm
+	)
 	{
 		$this->request		= $request;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
-		$this->php_ext		= $phpExt;
+		$this->php_ext		= $php_ext;
 		$this->tpotm		= $tpotm;
 	}
 
@@ -84,17 +91,27 @@ class listener implements EventSubscriberInterface
 	 */
 	public function permissions($event)
 	{
+		$categories = $event['categories'];
 		$permissions = $event['permissions'];
-		$permissions += [
-			'u_allow_tpotm_view' => [
-				'lang'	=> 'ACL_U_ALLOW_TPOTM_VIEW',
-				'cat'	=> 'misc',
-			],
-			'a_tpotm_admin' => [
-				'lang'	=> 'ACL_A_TPOTM_ADMIN',
-				'cat'	=> 'misc',
-			],
+
+		if (empty($categories['3Di']))
+		{
+			/* Setting up a custom CAT */
+			$categories['3Di'] = 'ACL_CAT_3DI';
+
+			$event['categories'] = $categories;
+		}
+
+		$perms = [
+			'u_allow_tpotm_view',
+			'a_tpotm_admin',
 		];
+
+		foreach ($perms as $permission)
+		{
+			$permissions[$permission] = ['lang' => 'ACL_' . utf8_strtoupper($permission), 'cat' => '3Di'];
+		}
+
 		$event['permissions'] = $permissions;
 	}
 
@@ -226,8 +243,9 @@ class listener implements EventSubscriberInterface
 		 */
 		if ($this->tpotm->is_authed() && $this->tpotm->enable_miniprofile())
 		{
-			$array = $event['user_cache_data'];
-			$array['user_tpotm'] = $event['row']['user_tpotm'];
+			$user_cache_data = $event['user_cache_data'];
+			$user_cache_data['user_tpotm'] = $event['row']['user_tpotm'];
+
 			/**
 			 * The migration created a field in the users table: user_tpotm
 			 * Sat as default to be empty string for everyone
@@ -235,10 +253,10 @@ class listener implements EventSubscriberInterface
 			 */
 			$user_tpotm = [];
 
-			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
+			$user_tpotm[] = ($user_cache_data['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
 
-			$array = array_merge($array, $user_tpotm);
-			$event['user_cache_data'] = $array;
+			$user_cache_data = array_merge($user_cache_data, $user_tpotm);
+			$event['user_cache_data'] = $user_cache_data;
 		}
 	}
 
