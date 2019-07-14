@@ -134,7 +134,7 @@ class tpotm_module
 			'TPOTM_MINIAVATAR'		=> (bool) $config['threedi_tpotm_miniavatar'],
 			'TPOTM_MINIPROFILE'		=> (bool) $config['threedi_tpotm_miniprofile'],
 			'TPOTM_ADM_MODS'		=> (bool) $config['threedi_tpotm_adm_mods'],
-			'TPOTM_FOUNDERS'		=> (bool) $config['threedi_tpotm_founders'](bool) ,
+			'TPOTM_FOUNDERS'		=> (bool) $config['threedi_tpotm_founders'],
 			'TPOTM_BANNEDS'			=> (bool) $config['threedi_tpotm_banneds'],
 
 			'U_ACTION'				=> $this->u_action,
