@@ -47,6 +47,16 @@ class tpotm
 
 	/**
 	 * Constructor
+	 * @param \phpbb\auth\auth                  $auth
+	 * @param \phpbb\cache\service              $cache
+	 * @param \phpbb\config\config              $config
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\user                       $user
+	 * @param \phpbb\path_helper                $path_helper
+	 * @param                                   $root_path
+	 * @param                                   $phpExt
+	 * @param \phpbb\template\template          $template
+	 * @param \phpbb\extension\manager          $ext_manager
 	 */
 	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
 	{
@@ -293,7 +303,12 @@ class tpotm
 	/**
 	 * Performs a date range costruction of the current month
 	 *
-	 * @return	string	user formatted data range (Thx Steve)
+	 * @param      $hr
+	 * @param      $min
+	 * @param      $sec
+	 * @param bool $start
+	 * @param bool $format
+	 * @return    string    user formatted data range (Thx Steve)
 	 */
 	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{

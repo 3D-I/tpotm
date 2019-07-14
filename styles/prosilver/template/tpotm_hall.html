@@ -33,7 +33,7 @@
 				{% if S_IS_RHEA %}
 					<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 				{% else %}
-					<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %}>
+					<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} alt="{{ lang('TPOTM_NO_EXPLAIN') }}">
 				{% endif %}
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 
 	<div class="panel bg1">
 		<div class="inner">
-			<div id="tpotm-container" class="tpotm-container">
+			<div class="tpotm-container">
 				{% for tpotm_ever in loops.tpotm_ever %}
 				<div class="tpotm-flex-cell">
 					<div class="tpotm-flex-item">

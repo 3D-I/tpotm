@@ -4,7 +4,7 @@
 	{% if S_IS_RHEA %}
 		<i class="icon fa-trophy fa-fw icon-lg" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} ></i>
 	{% elseif not S_IS_RHEA %}
-		<img src="{{ TPOTM_UCP_BADGE }}" class="tpotm-ucp-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} />
+		<img src="{{ TPOTM_UCP_BADGE }}" class="tpotm-ucp-badge" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %}  alt="{{ lang('TPOTM_NO_EXPLAIN') }}"/>
 	{% else %}
 		{{ lang('TPOTM_BADGE') }}
 	{% endif %}

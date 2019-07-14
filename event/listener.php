@@ -40,6 +40,12 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Constructor
+	 * @param \phpbb\request\request    $request
+	 * @param \phpbb\controller\helper  $helper
+	 * @param \phpbb\template\template  $template
+	 * @param \phpbb\user               $user
+	 * @param                           $php_ext
+	 * @param \threedi\tpotm\core\tpotm $tpotm
 	 */
 	public function __construct(
 		\phpbb\request\request $request,
@@ -88,6 +94,7 @@ class listener implements EventSubscriberInterface
 	 * Permission's language file is automatically loaded
 	 *
 	 * @event core.permissions
+	 * @param $event
 	 */
 	public function permissions($event)
 	{
@@ -117,6 +124,7 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Add configuration to Board preferences in UCP
+	 * @param $event
 	 */
 	public function tpotm_ucp_prefs_data($event)
 	{
@@ -149,6 +157,7 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Updates configuration to Board preferences in UCP
+	 * @param $event
 	 */
 	public function tpotm_ucp_prefs_update_data($event)
 	{
@@ -235,6 +244,7 @@ class listener implements EventSubscriberInterface
 	 * Modify the users' data displayed within their posts
 	 *
 	 * @event core.viewtopic_cache_user_data
+	 * @param $event
 	 */
 	public function viewtopic_tpotm_cache_user_data($event)
 	{
@@ -264,6 +274,7 @@ class listener implements EventSubscriberInterface
 	 * Modify the posts template block
 	 *
 	 * @event core.viewtopic_modify_post_row
+	 * @param $event
 	 */
 	public function viewtopic_tpotm($event)
 	{
