@@ -39,11 +39,11 @@ i.fa-question-circle-o {
 	background-repeat: no-repeat;
 	background-position: 100% 0;
 	border-radius: 7px;
-	box-shadow: 1px 2px 3px grey;
+	box-shadow: 1px 2px 3px #6f6d6d;
 	color: #105289;
 	position: relative;
-	padding: 5px 10px;
 	margin: 10px;
+	padding: 5px 10px;
 }
 
 .tpotm-div-1,
@@ -75,20 +75,20 @@ i.fa-question-circle-o {
 
 .tpotm-div-4 {
 	text-align: center;
+	background-color: #ecf3f7;
+	border-radius: 100%;
 	position: relative;
 	top: 10px;
 	left: 10px;
-	border-radius: 100%;
 	width: 100px;
-	background-color: #ecf3f7;
 	height: 100px;
 }
 
 .tpotm-span-1 {
 	font-size: 16px;
+	font-weight: bold;
 	position: relative;
 	top: 40px;
-	font-weight: bold;
 }
 
 .tpotm-div-5 {
@@ -97,12 +97,12 @@ i.fa-question-circle-o {
 }
 
 a.hall-avatar-tpotm img {
-	width: auto;
-	margin-bottom: 2px;
 	background-color: transparent;
 	border-radius: 7px;
-	box-shadow: 1px 2px 3px grey;
+	box-shadow: 1px 2px 3px #6f6d6d;
+	width: auto;
 	height: 80px;
+	margin-bottom: 2px;
 }
 
 /* for 3.1 navigation prepend icon */
@@ -114,8 +114,8 @@ a.hall-avatar-tpotm img {
 /* for 3.1 */
 .icon-tpotm-stats {
 	vertical-align: middle;
-	max-height: 16px;
 	width: auto;
+	max-height: 16px;
 	margin-bottom: 4px;
 	cursor: pointer;
 }
@@ -126,31 +126,31 @@ a.hall-avatar-tpotm img {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-flow: row wrap;
 	overflow: auto;
-	flex-flow: row wrap;
 	justify-content: space-around;
 	height: auto; /* else 304px; means 76 x 4 "((66+3+3+2+2) x 4)" tpotm-flex-cell height */
+	-ms-flex-flow: row wrap;
+	flex-flow: row wrap;
 }
 
 /* Each element within the viewport container */
 .tpotm-flex-item {
 	-ms-flex: 1 1 auto;
-	-webkit-box-flex: 1;
 	flex: 1 1;
+	-webkit-box-flex: 1;
 }
 
 /* Avatar container */
 .tpotm-flex-avatar {
+	vertical-align: middle;
+	background-color: transparent;
 	border-width: 1px;
 	border-style: none;
-	vertical-align: middle;
-	padding: 2px;
 	border-radius: 4px;
-	background-color: transparent;
-	box-shadow: 1px 2px 3px grey;
+	box-shadow: 1px 2px 3px #6f6d6d;
 	display: inline-flex;
 	width: auto;
+	padding: 2px;
 }
 
 /* Avatar image */
@@ -161,30 +161,30 @@ a.hall-avatar-tpotm img {
 
 /* The wrapper for each user content - default packed */
 .tpotm-flex-cell {
+	vertical-align: middle;
 	background: none;
 	border-width: 2px;
 	border-style: solid;
-	padding: 3px;
 	border-color: #729ea5;
-	width: 200px;
-	vertical-align: middle;
-	height: 66px;
 	border-radius: 7px;
-	box-shadow: 1px 2px 3px grey;
+	box-shadow: 1px 2px 3px #6f6d6d;
 	display: flex;
 	align-items: start;
+	width: 200px;
+	height: 66px;
+	padding: 3px;
 }
 
 /* Each text entry, with or without a link - default packed */
 .tpotm-flex-text,
 .tpotm-flex-text a {
 	font-size: 16px;
-	flex: 1;
+	line-height: 26px;
 	white-space: nowrap;
 	text-decoration: none;
 	text-overflow: ellipsis;
 	overflow: hidden;
-	line-height: 26px;
+	flex: 1;
 	width: 196px; /* (200 - (2+2)) tpotm-flex-cell width */
 }
 
