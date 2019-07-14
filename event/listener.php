@@ -243,8 +243,8 @@ class listener implements EventSubscriberInterface
 		 */
 		if ($this->tpotm->is_authed() && $this->tpotm->enable_miniprofile())
 		{
-			$user_cache_data = $event['user_cache_data'];
-			$user_cache_data['user_tpotm'] = $event['row']['user_tpotm'];
+			$array = $event['user_cache_data'];
+			$array['user_tpotm'] = $event['row']['user_tpotm'];
 
 			/**
 			 * The migration created a field in the users table: user_tpotm
@@ -253,10 +253,10 @@ class listener implements EventSubscriberInterface
 			 */
 			$user_tpotm = [];
 
-			$user_tpotm[] = ($user_cache_data['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
+			$user_tpotm[] = ($array['user_tpotm']) ? (string) $this->tpotm->style_miniprofile_badge($array['user_tpotm']) : '';
 
-			$user_cache_data = array_merge($user_cache_data, $user_tpotm);
-			$event['user_cache_data'] = $user_cache_data;
+			$array = array_merge($array, $user_tpotm);
+			$event['user_cache_data'] = $array;
 		}
 	}
 

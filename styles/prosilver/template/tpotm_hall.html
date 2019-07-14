@@ -10,7 +10,7 @@
 		<div class="tpotm-div-1">
 			<div class="tpotm-div-2">
 				<a href="{{ U_TPOTM_AVATAR_URL }}" class="hall-avatar-tpotm">{{ TPOTM_AVATAR_HALL }}</a>
-				<span class="text2">&nbsp;{{ TPOTM_NAME }}</span>
+				<span class="text2"> {{ TPOTM_NAME }}</span>
 			</div>
 			<span class="text1">{{ TPOTM_POST }}</span>
 			<div class="tpotm-div-3" style="background-image: linear-gradient({{ DEGREE }}deg, transparent 50%, {% if PERCENT > 50 %}#80BF00{% else %}#CCCCCC{% endif %} 50%), linear-gradient(90deg, #CCCCCC 50%, transparent 50%)">
@@ -31,9 +31,9 @@
 				{% endif %}
 				{{ lang('TPOTM_CACHE') }}
 				{% if S_IS_RHEA %}
-					&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
+					<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 				{% else %}
-					&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %}>
+					<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN') }}"{% else %}title="{{ lang('TPOTM_NO_EXPLAIN') }}"{% endif %}>
 				{% endif %}
 			</div>
 		</div>
@@ -43,9 +43,9 @@
 {# start Hall of fame #}
 <h3>{{ lang('TPOTM_EVER_CAT') }}
 	{% if S_IS_RHEA %}
-		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
+		<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
 	{% else %}
-		&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} >
+		<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} >
 	{% endif %}
 </h3>
 
@@ -66,7 +66,6 @@
 	<div class="panel bg1">
 		<div class="inner">
 			<div id="tpotm-container" class="tpotm-container">
-
 				{% for tpotm_ever in loops.tpotm_ever %}
 				<div class="tpotm-flex-cell">
 					<div class="tpotm-flex-item">
@@ -99,7 +98,6 @@
 		</div>
 		{% endif %}
 	</div>
-
 {% else %}
 	<div class="tpotm-div-1 tpotm-div-5">{{ lang('TPOTM_HALL_NO_TOP_POSTERS') }}</div>
 {% endif %}
