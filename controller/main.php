@@ -112,14 +112,7 @@ class main
 		$end_this_month = gmmktime(23, 59, 59, $month_cur, $this_max_days, $year);
 
 		/* Top posters ever's dynamic cache TTL admin choice*/
-		if ($this->config['threedi_tpotm_ttl_mode'])
-		{
-			$ttl_diff = (int) ($end_this_month - $now);
-		}
-		else
-		{
-			$ttl_diff = (int) $this->config['threedi_tpotm_ttl_tpe'];
-		}
+		$ttl_diff = ($this->config['threedi_tpotm_ttl_mode']) ? $ttl_diff = (int) $end_this_month - $now : (int) $this->config['threedi_tpotm_ttl_tpe'];
 
 		/* These are for pagination */
 		$start = $this->request->variable('start', 0);
@@ -170,7 +163,9 @@ class main
 			];
 
 			/* Giv'em an username, if any */
-			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+			$username = ($this->auth->acl_get('u_viewprofile'))
+				? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'])
+				: get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 			/**
 			 * DAE (Default Avatar Extended) extension compatibility

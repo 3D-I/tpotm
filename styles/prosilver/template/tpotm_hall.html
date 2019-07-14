@@ -41,66 +41,68 @@
 </div>
 
 {# start Hall of fame #}
-<h3>{{ lang('TPOTM_EVER_CAT') }}
-	{% if S_IS_RHEA %}
-		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
-	{% else %}
-		&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} >
-	{% endif %}
-</h3>
+{% if tpotm_ever|length %}
 
-<div class="action-bar top">
-	{% if loops.pagination or TOTAL_USERS %}
-	<div class="pagination">
-		 {COUNT}
-		{% if loops.pagination %}
-			{% include 'pagination.html' %}
+	<h3>{{ lang('TPOTM_EVER_CAT') }}
+		{% if S_IS_RHEA %}
+			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{%	 endif %} style="cursor: pointer;"></i>
 		{% else %}
-			&bull; {PAGE_NUMBER}
+			&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{%	 endif %} >
+		{% endif %}
+	</h3>
+
+	<div class="action-bar top">
+		{% if loops.pagination or TOTAL_USERS %}
+		<div class="pagination">
+			 {COUNT}
+			{% if loops.pagination %}
+				{% include 'pagination.html' %}
+			{% else %}
+				&bull; {PAGE_NUMBER}
+			{% endif %}
+		</div>
 		{% endif %}
 	</div>
-	{% endif %}
-</div>
 
-<div class="panel bg1">
-	<div class="inner">
-		<div id="tpotm-container" class="tpotm-container">
-		{% if tpotm_ever|length %}
-			{% for tpotm_ever in loops.tpotm_ever %}
-			<div class="tpotm-flex-cell">
-				<div class="tpotm-flex-item">
-					<div class="tpotm-flex-avatar">
-						{{ tpotm_ever.USER_AVATAR }}
-					</div>
-					&nbsp;{{ tpotm_ever.USERNAME }}
-					<div class="tpotm-flex-text">
-						{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
-					</div>
-					<div class="tpotm-flex-text">
-						{{ lang('TPOTM_LAST_POST_IN_MONTH') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.POST_TIME	}}
+	<div class="panel bg1">
+		<div class="inner">
+			<div id="tpotm-container" class="tpotm-container">
+
+				{% for tpotm_ever in loops.tpotm_ever %}
+				<div class="tpotm-flex-cell">
+					<div class="tpotm-flex-item">
+						<div class="tpotm-flex-avatar">
+							{{ tpotm_ever.USER_AVATAR }}
+						</div>
+						&nbsp;{{ tpotm_ever.USERNAME }}
+						<div class="tpotm-flex-text">
+							{{ lang('TPOTM_TOT_POST') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.TOTAL_POSTS	}}
+						</div>
+						<div class="tpotm-flex-text">
+							{{ lang('TPOTM_LAST_POST_IN_MONTH') }}{{ lang('COLON') }}&nbsp;{{ tpotm_ever.POST_TIME	}}
+						</div>
 					</div>
 				</div>
+				{% endfor %}
+
 			</div>
-			{% endfor %}
-		{% else %}
-			<div class="tpotm-div-1 tpotm-div-5">{{ lang('TPOTM_HALL_NO_TOP_POSTERS') }}</div>
-		{% endif %}
 		</div>
 	</div>
-</div>
 
-<div class="action-bar top">
-	{% if loops.pagination or TOTAL_USERS %}
-	<div class="pagination">
-		 {COUNT}
-		{% if loops.pagination %}
-			{% include 'pagination.html' %}
-		{% else %}
-			&bull; {PAGE_NUMBER}
+	<div class="action-bar top">
+		{% if loops.pagination or TOTAL_USERS %}
+		<div class="pagination">
+			 {COUNT}
+			{% if loops.pagination %}
+				{% include 'pagination.html' %}
+			{% else %}
+				&bull; {PAGE_NUMBER}
+			{% endif %}
+		</div>
 		{% endif %}
 	</div>
-	{% endif %}
-</div>
+
+{% endif %}
 {# end Hall of fame #}
 
 {% include 'jumpbox.html' %}
