@@ -65,6 +65,7 @@
 <div class="panel bg1">
 	<div class="inner">
 		<div id="tpotm-container" class="tpotm-container">
+		{% if tpotm_ever|length %}
 			{% for tpotm_ever in loops.tpotm_ever %}
 			<div class="tpotm-flex-cell">
 				<div class="tpotm-flex-item">
@@ -81,6 +82,9 @@
 				</div>
 			</div>
 			{% endfor %}
+		{% else %}
+			<div class="tpotm-div-1 tpotm-div-5">{{ lang('TPOTM_HALL_NO_TOP_POSTERS') }}</div>
+		{% endif %}
 		</div>
 	</div>
 </div>

@@ -122,8 +122,8 @@ class main
 		}
 
 		/* These are for pagination */
-		$start			= $this->request->variable('start', 0);
-		$limit			= (int) $this->config['threedi_tpotm_users_page'];
+		$start = $this->request->variable('start', 0);
+		$limit = (int) $this->config['threedi_tpotm_users_page'];
 
 		/* Admin choices */
 		$and_admmods = $this->tpotm->wishes_admin_mods();
