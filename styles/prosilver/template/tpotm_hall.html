@@ -41,16 +41,15 @@
 </div>
 
 {# start Hall of fame #}
+<h3>{{ lang('TPOTM_EVER_CAT') }}
+	{% if S_IS_RHEA %}
+		&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} style="cursor: pointer;"></i>
+	{% else %}
+		&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{% endif %} >
+	{% endif %}
+</h3>
+
 {% if tpotm_ever|length %}
-
-	<h3>{{ lang('TPOTM_EVER_CAT') }}
-		{% if S_IS_RHEA %}
-			&nbsp;<i class="icon fa-question-circle-o fa-fw" aria-hidden="true" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{%	 endif %} style="cursor: pointer;"></i>
-		{% else %}
-			&nbsp;<img src="{{ TPOTM_ICON_STATS }}" class="icon icon-tpotm-stats" {% if S_U_TOOLTIP_SEL %}title="{{ lang('TPOTM_EXPLAIN_HALL') }}"{% else %}title="{{ lang('TPOTM_HALL_NO_EXPLAIN') }}"{%	 endif %} >
-		{% endif %}
-	</h3>
-
 	<div class="action-bar top">
 		{% if loops.pagination or TOTAL_USERS %}
 		<div class="pagination">
@@ -84,7 +83,6 @@
 					</div>
 				</div>
 				{% endfor %}
-
 			</div>
 		</div>
 	</div>
@@ -102,6 +100,8 @@
 		{% endif %}
 	</div>
 
+{% else %}
+	<div class="tpotm-div-1 tpotm-div-5">{{ lang('TPOTM_HALL_NO_TOP_POSTERS') }}</div>
 {% endif %}
 {# end Hall of fame #}
 
