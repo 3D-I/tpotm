@@ -51,7 +51,19 @@ class main
 	/**
 	 * Constructor
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $php_ext, $root_path)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\config\config $config,
+		\phpbb\controller\helper $helper,
+		\phpbb\pagination $pagination,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
+		\phpbb\user $user,
+		\threedi\tpotm\core\tpotm $tpotm,
+		$php_ext,
+		$root_path
+	)
 	{
 		$this->auth			= $auth;
 		$this->db			= $db;
@@ -62,6 +74,7 @@ class main
 		$this->template		= $template;
 		$this->user			= $user;
 		$this->tpotm		= $tpotm;
+
 		$this->php_ext		= $php_ext;
 		$this->root_path	= $root_path;
 	}
