@@ -11,7 +11,7 @@
 namespace threedi\tpotm;
 
 /**
-* Extension class for custom enable/disable/purge actions
+* Top Poster Of The Month Extension base
 */
 
 class ext extends \phpbb\extension\base

@@ -1,7 +1,6 @@
 # 3Di - Top Poster Of The Month
 
 Have a Top Poster Of The Month to show on your phpBB.
-Includes Hall of fame. Compatible with Default Avatar Extended.
 
 Requirements
 

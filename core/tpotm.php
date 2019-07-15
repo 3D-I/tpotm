@@ -27,11 +27,17 @@ class tpotm
 	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/** @var \phpbb\extension\manager */
+	protected $ext_manager;
+
 	/* @var \phpbb\user */
 	protected $user;
 
 	/* @var \phpbb\controller\helper */
 	protected $path_helper;
+
+	/* @var \phpbb\template\template */
+	protected $template;
 
 	/* @var string phpBB root path */
 	protected $root_path;
@@ -39,37 +45,43 @@ class tpotm
 	/* @var string phpEx */
 	protected $php_ext;
 
-	/* @var \phpbb\template\template */
-	protected $template;
-
-	/** @var \phpbb\extension\manager */
-	protected $ext_manager;
-
 	/**
 	 * Constructor
 	 * @param \phpbb\auth\auth                  $auth
 	 * @param \phpbb\cache\service              $cache
 	 * @param \phpbb\config\config              $config
 	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\extension\manager          $ext_manager
 	 * @param \phpbb\user                       $user
 	 * @param \phpbb\path_helper                $path_helper
+	 * @param \phpbb\template\template          $template
 	 * @param                                   $root_path
 	 * @param                                   $phpExt
-	 * @param \phpbb\template\template          $template
-	 * @param \phpbb\extension\manager          $ext_manager
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\cache\service $cache,
+		\phpbb\config\config $config,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\extension\manager $ext_manager,
+		\phpbb\user $user,
+		\phpbb\path_helper $path_helper,
+		\phpbb\template\template $template,
+		$root_path,
+		$phpExt
+	)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
 		$this->config			=	$config;
 		$this->db				=	$db;
+		$this->ext_manager		=	$ext_manager;
 		$this->user				=	$user;
 		$this->path_helper		=	$path_helper;
+		$this->template			=	$template;
+
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
-		$this->template			=	$template;
-		$this->ext_manager		=	$ext_manager;
 
 		$is_dae_enabled			=	$this->ext_manager->is_enabled('threedi/dae');
 		$this->is_dae_enabled	=	$is_dae_enabled;
@@ -113,7 +125,7 @@ class tpotm
 	 */
 	public function is_authed()
 	{
-		return (bool) (($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')));
+		return ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin'));
 	}
 
 	/**
