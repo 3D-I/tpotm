@@ -3,7 +3,7 @@
  *
  * Top Poster Of The Month. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2005,2017, 3Di
+ * @copyright (c) 2005, 2019, 3Di <https://www.phpbbstudio.com>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -50,8 +50,33 @@ class main
 
 	/**
 	 * Constructor
+	 * @param \phpbb\auth\auth						$auth
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\pagination						$pagination
+	 * @param \phpbb\request\request				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \threedi\tpotm\core\tpotm				$tpotm
+	 * @param										$php_ext
+	 * @param										$root_path
+	 * @return void
+	 * @access public
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\db\driver\driver_interface $db, \phpbb\config\config $config, \phpbb\controller\helper $helper, \phpbb\pagination $pagination, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user, \threedi\tpotm\core\tpotm $tpotm, $phpExt, $root_path)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\config\config $config,
+		\phpbb\controller\helper $helper,
+		\phpbb\pagination $pagination,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
+		\phpbb\user $user,
+		\threedi\tpotm\core\tpotm $tpotm,
+		$php_ext,
+		$root_path
+	)
 	{
 		$this->auth			= $auth;
 		$this->db			= $db;
@@ -62,7 +87,8 @@ class main
 		$this->template		= $template;
 		$this->user			= $user;
 		$this->tpotm		= $tpotm;
-		$this->php_ext		= $phpExt;
+
+		$this->php_ext		= $php_ext;
 		$this->root_path	= $root_path;
 	}
 
@@ -75,12 +101,12 @@ class main
 	{
 		if (!$this->tpotm->is_authed())
 		{
-			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM__HALL');
+			throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED_TPOTM_HALL');
 		}
 
 		if (!$this->tpotm->is_hall())
 		{
-			throw new \phpbb\exception\http_exception(404, 'TPOTM__HALL_DISABLED');
+			throw new \phpbb\exception\http_exception(404, 'TPOTM_HALL_DISABLED');
 		}
 
 		/* Starting point in time */
@@ -112,18 +138,11 @@ class main
 		$end_this_month = gmmktime(23, 59, 59, $month_cur, $this_max_days, $year);
 
 		/* Top posters ever's dynamic cache TTL admin choice*/
-		if ($this->config['threedi_tpotm_ttl_mode'])
-		{
-			$ttl_diff = (int) ($end_this_month - $now);
-		}
-		else
-		{
-			$ttl_diff = (int) $this->config['threedi_tpotm_ttl_tpe'];
-		}
+		$ttl_diff = ($this->config['threedi_tpotm_ttl_mode']) ? $ttl_diff = (int) $end_this_month - $now : (int) $this->config['threedi_tpotm_ttl_tpe'];
 
 		/* These are for pagination */
-		$start			= $this->request->variable('start', 0);
-		$limit			= (int) $this->config['threedi_tpotm_users_page'];
+		$start = $this->request->variable('start', 0);
+		$limit = (int) $this->config['threedi_tpotm_users_page'];
 
 		/* Admin choices */
 		$and_admmods = $this->tpotm->wishes_admin_mods();
@@ -156,7 +175,7 @@ class main
 		 * Gives the user an avatar as default if missing, for the sake of the layout.
 		 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 		 */
-		$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->check_point_badge_img() : $this->user->lang('TPOTM_BADGE');
+		$no_avatar = (empty($row['user_avatar'])) ? $this->tpotm->check_point_badge_img() : $this->user->lang('TPOTM_BADGE');
 
 		/* Loop into the data */
 		foreach ($rows as $row)
@@ -170,7 +189,9 @@ class main
 			];
 
 			/* Giv'em an username, if any */
-			$username = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+			$username = ($this->auth->acl_get('u_viewprofile'))
+				? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour'])
+				: get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
 
 			/**
 			 * DAE (Default Avatar Extended) extension compatibility

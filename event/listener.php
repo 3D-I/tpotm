@@ -3,7 +3,7 @@
  *
  * Top Poster Of The Month. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2005,2017, 3Di
+ * @copyright (c) 2005, 2019, 3Di <https://www.phpbbstudio.com>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -32,23 +32,39 @@ class listener implements EventSubscriberInterface
 	/* @var \phpbb\user */
 	protected $user;
 
-	/* @var string phpEx */
-	protected $php_ext;
-
 	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
+	/* @var string phpEx */
+	protected $php_ext;
+
 	/**
 	 * Constructor
+	 * @param \phpbb\request\request		$request
+	 * @param \phpbb\controller\helper		$helper
+	 * @param \phpbb\template\template		$template
+	 * @param \phpbb\user					$user
+	 * @param \threedi\tpotm\core\tpotm		$tpotm
+	 * @param								$php_ext
+	 * @return void
+	 * @access public
 	 */
-	public function __construct(\phpbb\request\request $request, \phpbb\controller\helper $helper, \phpbb\template\template $template, \phpbb\user $user, $phpExt, \threedi\tpotm\core\tpotm $tpotm)
+	public function __construct(
+		\phpbb\request\request $request,
+		\phpbb\controller\helper $helper,
+		\phpbb\template\template $template,
+		\phpbb\user $user,
+		\threedi\tpotm\core\tpotm $tpotm,
+		$php_ext
+	)
 	{
 		$this->request		= $request;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
-		$this->php_ext		= $phpExt;
 		$this->tpotm		= $tpotm;
+
+		$this->php_ext		= $php_ext;
 	}
 
 	static public function getSubscribedEvents()
@@ -81,25 +97,37 @@ class listener implements EventSubscriberInterface
 	 * Permission's language file is automatically loaded
 	 *
 	 * @event core.permissions
+	 * @param $event
 	 */
 	public function permissions($event)
 	{
+		$categories = $event['categories'];
 		$permissions = $event['permissions'];
-		$permissions += [
-			'u_allow_tpotm_view' => [
-				'lang'	=> 'ACL_U_ALLOW_TPOTM_VIEW',
-				'cat'	=> 'misc',
-			],
-			'a_tpotm_admin' => [
-				'lang'	=> 'ACL_A_TPOTM_ADMIN',
-				'cat'	=> 'misc',
-			],
+
+		if (empty($categories['3Di']))
+		{
+			/* Setting up a custom CAT */
+			$categories['3Di'] = 'ACL_CAT_3DI';
+
+			$event['categories'] = $categories;
+		}
+
+		$perms = [
+			'u_allow_tpotm_view',
+			'a_tpotm_admin',
 		];
+
+		foreach ($perms as $permission)
+		{
+			$permissions[$permission] = ['lang' => 'ACL_' . utf8_strtoupper($permission), 'cat' => '3Di'];
+		}
+
 		$event['permissions'] = $permissions;
 	}
 
 	/**
 	 * Add configuration to Board preferences in UCP
+	 * @param $event
 	 */
 	public function tpotm_ucp_prefs_data($event)
 	{
@@ -132,6 +160,7 @@ class listener implements EventSubscriberInterface
 
 	/**
 	 * Updates configuration to Board preferences in UCP
+	 * @param $event
 	 */
 	public function tpotm_ucp_prefs_update_data($event)
 	{
@@ -218,6 +247,7 @@ class listener implements EventSubscriberInterface
 	 * Modify the users' data displayed within their posts
 	 *
 	 * @event core.viewtopic_cache_user_data
+	 * @param $event
 	 */
 	public function viewtopic_tpotm_cache_user_data($event)
 	{
@@ -228,6 +258,7 @@ class listener implements EventSubscriberInterface
 		{
 			$array = $event['user_cache_data'];
 			$array['user_tpotm'] = $event['row']['user_tpotm'];
+
 			/**
 			 * The migration created a field in the users table: user_tpotm
 			 * Sat as default to be empty string for everyone
@@ -246,6 +277,7 @@ class listener implements EventSubscriberInterface
 	 * Modify the posts template block
 	 *
 	 * @event core.viewtopic_modify_post_row
+	 * @param $event
 	 */
 	public function viewtopic_tpotm($event)
 	{

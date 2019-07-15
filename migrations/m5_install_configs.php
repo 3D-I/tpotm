@@ -10,20 +10,22 @@
 
 namespace threedi\tpotm\migrations;
 
-class m1_install_perms extends \phpbb\db\migration\migration
+class m5_install_configs extends \phpbb\db\migration\migration
 {
+	public function effectively_installed()
+	{
+		return phpbb_version_compare($this->config['threedi_tpotm'], '2.1.0', '>=');
+	}
+
 	static public function depends_on()
 	{
-		return ['\phpbb\db\migration\data\v31x\v3111'];
+		return ['\threedi\tpotm\migrations\m3_install_configs'];
 	}
 
 	public function update_data()
 	{
 		return [
-			['permission.add', ['u_allow_tpotm_view']],
-			['permission.permission_set', ['REGISTERED', 'u_allow_tpotm_view', 'group']],
-			['permission.add', ['a_tpotm_admin']],
-			['permission.permission_set', ['ADMINISTRATORS', 'a_tpotm_admin', 'group']],
+			['config.update', ['threedi_tpotm', '2.1.0']],
 		];
 	}
 }

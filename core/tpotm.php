@@ -3,7 +3,7 @@
  *
  * Top Poster Of The Month. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2005,2017, 3Di
+ * @copyright (c) 2005, 2019, 3Di <https://www.phpbbstudio.com>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -27,11 +27,17 @@ class tpotm
 	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/** @var \phpbb\extension\manager */
+	protected $ext_manager;
+
 	/* @var \phpbb\user */
 	protected $user;
 
 	/* @var \phpbb\controller\helper */
 	protected $path_helper;
+
+	/* @var \phpbb\template\template */
+	protected $template;
 
 	/* @var string phpBB root path */
 	protected $root_path;
@@ -39,27 +45,43 @@ class tpotm
 	/* @var string phpEx */
 	protected $php_ext;
 
-	/* @var \phpbb\template\template */
-	protected $template;
-
-	/** @var \phpbb\extension\manager */
-	protected $ext_manager;
-
 	/**
 	 * Constructor
+	 * @param \phpbb\auth\auth                  $auth
+	 * @param \phpbb\cache\service              $cache
+	 * @param \phpbb\config\config              $config
+	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\extension\manager          $ext_manager
+	 * @param \phpbb\user                       $user
+	 * @param \phpbb\path_helper                $path_helper
+	 * @param \phpbb\template\template          $template
+	 * @param                                   $root_path
+	 * @param                                   $phpExt
 	 */
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\cache\service $cache, \phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\user $user, \phpbb\path_helper $path_helper, $root_path, $phpExt, \phpbb\template\template $template, \phpbb\extension\manager $ext_manager)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\cache\service $cache,
+		\phpbb\config\config $config,
+		\phpbb\db\driver\driver_interface $db,
+		\phpbb\extension\manager $ext_manager,
+		\phpbb\user $user,
+		\phpbb\path_helper $path_helper,
+		\phpbb\template\template $template,
+		$root_path,
+		$phpExt
+	)
 	{
 		$this->auth				=	$auth;
 		$this->cache			=	$cache;
 		$this->config			=	$config;
 		$this->db				=	$db;
+		$this->ext_manager		=	$ext_manager;
 		$this->user				=	$user;
 		$this->path_helper		=	$path_helper;
+		$this->template			=	$template;
+
 		$this->root_path		=	$root_path;
 		$this->php_ext			=	$phpExt;
-		$this->template			=	$template;
-		$this->ext_manager		=	$ext_manager;
 
 		$is_dae_enabled			=	$this->ext_manager->is_enabled('threedi/dae');
 		$this->is_dae_enabled	=	$is_dae_enabled;
@@ -73,7 +95,7 @@ class tpotm
 	 */
 	public function is_dae()
 	{
-		return (bool) (($this->is_dae_enabled) && $this->config['threedi_default_avatar_extended']);
+		return $this->is_dae_enabled && $this->config['threedi_default_avatar_extended'] && ($this->auth->acl_get('u_dae_user') || $this->auth->acl_get('a_dae_admin'));
 	}
 
 	/**
@@ -103,7 +125,7 @@ class tpotm
 	 */
 	public function is_authed()
 	{
-		return (bool) (($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin')));
+		return ($this->auth->acl_get('u_allow_tpotm_view') || $this->auth->acl_get('a_tpotm_admin'));
 	}
 
 	/**
@@ -230,6 +252,7 @@ class tpotm
 		$tpotm_sql1 = [
 			'user_tpotm'	=> ''
 		];
+
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
 			WHERE user_id <> ' . ANONYMOUS;
@@ -247,6 +270,7 @@ class tpotm
 		$tpotm_sql2 = [
 			'user_tpotm'	=> 'tpotm_badge.png'
 		];
+
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
 			WHERE user_id = ' . (int) $tpotm_user_id;
@@ -293,7 +317,12 @@ class tpotm
 	/**
 	 * Performs a date range costruction of the current month
 	 *
-	 * @return	string	user formatted data range (Thx Steve)
+	 * @param int		$hr			24 hrs format like 14
+	 * @param int		$min		minutes like 01
+	 * @param int		$sec		seconds like 01
+	 * @param bool		$start		from the start of the mont yes or not
+	 * @param bool		$format		if the data should be user prefs' formatted
+	 * @return string	user formatted data range (Thx Steve)
 	 */
 	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
@@ -306,7 +335,7 @@ class tpotm
 	/**
 	 * Gets the Unix Timestamp values for the current month.
 	 *
-	 * @return array	($month_start, $month_end) Unix Timestamp
+	 * @return array	($month_start, $month_end) Unix Timestamps
 	 */
 	protected function month_timegap()
 	{
@@ -317,6 +346,7 @@ class tpotm
 
 		/* Start timestamp for current month */
 		$month_start = $month_start_cur;
+
 		/* End timestamp for current month */
 		$month_end = $now;
 
@@ -483,7 +513,7 @@ class tpotm
 	 * There can be only ONE, the TPOTM.
 	 * If same tot posts and same exact post time then the post ID rules
 	 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-	 * Performs a chache check-in prior to delivery the final results
+	 * Performs a cache's check-in prior to delivery the final results
 	 *
 	 * @return array $row		cached or not results
 	*/
@@ -523,14 +553,15 @@ class tpotm
 
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
+
 		return $row;
 	}
 
 	/*
 	 * Gets the total TPOTM posts count for the current month till now
 	 *
-	 * @param int	$user_id		the current TPOTM user_id
-	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
+	 * @param int		$user_id			the current TPOTM user_id
+	 * @return int		$tpotm_tot_posts	cached or not tpotm_tot_posts results
 	*/
 	protected function perform_cache_on_tpotm_tot_posts($user_id)
 	{
@@ -560,6 +591,7 @@ class tpotm
 
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
+
 		return (int) $tpotm_tot_posts;
 	}
 
@@ -622,8 +654,8 @@ class tpotm
 		$start = 90;
 
 		$template_vars += [
-			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
-			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
+			'PERCENT'	=> number_format((float) $percent, 2, '.', ','),
+			'DEGREE'	=> $percent > 50 ? $degrees - $start : $degrees + $start,
 		];
 
 		/**

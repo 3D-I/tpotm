@@ -14,19 +14,6 @@ services:
             - '%core.php_ext%'
             - '%core.root_path%'
 
-    threedi.tpotm.listener:
-        class: threedi\tpotm\event\listener
-        arguments:
-            - '@request'
-            - '@controller.helper'
-            - '@template'
-            - '@user'
-            - '%core.php_ext%'
-            - '@threedi.tpotm.tpotm'
-
-        tags:
-            - { name: event.listener }
-
     threedi.tpotm.tpotm:
         class: threedi\tpotm\core\tpotm
         arguments:
@@ -34,9 +21,21 @@ services:
             - '@cache'
             - '@config'
             - '@dbal.conn'
+            - '@ext.manager'
             - '@user'
             - '@path_helper'
+            - '@template'
             - '%core.root_path%'
             - '%core.php_ext%'
+
+    threedi.tpotm.listener:
+        class: threedi\tpotm\event\listener
+        arguments:
+            - '@request'
+            - '@controller.helper'
             - '@template'
-            - '@ext.manager'
+            - '@user'
+            - '@threedi.tpotm.tpotm'
+            - '%core.php_ext%'
+        tags:
+            - { name: event.listener }

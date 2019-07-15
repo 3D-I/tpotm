@@ -3,7 +3,7 @@
  *
  * Top Poster Of The Month. An extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2005,2017, 3Di
+ * @copyright (c) 2005, 2019, 3Di <https://www.phpbbstudio.com>
  * @license GNU General Public License, version 2 (GPL-2.0)
  *
  */
@@ -67,6 +67,7 @@ $lang = array_merge($lang, [
 	'TPOTM_HELLO'					=> 'Top Poster Of The Month - Hall Of Fame',
 	'TPOTM_EXPLAIN_HALL'			=> 'From %1s to %2s',
 	'TPOTM_HALL_NO_EXPLAIN'			=> 'Since Epoch till the very end of the previous month',
+	'TPOTM_HALL_NO_TOP_POSTERS'		=> 'There are no past Top Posters yet to display.',
 
 	'HALL_OF_FAME'	=> [
 		0	=> 'Hall of fame',
@@ -79,6 +80,6 @@ $lang = array_merge($lang, [
 		2	=> ' Found a total of <strong>%d</strong> top posters',
 	],
 
-	'NOT_AUTHORISED_TPOTM__HALL'	=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
-	'TPOTM__HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
+	'NOT_AUTHORISED_TPOTM_HALL'		=> 'You are not authorized to see the Hall of fame of Top Poster Of The Month extension.',
+	'TPOTM_HALL_DISABLED'			=> 'The Hall of fame of Top Poster Of The Month extension is momentanely disabled.',
 ]);
