@@ -19,6 +19,8 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
+	'ACL_CAT_3DI'					=>	'3Di',
+
 	'ACP_TPOTM_TITLE'				=> 'Top Poster Of The Month',
 	'ACP_TPOTM_SETTINGS'			=> 'Settings',
 

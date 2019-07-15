@@ -19,8 +19,6 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-	'ACL_CAT_3DI'							=>	'3Di',
-
 	'TPOTM_GENERAL'							=>	'General Settings',
 	// Legend Tpl locations
 	'ACP_TPOTM_TEMPLATE_LOCATIONS'			=>	'Template locations',
