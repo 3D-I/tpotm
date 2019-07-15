@@ -5,7 +5,7 @@
 	"homepage": "https://github.com/3D-I/tpotm",
 	"version": "2.1.0",
 	"time": "2019-07-15",
-	"license": "GPL-2.0",
+	"license": "GPL-2.0-only",
 	"authors": [
 		{
 			"name": "3Di",
