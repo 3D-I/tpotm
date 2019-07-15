@@ -49,7 +49,8 @@
 	{% endif %}
 </h3>
 
-{% if tpotm_ever|length %}
+{# display top posters ever only if there are some #}
+{% if loops.tpotm_ever %}
 	<div class="action-bar top">
 		{% if loops.pagination or TOTAL_USERS %}
 		<div class="pagination">

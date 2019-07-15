@@ -178,8 +178,8 @@ a.hall-avatar-tpotm img {
 /* Each text entry, with or without a link - default packed */
 .tpotm-flex-text,
 .tpotm-flex-text a {
-	font-size: 16px;
-	line-height: 26px;
+	font-size: 10px;
+	line-height: 14px;
 	white-space: nowrap;
 	text-decoration: none;
 	text-overflow: ellipsis;
