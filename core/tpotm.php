@@ -83,7 +83,7 @@ class tpotm
 	 */
 	public function is_dae()
 	{
-		return (bool) (($this->is_dae_enabled) && $this->config['threedi_default_avatar_extended']);
+		return $this->is_dae_enabled && $this->config['threedi_default_avatar_extended'] && ($this->auth->acl_get('u_dae_user') || $this->auth->acl_get('a_dae_admin'));
 	}
 
 	/**
@@ -240,6 +240,7 @@ class tpotm
 		$tpotm_sql1 = [
 			'user_tpotm'	=> ''
 		];
+
 		$sql1 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql1) . '
 			WHERE user_id <> ' . ANONYMOUS;
@@ -257,6 +258,7 @@ class tpotm
 		$tpotm_sql2 = [
 			'user_tpotm'	=> 'tpotm_badge.png'
 		];
+
 		$sql2 = 'UPDATE ' . USERS_TABLE . '
 			SET ' . $this->db->sql_build_array('UPDATE', $tpotm_sql2) . '
 			WHERE user_id = ' . (int) $tpotm_user_id;
@@ -332,6 +334,7 @@ class tpotm
 
 		/* Start timestamp for current month */
 		$month_start = $month_start_cur;
+
 		/* End timestamp for current month */
 		$month_end = $now;
 
@@ -538,6 +541,7 @@ class tpotm
 
 			$this->cache->put('_tpotm', $row, (int) $this->config_time_cache());
 		}
+
 		return $row;
 	}
 
@@ -575,6 +579,7 @@ class tpotm
 
 			$this->cache->put('_tpotm_tot_posts', (int) $tpotm_tot_posts, (int) $this->config_time_cache());
 		}
+
 		return (int) $tpotm_tot_posts;
 	}
 
@@ -637,8 +642,8 @@ class tpotm
 		$start = 90;
 
 		$template_vars += [
-			'PERCENT'			=> number_format((float) $percent, 2, '.', ','),
-			'DEGREE'			=> $percent > 50 ? $degrees - $start : $degrees + $start,
+			'PERCENT'	=> number_format((float) $percent, 2, '.', ','),
+			'DEGREE'	=> $percent > 50 ? $degrees - $start : $degrees + $start,
 		];
 
 		/**
