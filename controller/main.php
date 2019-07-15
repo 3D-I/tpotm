@@ -173,7 +173,7 @@ class main
 		 * Gives the user an avatar as default if missing, for the sake of the layout.
 		 * If the TPOTM img has been manipulated returns no avatar at all and notice.
 		 */
-		$no_avatar =  (empty($row['user_avatar'])) ? $this->tpotm->check_point_badge_img() : $this->user->lang('TPOTM_BADGE');
+		$no_avatar = (empty($row['user_avatar'])) ? $this->tpotm->check_point_badge_img() : $this->user->lang('TPOTM_BADGE');
 
 		/* Loop into the data */
 		foreach ($rows as $row)

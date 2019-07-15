@@ -305,12 +305,12 @@ class tpotm
 	/**
 	 * Performs a date range costruction of the current month
 	 *
-	 * @param      $hr
-	 * @param      $min
-	 * @param      $sec
-	 * @param bool $start
-	 * @param bool $format
-	 * @return    string    user formatted data range (Thx Steve)
+	 * @param int		$hr			24 hrs format like 14
+	 * @param int		$min		minutes like 01
+	 * @param int		$sec		seconds like 01
+	 * @param bool		$start		from the start of the mont yes or not
+	 * @param bool		$format		if the data should be user prefs' formatted
+	 * @return string	user formatted data range (Thx Steve)
 	 */
 	protected function get_month_data($hr, $min, $sec, $start = true, $format = false)
 	{
@@ -323,7 +323,7 @@ class tpotm
 	/**
 	 * Gets the Unix Timestamp values for the current month.
 	 *
-	 * @return array	($month_start, $month_end) Unix Timestamp
+	 * @return array	($month_start, $month_end) Unix Timestamps
 	 */
 	protected function month_timegap()
 	{
@@ -501,7 +501,7 @@ class tpotm
 	 * There can be only ONE, the TPOTM.
 	 * If same tot posts and same exact post time then the post ID rules
 	 * Empty arrays SQL errors eated by setting the fourth parm as true within "sql_in_set"
-	 * Performs a chache check-in prior to delivery the final results
+	 * Performs a cache's check-in prior to delivery the final results
 	 *
 	 * @return array $row		cached or not results
 	*/
@@ -548,8 +548,8 @@ class tpotm
 	/*
 	 * Gets the total TPOTM posts count for the current month till now
 	 *
-	 * @param int	$user_id		the current TPOTM user_id
-	 * @return int $tpotm_tot_posts		cached or not tpotm_tot_posts results
+	 * @param int		$user_id			the current TPOTM user_id
+	 * @return int		$tpotm_tot_posts	cached or not tpotm_tot_posts results
 	*/
 	protected function perform_cache_on_tpotm_tot_posts($user_id)
 	{
