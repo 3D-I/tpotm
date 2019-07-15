@@ -32,36 +32,39 @@ class listener implements EventSubscriberInterface
 	/* @var \phpbb\user */
 	protected $user;
 
-	/* @var string phpEx */
-	protected $php_ext;
-
 	/* @var \threedi\tpotm\core\tpotm */
 	protected $tpotm;
 
+	/* @var string phpEx */
+	protected $php_ext;
+
 	/**
 	 * Constructor
-	 * @param \phpbb\request\request    $request
-	 * @param \phpbb\controller\helper  $helper
-	 * @param \phpbb\template\template  $template
-	 * @param \phpbb\user               $user
-	 * @param                           $php_ext
-	 * @param \threedi\tpotm\core\tpotm $tpotm
+	 * @param \phpbb\request\request		$request
+	 * @param \phpbb\controller\helper		$helper
+	 * @param \phpbb\template\template		$template
+	 * @param \phpbb\user					$user
+	 * @param \threedi\tpotm\core\tpotm		$tpotm
+	 * @param								$php_ext
+	 * @return void
+	 * @access public
 	 */
 	public function __construct(
 		\phpbb\request\request $request,
 		\phpbb\controller\helper $helper,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
-		$php_ext,
-		\threedi\tpotm\core\tpotm $tpotm
+		\threedi\tpotm\core\tpotm $tpotm,
+		$php_ext
 	)
 	{
 		$this->request		= $request;
 		$this->helper		= $helper;
 		$this->template		= $template;
 		$this->user			= $user;
-		$this->php_ext		= $php_ext;
 		$this->tpotm		= $tpotm;
+
+		$this->php_ext		= $php_ext;
 	}
 
 	static public function getSubscribedEvents()

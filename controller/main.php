@@ -50,17 +50,19 @@ class main
 
 	/**
 	 * Constructor
-	 * @param \phpbb\auth\auth                  $auth
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\config\config              $config
-	 * @param \phpbb\controller\helper          $helper
-	 * @param \phpbb\pagination                 $pagination
-	 * @param \phpbb\request\request            $request
-	 * @param \phpbb\template\template          $template
-	 * @param \phpbb\user                       $user
-	 * @param \threedi\tpotm\core\tpotm         $tpotm
-	 * @param                                   $php_ext
-	 * @param                                   $root_path
+	 * @param \phpbb\auth\auth						$auth
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\pagination						$pagination
+	 * @param \phpbb\request\request				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \threedi\tpotm\core\tpotm				$tpotm
+	 * @param										$php_ext
+	 * @param										$root_path
+	 * @return void
+	 * @access public
 	 */
 	public function __construct(
 		\phpbb\auth\auth $auth,
