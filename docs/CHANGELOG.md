@@ -3,6 +3,7 @@
 v2.1.0 - 2019 Edition
 - FIX - Display top posters's tab only if there are some
 - FIX - BUG with DAE (check for permissions if set for speific groups)
+- TASK - Move permissions to a custom TAB
 - Code housekeeping
 - 
 
