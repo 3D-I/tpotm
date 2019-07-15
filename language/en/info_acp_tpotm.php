@@ -21,6 +21,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'ACP_TPOTM_TITLE'				=> 'Top Poster Of The Month',
 	'ACP_TPOTM_SETTINGS'			=> 'Settings',
+
 	'ACP_TPOTM_SETTING_SAVED'		=> 'Top Poster Of The Month Settings saved.',
 
 	// Error log
