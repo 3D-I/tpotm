@@ -118,9 +118,9 @@ class tpotm_module
 		$s_errors = !empty($errors);
 
 		$template->assign_vars([
-			'S_ERROR'				=> $s_errors,
+			'S_ERRORS'				=> $s_errors,
 
-			'ERROR_MSG'				=> $s_errors ? implode('<br>', $errors) : '',
+			'ERRORS_MSG'			=> $s_errors ? implode('<br>', $errors) : '',
 
 			'TPOTM_INDEX'			=> (bool) $config['threedi_tpotm_index'],
 			'TPOTM_FORUMS'			=> (bool) $config['threedi_tpotm_forums'],

@@ -51,6 +51,8 @@ fieldset {
 }
 
 /* Rounded corners against the core phpbb */
+
+/* noinspection Stylelint ,Stylelint */
 input.button1,
 input.button2 {
 	border-radius: 4px;

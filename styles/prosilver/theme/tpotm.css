@@ -7,12 +7,16 @@
 }
 
 /* miniprofile next to posts (for 3.2) */
+
+/* noinspection Stylelint */
 i.fa-spinner {
 	color: #2a6496;
 	cursor: pointer;
 }
 
 /* index and hall (for 3.2) */
+
+/* noinspection Stylelint */
 i.fa-question-circle-o {
 	cursor: pointer;
 }
@@ -96,6 +100,7 @@ i.fa-question-circle-o {
 	text-align: center;
 }
 
+/* noinspection Stylelint */
 a.hall-avatar-tpotm img {
 	background-color: transparent;
 	border-radius: 7px;

@@ -1,5 +1,11 @@
 # 3Di - Top Poster Of The Month - Changes Log
 
+v2.1.1 - 2019 Summer Edition
+- FIX - Display errors in ACP settings if any
+- Code housekeeping
+
+# History
+
 v2.1.0 - 2019 Edition
 - FIX - Display top posters's tab only if there are some
 - FIX - BUG with DAE (check for permissions if set for speific groups)
@@ -8,9 +14,8 @@ v2.1.0 - 2019 Edition
 - Code housekeeping
 - 
 
-# History
 
- Latest release
+# Latest CDB release
 
 v2.0.9
 
