@@ -301,12 +301,10 @@ class tpotm
 	public function template_switches_over_all()
 	{
 		$this->template->assign_vars([
-			/* The 2 vars below are correct ;-D */
-			'S_TPOTM_INDEX_BOTTOM'	=> $this->config['threedi_tpotm_index'] ? true : false,
-			'S_TPOTM_INDEX_TOP'		=> $this->config['threedi_tpotm_index'] ? false : true,
-
 			'S_TPOTM'				=> $this->is_authed(),
 			'S_IS_RHEA'				=> $this->is_rhea(),
+			'S_TPOTM_INDEX_BOTTOM'	=> (bool) $this->config['threedi_tpotm_index'],
+			'S_TPOTM_INDEX_TOP'		=> (bool) !$this->config['threedi_tpotm_index'],
 			'S_TPOTM_INDEX_FORUMS'	=> (bool) $this->config['threedi_tpotm_forums'],
 			'S_TPOTM_AVATAR'		=> (bool) $this->config['threedi_tpotm_miniavatar'],
 			'S_TPOTM_MINIPROFILE'	=> (bool) $this->config['threedi_tpotm_miniprofile'],
