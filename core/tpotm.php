@@ -546,7 +546,7 @@ class tpotm
 			$this->db->sql_freeresult($result);
 
 			/* There is a TPOTM, let's update the DB then */
-			if (((int) $row['total_posts'] >= 1) && empty($row['user_tpotm']))
+			if ( (isset($row['total_posts']) && (int) $row['total_posts'] >= 1) && empty($row['user_tpotm']) )
 			{
 				$this->perform_user_reset((int) $row['user_id']);
 			}
@@ -606,11 +606,17 @@ class tpotm
 		 * Data Syncronization
 		 */
 		$row = $this->perform_cache_on_main_db_query();
-		$tpotm_tot_posts = $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']);
+		$tpotm_tot_posts = isset($row['user_id']) ? $this->perform_cache_on_tpotm_tot_posts((int) $row['user_id']) : false;
 		$total_month = $this->perform_cache_on_this_month_total_posts();
 
-		/* Only authed can view the profile */
-		$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) : get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+		if ($row)
+		{
+			$tpotm_un_string_full		= get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
+			$tpotm_un_string_noprofile	= get_username_string('no_profile', $row['user_id'], $row['username'], $row['user_colour']);
+
+			/* Only authed can view the profile */
+			$tpotm_un_string = ($this->auth->acl_get('u_viewprofile')) ? $tpotm_un_string_full : $tpotm_un_string_noprofile;
+		}
 
 		/**
 		 * Fresh install (one starting post by founder)
@@ -643,7 +649,8 @@ class tpotm
 		];
 
 		/* Prevents a potential Division by Zero below */
-		$tpotm_tot_posts = ($tpotm_tot_posts === 0) ? true : (int) $tpotm_tot_posts;
+		$tpotm_tot_posts = ($tpotm_tot_posts == 0) ? true : (int) $tpotm_tot_posts;
+
 		/**
 		 * Percentages for Hall of Fame's styling etc..
 		 * It could happen an user posted more than the total posts in the month.
@@ -663,13 +670,16 @@ class tpotm
 		 */
 		if ((int) $tpotm_tot_posts >= 1)
 		{
-			/* Map arguments for  phpbb_get_avatar() */
-			$row_avatar = [
-				'avatar'		 => $row['user_avatar'],
-				'avatar_type'	 => $row['user_avatar_type'],
-				'avatar_height'	 => $row['user_avatar_height'],
-				'avatar_width'	 => $row['user_avatar_width'],
-			];
+			if ($row)
+			{
+				/* Map arguments for  phpbb_get_avatar() */
+				$row_avatar = [
+					'avatar'		 => $row['user_avatar'],
+					'avatar_type'	 => $row['user_avatar_type'],
+					'avatar_height'	 => $row['user_avatar_height'],
+					'avatar_width'	 => $row['user_avatar_width'],
+				];
+			}
 
 			/**
 			 * DAE (Default Avatar Extended) extension compatibility
@@ -695,7 +705,12 @@ class tpotm
 			 */
 			if ($this->enable_miniavatar())
 			{
-				$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+				$tpotm_av_url = '';
+
+				if ($row)
+				{
+					$tpotm_av_url = ($this->auth->acl_get('u_viewprofile')) ? get_username_string('profile', $row['user_id'], $row['username'], $row['user_colour']) : '';
+				}
 
 				/* DAE (Default Avatar Extended) extension compatibility */
 				if ($this->is_dae())
