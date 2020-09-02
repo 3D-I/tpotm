@@ -301,15 +301,18 @@ class tpotm
 	public function template_switches_over_all()
 	{
 		$this->template->assign_vars([
+			/* The 2 vars below are correct ;-D */
+			'S_TPOTM_INDEX_BOTTOM'	=> $this->config['threedi_tpotm_index'] ? true : false,
+			'S_TPOTM_INDEX_TOP'		=> $this->config['threedi_tpotm_index'] ? false : true,
+
 			'S_TPOTM'				=> $this->is_authed(),
 			'S_IS_RHEA'				=> $this->is_rhea(),
-			'S_TPOTM_INDEX_BOTTOM'	=> ($this->config['threedi_tpotm_index']) ? true : false,
-			'S_TPOTM_INDEX_TOP'		=> ($this->config['threedi_tpotm_index']) ? false : true,
-			'S_TPOTM_INDEX_FORUMS'	=> ($this->config['threedi_tpotm_forums']) ? true : false,
-			'S_TPOTM_AVATAR'		=> ($this->config['threedi_tpotm_miniavatar']) ? true : false,
-			'S_TPOTM_MINIPROFILE'	=> ($this->config['threedi_tpotm_miniprofile']) ? true : false,
-			'S_TPOTM_HALL'			=> ($this->config['threedi_tpotm_hall']) ? true : false,
+			'S_TPOTM_INDEX_FORUMS'	=> (bool) $this->config['threedi_tpotm_forums'],
+			'S_TPOTM_AVATAR'		=> (bool) $this->config['threedi_tpotm_miniavatar'],
+			'S_TPOTM_MINIPROFILE'	=> (bool) $this->config['threedi_tpotm_miniprofile'],
+			'S_TPOTM_HALL'			=> (bool) $this->config['threedi_tpotm_hall'],
 			'S_U_TOOLTIP_SEL'		=> (bool) $this->user->data['user_tt_sel_tpotm'],
+
 			'TPOTM_ICON_STATS'		=> (string) $this->icon_tpotm_stats_url(),
 		]);
 	}
@@ -674,10 +677,10 @@ class tpotm
 			{
 				/* Map arguments for  phpbb_get_avatar() */
 				$row_avatar = [
-					'avatar'		 => $row['user_avatar'],
-					'avatar_type'	 => $row['user_avatar_type'],
-					'avatar_height'	 => $row['user_avatar_height'],
-					'avatar_width'	 => $row['user_avatar_width'],
+					'avatar'		=> $row['user_avatar'],
+					'avatar_type'	=> $row['user_avatar_type'],
+					'avatar_height'	=> $row['user_avatar_height'],
+					'avatar_width'	=> $row['user_avatar_width'],
 				];
 			}
 
